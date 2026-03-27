@@ -4,6 +4,9 @@ use App\Http\Controllers\v0\OperatorController;
 use App\Http\Controllers\v0\UserController;
 use App\Http\Controllers\v0\ProfileController;
 use App\Http\Controllers\v0\RoleController;
+use App\Http\Controllers\v0\VehicleController;
+use App\Http\Controllers\v0\DriverVehicleController;
+use App\Http\Controllers\v0\DriverProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v0/operators')->group(function () {
@@ -40,4 +43,28 @@ Route::prefix('v0/roles')->group(function () {
     Route::put('/{id}', [RoleController::class, 'update']);
     Route::delete('/{id}', [RoleController::class, 'destroy']);
     Route::get('/name/{name}', [RoleController::class, 'findByName']);
+});
+
+Route::prefix('v0/vehicles')->group(function () {
+    Route::get('/', [VehicleController::class, 'index']);
+    Route::post('/', [VehicleController::class, 'store']);
+    Route::get('/{id}', [VehicleController::class, 'show']);
+    Route::put('/{id}', [VehicleController::class, 'update']);
+    Route::delete('/{id}', [VehicleController::class, 'destroy']);
+    Route::get('/fleet/{fleetIdentifier}', [VehicleController::class, 'byFleetIdentifier']);
+});
+
+Route::prefix('v0/driver-vehicles')->group(function () {
+    Route::get('/', [DriverVehicleController::class, 'index']);
+    Route::post('/', [DriverVehicleController::class, 'store']);
+    Route::get('/{id}', [DriverVehicleController::class, 'show']);
+    Route::delete('/{id}', [DriverVehicleController::class, 'destroy']);
+    Route::get('/profile/{profileId}', [DriverVehicleController::class, 'byProfile']);
+});
+
+Route::prefix('v0/drivers')->group(function () {
+    Route::get('/', [DriverProfileController::class, 'index']);
+    Route::post('/', [DriverProfileController::class, 'store']);
+    Route::get('/{id}', [DriverProfileController::class, 'show']);
+    Route::put('/{id}', [DriverProfileController::class, 'update']);
 });

@@ -51,4 +51,14 @@ class UserRepository extends BaseRepository implements UserInterface
     {
         return $this->model->where('email', $email)->first();
     }
+
+    public function findByEmailIgnoreCase(string $email)
+    {
+        return $this->model->whereRaw('LOWER(email) = ?', [strtolower($email)])->first();
+    }
+
+    public function findByPhoneNumber(string $phone)
+    {
+        return $this->model->where('phone_number', $phone)->first();
+    }
 }

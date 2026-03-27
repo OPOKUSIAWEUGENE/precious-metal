@@ -58,4 +58,16 @@ class ProfileRepository extends BaseRepository implements ProfileInterface
             ->where('current', true)
             ->first();
     }
+
+    public function listByOperator(string $operatorId)
+    {
+        return $this->model->where('operator_id', $operatorId)->get();
+    }
+
+    public function save(array $data)
+    {
+        $profile = $this->model->newInstance($data);
+        $profile->save();
+        return $profile;
+    }
 }

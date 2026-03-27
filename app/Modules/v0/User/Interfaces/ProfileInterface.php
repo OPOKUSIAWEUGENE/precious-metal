@@ -11,4 +11,6 @@ interface ProfileInterface
     public function delete(string $id);
     public function findByUserId(string $userId);
     public function getCurrentProfile(string $userId);
+    public function listByOperator(string $operatorId);
+    public function save(array $data);
 }
