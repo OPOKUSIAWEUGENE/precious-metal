@@ -13,6 +13,7 @@ use App\Http\Controllers\v0\RouteController;
 use App\Http\Controllers\v0\AuthController;
 use App\Http\Controllers\v0\PassengerTripController;
 use App\Http\Controllers\v0\FinanceController;
+use App\Http\Controllers\v0\GatewayController;
 use Illuminate\Support\Facades\Route;
 
 // ================== Authentication Routes ==================
@@ -169,4 +170,30 @@ Route::prefix('v0/commissions')->group(function () {
     Route::get('/period/{periodStart}/{periodEnd}', [FinanceController::class, 'commissionsByPeriod']);
     Route::get('/sum/operator/{operatorId}/{periodStart}/{periodEnd}', [FinanceController::class, 'commissionsSumByOperator']);
     Route::get('/sum/driver/{driverProfileId}/{periodStart}/{periodEnd}', [FinanceController::class, 'commissionsSumByDriver']);
+});
+
+Route::prefix('v0/payments')->group(function () {
+    Route::get('/', [FinanceController::class, 'paymentsIndex']);
+    Route::post('/', [FinanceController::class, 'paymentsStore']);
+    Route::get('/{id}', [FinanceController::class, 'paymentsShow']);
+    Route::put('/{id}', [FinanceController::class, 'paymentsUpdate']);
+    Route::delete('/{id}', [FinanceController::class, 'paymentsDestroy']);
+    Route::get('/booking/{bookingId}', [FinanceController::class, 'paymentsByBooking']);
+    Route::get('/passenger/{passengerProfileId}', [FinanceController::class, 'paymentsByPassenger']);
+    Route::get('/operator/{operatorId}', [FinanceController::class, 'paymentsByOperator']);
+    Route::get('/status/{status}', [FinanceController::class, 'paymentsByStatus']);
+    Route::get('/transaction/{transactionId}', [FinanceController::class, 'paymentsByTransactionId']);
+    Route::get('/period/{periodStart}/{periodEnd}', [FinanceController::class, 'paymentsByPeriod']);
+    Route::get('/sum/operator/{operatorId}/{periodStart}/{periodEnd}', [FinanceController::class, 'paymentsSumByOperator']);
+    Route::get('/sum/passenger/{passengerProfileId}/{periodStart}/{periodEnd}', [FinanceController::class, 'paymentsSumByPassenger']);
+});
+
+// ================== Gateway Routes ==================
+
+Route::prefix('v0/checkout')->group(function () {
+    Route::post('/create', [GatewayController::class, 'createCheckout']);
+    Route::get('/verify/{paymentId}', [GatewayController::class, 'verifyPayment']);
+    Route::post('/refund/{paymentId}', [GatewayController::class, 'refundPayment']);
+    Route::post('/webhook', [GatewayController::class, 'handleWebhook']);
+    Route::get('/info', [GatewayController::class, 'getGatewayInfo']);
 });

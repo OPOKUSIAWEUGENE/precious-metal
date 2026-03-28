@@ -52,4 +52,15 @@ return [
         ],
     ],
 
+    'hubtel' => [
+        'base_url' => env('HUBTEL_BASE_URL', 'https://api.hubtel.com'),
+        'client_id' => env('HUBTEL_CLIENT_ID'),
+        'client_secret' => env('HUBTEL_CLIENT_SECRET'),
+        'merchant_account' => env('HUBTEL_MERCHANT_ACCOUNT'),
+        'callback_url' => env('HUBTEL_CALLBACK_URL'),
+        'return_url' => env('HUBTEL_RETURN_URL'),
+    ],
+
+    'default_gateway' => env('DEFAULT_PAYMENT_GATEWAY', 'HUBTEL'),
+
 ];
