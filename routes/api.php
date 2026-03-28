@@ -12,6 +12,7 @@ use App\Http\Controllers\v0\BookingController;
 use App\Http\Controllers\v0\RouteController;
 use App\Http\Controllers\v0\AuthController;
 use App\Http\Controllers\v0\PassengerTripController;
+use App\Http\Controllers\v0\FinanceController;
 use Illuminate\Support\Facades\Route;
 
 // ================== Authentication Routes ==================
@@ -139,4 +140,33 @@ Route::prefix('v0/route-stops')->group(function () {
     Route::put('/{id}', [RouteController::class, 'stopsUpdate']);
     Route::delete('/{id}', [RouteController::class, 'stopsDestroy']);
     Route::get('/search/{name}', [RouteController::class, 'stopsByName']);
+});
+
+// ================== Finance Routes ==================
+
+Route::prefix('v0/settlements')->group(function () {
+    Route::get('/', [FinanceController::class, 'settlementsIndex']);
+    Route::post('/', [FinanceController::class, 'settlementsStore']);
+    Route::get('/{id}', [FinanceController::class, 'settlementsShow']);
+    Route::put('/{id}', [FinanceController::class, 'settlementsUpdate']);
+    Route::delete('/{id}', [FinanceController::class, 'settlementsDestroy']);
+    Route::get('/operator/{operatorId}', [FinanceController::class, 'settlementsByOperator']);
+    Route::get('/driver/{driverProfileId}', [FinanceController::class, 'settlementsByDriver']);
+    Route::get('/status/{status}', [FinanceController::class, 'settlementsByStatus']);
+    Route::get('/period/{periodStart}/{periodEnd}', [FinanceController::class, 'settlementsByPeriod']);
+});
+
+Route::prefix('v0/commissions')->group(function () {
+    Route::get('/', [FinanceController::class, 'commissionsIndex']);
+    Route::post('/', [FinanceController::class, 'commissionsStore']);
+    Route::get('/{id}', [FinanceController::class, 'commissionsShow']);
+    Route::put('/{id}', [FinanceController::class, 'commissionsUpdate']);
+    Route::delete('/{id}', [FinanceController::class, 'commissionsDestroy']);
+    Route::get('/trip/{tripId}', [FinanceController::class, 'commissionsByTrip']);
+    Route::get('/operator/{operatorId}', [FinanceController::class, 'commissionsByOperator']);
+    Route::get('/driver/{driverProfileId}', [FinanceController::class, 'commissionsByDriver']);
+    Route::get('/status/{status}', [FinanceController::class, 'commissionsByStatus']);
+    Route::get('/period/{periodStart}/{periodEnd}', [FinanceController::class, 'commissionsByPeriod']);
+    Route::get('/sum/operator/{operatorId}/{periodStart}/{periodEnd}', [FinanceController::class, 'commissionsSumByOperator']);
+    Route::get('/sum/driver/{driverProfileId}/{periodStart}/{periodEnd}', [FinanceController::class, 'commissionsSumByDriver']);
 });

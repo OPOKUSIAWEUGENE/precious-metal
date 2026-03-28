@@ -4,9 +4,6 @@ namespace App\Modules\v0\Users\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use Illuminate\Support\Str;
 
 class GoogleOauthService
 {
@@ -14,23 +11,33 @@ class GoogleOauthService
     protected string $clientId;
     protected string $clientSecret;
     protected string $redirectUri;
+    protected string $passengerRedirectUri;
     protected string $userInfoUrl;
 
     public function __construct()
     {
-        $this->tokenUrl = config('services.google.oauth.token_url', 'https://oauth2.googleapis.com/token');
-        $this->clientId = config('services.google.client_id', '');
-        $this->clientSecret = config('services.google.client_secret', '');
-        $this->redirectUri = config('services.google.oauth.redirect_uri', config('app.url') . '/api/v0/auth/google/callback');
-        $this->userInfoUrl = config('services.google.oauth.userinfo_url', 'https://www.googleapis.com/oauth2/v2/userinfo');
+        $this->tokenUrl = config('services.google.oauth.token_url');
+        $this->clientId = config('services.google.client_id');
+        $this->clientSecret = config('services.google.client_secret');
+        $this->redirectUri = config('services.google.oauth.redirect_uri');
+        $this->passengerRedirectUri = config('services.google.oauth.passenger_redirect_uri');
+        $this->userInfoUrl = config('services.google.oauth.userinfo_url');
+    }
+
+    /**
+     * Get redirect URI based on context (general or passenger).
+     */
+    public function getRedirectUri(bool $isPassenger = false): string
+    {
+        return $isPassenger ? $this->passengerRedirectUri : $this->redirectUri;
     }
 
     /**
      * Exchange authorization code for tokens and profile.
      */
-    public function exchangeCodeForProfile(string $code): array
+    public function exchangeCodeForProfile(string $code, bool $isPassenger = false): array
     {
-        $tokenResponse = $this->exchangeForTokens($code);
+        $tokenResponse = $this->exchangeForTokens($code, $isPassenger);
         
         if (empty($tokenResponse)) {
             return [];
@@ -45,14 +52,16 @@ class GoogleOauthService
     /**
      * Exchange authorization code for access and ID tokens.
      */
-    protected function exchangeForTokens(string $code): array
+    protected function exchangeForTokens(string $code, bool $isPassenger = false): array
     {
+        $redirectUri = $this->getRedirectUri($isPassenger);
+        
         try {
             $response = Http::asForm()->post($this->tokenUrl, [
                 'code' => $code,
                 'client_id' => $this->clientId,
                 'client_secret' => $this->clientSecret,
-                'redirect_uri' => $this->redirectUri,
+                'redirect_uri' => $redirectUri,
                 'grant_type' => 'authorization_code',
             ]);
 

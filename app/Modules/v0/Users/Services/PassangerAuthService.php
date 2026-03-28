@@ -139,7 +139,7 @@ class PassangerAuthService extends BaseService
         }
 
         try {
-            $profile = $this->googleOauthService->exchangeCodeForProfile($code);
+            $profile = $this->googleOauthService->exchangeCodeForProfile($code, true);
             
             if (empty($profile)) {
                 return self::error('Failed to exchange Google authorization code', code: 502);
