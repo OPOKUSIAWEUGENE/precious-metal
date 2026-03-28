@@ -7,6 +7,8 @@ use App\Http\Controllers\v0\RoleController;
 use App\Http\Controllers\v0\VehicleController;
 use App\Http\Controllers\v0\DriverVehicleController;
 use App\Http\Controllers\v0\DriverProfileController;
+use App\Http\Controllers\v0\TripController;
+use App\Http\Controllers\v0\BookingController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v0/operators')->group(function () {
@@ -67,4 +69,25 @@ Route::prefix('v0/drivers')->group(function () {
     Route::post('/', [DriverProfileController::class, 'store']);
     Route::get('/{id}', [DriverProfileController::class, 'show']);
     Route::put('/{id}', [DriverProfileController::class, 'update']);
+});
+
+Route::prefix('v0/trips')->group(function () {
+    Route::get('/', [TripController::class, 'index']);
+    Route::post('/', [TripController::class, 'store']);
+    Route::get('/{id}', [TripController::class, 'show']);
+    Route::put('/{id}', [TripController::class, 'update']);
+    Route::delete('/{id}', [TripController::class, 'destroy']);
+    Route::get('/route/{routeId}', [TripController::class, 'byRoute']);
+    Route::get('/vehicle/{vehicleId}', [TripController::class, 'byVehicle']);
+    Route::get('/driver/{driverProfileId}', [TripController::class, 'byDriver']);
+});
+
+Route::prefix('v0/bookings')->group(function () {
+    Route::get('/', [BookingController::class, 'index']);
+    Route::post('/', [BookingController::class, 'store']);
+    Route::get('/{id}', [BookingController::class, 'show']);
+    Route::put('/{id}', [BookingController::class, 'update']);
+    Route::delete('/{id}', [BookingController::class, 'destroy']);
+    Route::get('/trip/{tripId}', [BookingController::class, 'byTrip']);
+    Route::get('/passenger/{passengerProfileId}', [BookingController::class, 'byPassenger']);
 });

@@ -14,31 +14,32 @@ class BaseRepository
         $this->model = $model;
     }
 
-    public function all(): Collection
+    public function all()
     {
         return $this->model->all();
     }
 
-    public function find(string $id): ?Model
+    public function find(string $id)
     {
         return $this->model->find($id);
     }
 
-    public function create(array $data): Model
+    public function create(array $data)
     {
         return $this->model->create($data);
     }
 
-    public function update(string $id, array $data): bool
+    public function update(string $id, array $data)
     {
         $record = $this->find($id);
         if (!$record) {
-            return false;
+            return null;
         }
-        return $record->update($data);
+        $record->update($data);
+        return $record->fresh();
     }
 
-    public function delete(string $id): bool
+    public function delete(string $id)
     {
         $record = $this->find($id);
         if (!$record) {
