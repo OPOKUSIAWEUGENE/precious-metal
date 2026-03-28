@@ -5,7 +5,7 @@ namespace App\Http\Controllers\v0;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v0\User\StoreProfileRequest;
 use App\Http\Requests\v0\User\UpdateProfileRequest;
-use App\Modules\v0\User\Services\ProfileService;
+use App\Modules\v0\Users\Services\ProfileService;
 use Illuminate\Http\JsonResponse;
 
 class ProfileController extends Controller

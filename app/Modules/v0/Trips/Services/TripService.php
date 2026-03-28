@@ -4,8 +4,9 @@ namespace App\Modules\v0\Trips\Services;
 
 use App\Modules\BaseService;
 use App\Modules\v0\Trips\Repositories\TripRepository;
-use App\Modules\v0\Trips\Repositories\RouteRepository;
-use App\Modules\v0\Trips\Repositories\RouteStopRepository;
+use App\Modules\v0\Trips\Repositories\BookingRepository;
+use App\Modules\v0\Routes\Repositories\RouteRepository;
+use App\Modules\v0\Routes\Repositories\RouteStopRepository;
 use App\Modules\v0\Fleet\Repositories\VehicleRepository;
 use App\Modules\v0\User\Repositories\ProfileRepository;
 use App\Modules\v0\Trips\Enums\TripStatus;

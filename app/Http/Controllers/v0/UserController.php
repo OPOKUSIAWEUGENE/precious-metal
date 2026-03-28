@@ -5,7 +5,7 @@ namespace App\Http\Controllers\v0;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v0\User\StoreUserRequest;
 use App\Http\Requests\v0\User\UpdateUserRequest;
-use App\Modules\v0\User\Services\UserService;
+use App\Modules\v0\Users\Services\UserService;
 use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller

@@ -9,7 +9,38 @@ use App\Http\Controllers\v0\DriverVehicleController;
 use App\Http\Controllers\v0\DriverProfileController;
 use App\Http\Controllers\v0\TripController;
 use App\Http\Controllers\v0\BookingController;
+use App\Http\Controllers\v0\RouteController;
+use App\Http\Controllers\v0\AuthController;
+use App\Http\Controllers\v0\PassengerTripController;
 use Illuminate\Support\Facades\Route;
+
+// ================== Authentication Routes ==================
+
+Route::prefix('v0/auth')->group(function () {
+    // General auth
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login/email', [AuthController::class, 'loginWithEmail']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
+
+    // Passenger auth
+    Route::post('/passenger/login', [AuthController::class, 'passengerLogin']);
+    Route::post('/passenger/register', [AuthController::class, 'passengerRegister']);
+    Route::post('/passenger/google/code', [AuthController::class, 'passengerGoogleCodeSignIn']);
+    Route::post('/passenger/google/token', [AuthController::class, 'passengerGoogleTokenSignIn']);
+    Route::get('/passenger/google/url', [AuthController::class, 'passengerGoogleAuthUrl']);
+    Route::post('/passenger/logout', [AuthController::class, 'passengerLogout']);
+});
+
+// ================== Passenger Public Routes ==================
+
+Route::prefix('v0/passenger/trips')->group(function () {
+    Route::get('/featured', [PassengerTripController::class, 'featured']);
+    Route::get('/search', [PassengerTripController::class, 'search']);
+});
+
+// ================== Protected Routes (require auth) ==================
 
 Route::prefix('v0/operators')->group(function () {
     Route::get('/', [OperatorController::class, 'index']);
@@ -90,4 +121,22 @@ Route::prefix('v0/bookings')->group(function () {
     Route::delete('/{id}', [BookingController::class, 'destroy']);
     Route::get('/trip/{tripId}', [BookingController::class, 'byTrip']);
     Route::get('/passenger/{passengerProfileId}', [BookingController::class, 'byPassenger']);
+});
+
+Route::prefix('v0/routes')->group(function () {
+    Route::get('/', [RouteController::class, 'index']);
+    Route::post('/', [RouteController::class, 'store']);
+    Route::get('/{id}', [RouteController::class, 'show']);
+    Route::put('/{id}', [RouteController::class, 'update']);
+    Route::delete('/{id}', [RouteController::class, 'destroy']);
+    Route::get('/status/{status}', [RouteController::class, 'byStatus']);
+});
+
+Route::prefix('v0/route-stops')->group(function () {
+    Route::get('/', [RouteController::class, 'stopsIndex']);
+    Route::post('/', [RouteController::class, 'stopsStore']);
+    Route::get('/{id}', [RouteController::class, 'stopsShow']);
+    Route::put('/{id}', [RouteController::class, 'stopsUpdate']);
+    Route::delete('/{id}', [RouteController::class, 'stopsDestroy']);
+    Route::get('/search/{name}', [RouteController::class, 'stopsByName']);
 });

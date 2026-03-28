@@ -2,9 +2,11 @@
 
 namespace App\Modules\v0\Trips\Models;
 
-use App\Modules\v0\Fleet\Models\Vehicle;
+use App\Modules\v0\Fleets\Models\Vehicle;
 use App\Modules\v0\Trips\Enums\TripStatus;
-use App\Modules\v0\User\Models\Profile;
+use App\Modules\v0\Users\Models\Profile;
+use App\Modules\v0\Routes\Models\Route;
+use App\Modules\v0\Routes\Models\RouteStop;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

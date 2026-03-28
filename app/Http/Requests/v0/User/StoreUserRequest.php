@@ -4,7 +4,7 @@ namespace App\Http\Requests\v0\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Modules\v0\User\Enums\ProfileType;
+use App\Modules\v0\Users\Enums\ProfileType;
 
 class StoreUserRequest extends FormRequest
 {

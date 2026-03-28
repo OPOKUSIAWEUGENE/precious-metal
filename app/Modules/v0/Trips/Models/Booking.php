@@ -3,7 +3,7 @@
 namespace App\Modules\v0\Trips\Models;
 
 use App\Modules\v0\Trips\Enums\BookingStatus;
-use App\Modules\v0\User\Models\Profile;
+use App\Modules\v0\Users\Models\Profile;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

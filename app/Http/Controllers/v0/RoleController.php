@@ -5,7 +5,7 @@ namespace App\Http\Controllers\v0;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v0\User\StoreRoleRequest;
 use App\Http\Requests\v0\User\UpdateRoleRequest;
-use App\Modules\v0\User\Services\RoleService;
+use App\Modules\v0\Users\Services\RoleService;
 use Illuminate\Http\JsonResponse;
 
 class RoleController extends Controller

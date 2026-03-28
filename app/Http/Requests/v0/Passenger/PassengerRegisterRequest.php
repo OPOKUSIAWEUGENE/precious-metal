@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Requests\v0\Passenger;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class PassengerRegisterRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    public function rules(): array
+    {
+        return [
+            'phone_number' => 'required|string|max:20',
+            'password' => 'required|string|min:8|max:255',
+            'confirm_password' => 'required|string|min:8|max:255|same:password',
+            'email' => 'nullable|email|max:255',
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'confirm_password.same' => 'The password and confirmation must match.',
+        ];
+    }
+}
