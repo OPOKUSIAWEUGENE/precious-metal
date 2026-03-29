@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\v0;
+namespace App\Http\Controllers\v0\Gateways;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v0\Gateways\CreateCheckoutRequest;
@@ -9,7 +9,7 @@ use App\Modules\v0\Gateways\Services\OnlineCheckoutService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class GatewayController extends Controller
+class CheckoutController extends Controller
 {
     protected OnlineCheckoutService $checkoutService;
 
@@ -21,7 +21,7 @@ class GatewayController extends Controller
     /**
      * Create a new checkout session.
      */
-    public function createCheckout(CreateCheckoutRequest $request): JsonResponse
+    public function create(CreateCheckoutRequest $request): JsonResponse
     {
         return $this->checkoutService->createCheckout($request->validated());
     }
@@ -29,7 +29,7 @@ class GatewayController extends Controller
     /**
      * Verify a payment.
      */
-    public function verifyPayment(string $paymentId): JsonResponse
+    public function verify(string $paymentId): JsonResponse
     {
         return $this->checkoutService->verifyPayment($paymentId);
     }
@@ -37,7 +37,7 @@ class GatewayController extends Controller
     /**
      * Refund a payment.
      */
-    public function refundPayment(RefundPaymentRequest $request, string $paymentId): JsonResponse
+    public function refund(RefundPaymentRequest $request, string $paymentId): JsonResponse
     {
         return $this->checkoutService->refundPayment($paymentId, $request->input('amount'));
     }
@@ -45,7 +45,7 @@ class GatewayController extends Controller
     /**
      * Handle webhook callback from payment gateway.
      */
-    public function handleWebhook(Request $request): JsonResponse
+    public function webhook(Request $request): JsonResponse
     {
         return $this->checkoutService->handleWebhook($request->all());
     }
@@ -53,7 +53,7 @@ class GatewayController extends Controller
     /**
      * Get gateway status/info.
      */
-    public function getGatewayInfo(): JsonResponse
+    public function info(): JsonResponse
     {
         return response()->json([
             'gateway' => $this->checkoutService->getGatewayName(),

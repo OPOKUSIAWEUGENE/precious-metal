@@ -13,7 +13,8 @@ use App\Http\Controllers\v0\RouteController;
 use App\Http\Controllers\v0\AuthController;
 use App\Http\Controllers\v0\PassengerTripController;
 use App\Http\Controllers\v0\FinanceController;
-use App\Http\Controllers\v0\GatewayController;
+use App\Http\Controllers\v0\Gateways\CheckoutController;
+use App\Http\Controllers\v0\Callbacks\CallbackController;
 use Illuminate\Support\Facades\Route;
 
 // ================== Authentication Routes ==================
@@ -191,9 +192,23 @@ Route::prefix('v0/payments')->group(function () {
 // ================== Gateway Routes ==================
 
 Route::prefix('v0/checkout')->group(function () {
-    Route::post('/create', [GatewayController::class, 'createCheckout']);
-    Route::get('/verify/{paymentId}', [GatewayController::class, 'verifyPayment']);
-    Route::post('/refund/{paymentId}', [GatewayController::class, 'refundPayment']);
-    Route::post('/webhook', [GatewayController::class, 'handleWebhook']);
-    Route::get('/info', [GatewayController::class, 'getGatewayInfo']);
+    Route::post('/create', [CheckoutController::class, 'create']);
+    Route::get('/verify/{paymentId}', [CheckoutController::class, 'verify']);
+    Route::post('/refund/{paymentId}', [CheckoutController::class, 'refund']);
+    Route::post('/webhook', [CheckoutController::class, 'webhook']);
+    Route::get('/info', [CheckoutController::class, 'info']);
+});
+
+// ================== Callback Routes ==================
+
+Route::prefix('v0/callbacks')->group(function () {
+    Route::post('/incoming', [CallbackController::class, 'incoming']);
+    Route::post('/outgoing', [CallbackController::class, 'outgoing']);
+    Route::get('/', [CallbackController::class, 'index']);
+    Route::get('/{id}', [CallbackController::class, 'show']);
+    Route::get('/incoming/list', [CallbackController::class, 'incomingList']);
+    Route::get('/outgoing/list', [CallbackController::class, 'outgoingList']);
+    Route::get('/status/{status}', [CallbackController::class, 'byStatus']);
+    Route::post('/{id}/retry', [CallbackController::class, 'retry']);
+    Route::get('/related', [CallbackController::class, 'byRelated']);
 });
