@@ -2,8 +2,8 @@
 
 namespace App\Modules\v0\Fleets\Models;
 
-use App\Modules\v0\Fleet\Enums\VehicleStatus;
-use App\Modules\v0\Operator\Models\Operator;
+use App\Modules\v0\Fleets\Enums\VehicleStatus;
+use App\Modules\v0\Operators\Models\Operator;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

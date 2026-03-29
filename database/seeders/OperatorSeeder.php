@@ -57,9 +57,7 @@ class OperatorSeeder extends Seeder
         foreach ($operators as $operatorData) {
             $existing = Operator::where('name', $operatorData['name'])->first();
             
-            if ($existing) {
-                $existing->update($operatorData);
-            } else {
+            if (!$existing) {
                 Operator::create($operatorData);
             }
         }
