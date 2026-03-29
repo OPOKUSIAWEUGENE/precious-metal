@@ -2,9 +2,9 @@
 
 namespace App\Modules\v0\Operators\Repositories;
 
-use App\Modules\v0\Operator\Interfaces\OperatorInterface;
+use App\Modules\v0\Operators\Interfaces\OperatorInterface;
 use App\Modules\BaseRepository;
-use App\Modules\v0\Operator\Models\Operator;
+use App\Modules\v0\Operators\Models\Operator;
 
 class OperatorRepository extends BaseRepository implements OperatorInterface
 {

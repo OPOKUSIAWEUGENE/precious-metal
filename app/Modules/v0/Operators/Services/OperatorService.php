@@ -2,8 +2,9 @@
 
 namespace App\Modules\v0\Operators\Services;
 
-use App\Modules\v0\Operator\Repositories\OperatorRepository;
+
 use App\Modules\BaseService;
+use App\Modules\v0\Operators\Repositories\OperatorRepository;
 use App\Traits\ApiResponse;
 use App\Modules\v0\Operator\Resources\OperatorResource;
 use Illuminate\Http\JsonResponse;

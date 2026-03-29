@@ -60,6 +60,12 @@ Route::prefix('v0/users')->group(function () {
     Route::put('/{id}', [UserController::class, 'update']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
     Route::get('/email/{email}', [UserController::class, 'findByEmail']);
+    Route::post('/{userId}/profiles', [UserController::class, 'addProfile']);
+    Route::put('/{userId}/current-profile', [UserController::class, 'setCurrentProfile']);
+    Route::get('/profile-type/{type}', [UserController::class, 'byProfileType']);
+    Route::put('/{id}/deactivate', [UserController::class, 'deactivate']);
+    Route::put('/{id}/activate', [UserController::class, 'activate']);
+    Route::post('/social-login', [UserController::class, 'registerWithSocialLogin']);
 });
 
 Route::prefix('v0/profiles')->group(function () {
@@ -69,7 +75,8 @@ Route::prefix('v0/profiles')->group(function () {
     Route::put('/{id}', [ProfileController::class, 'update']);
     Route::delete('/{id}', [ProfileController::class, 'destroy']);
     Route::get('/user/{userId}', [ProfileController::class, 'byUser']);
-    Route::get('/user/{userId}/current', [ProfileController::class, 'currentProfile']);
+    Route::get('/type/{type}', [ProfileController::class, 'byType']);
+    Route::put('/user/{userId}/current', [ProfileController::class, 'setCurrent']);
 });
 
 Route::prefix('v0/roles')->group(function () {
