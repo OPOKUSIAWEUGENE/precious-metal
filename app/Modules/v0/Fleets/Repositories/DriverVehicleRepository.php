@@ -3,8 +3,8 @@
 namespace App\Modules\v0\Fleets\Repositories;
 
 use App\Modules\BaseRepository;
-use App\Modules\v0\Fleet\Interfaces\DriverVehicleInterface;
-use App\Modules\v0\Fleet\Models\DriverVehicle;
+use App\Modules\v0\Fleets\Interfaces\DriverVehicleInterface;
+use App\Modules\v0\Fleets\Models\DriverVehicle;
 
 class DriverVehicleRepository extends BaseRepository implements DriverVehicleInterface
 {

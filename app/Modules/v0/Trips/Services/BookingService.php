@@ -15,7 +15,6 @@ class BookingService extends BaseService
 {
     use ApiResponse;
 
-    protected BookingRepository $repository;
     protected TripRepository $tripRepository;
     protected ProfileRepository $profileRepository;
 

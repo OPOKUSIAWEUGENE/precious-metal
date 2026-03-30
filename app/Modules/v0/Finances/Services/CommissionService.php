@@ -13,8 +13,6 @@ class CommissionService extends BaseService
 {
     use ApiResponse;
 
-    protected CommissionRepository $repository;
-
     public function __construct(CommissionRepository $repository)
     {
         $this->repository = $repository;

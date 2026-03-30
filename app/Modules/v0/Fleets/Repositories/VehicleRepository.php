@@ -3,8 +3,8 @@
 namespace App\Modules\v0\Fleets\Repositories;
 
 use App\Modules\BaseRepository;
-use App\Modules\v0\Fleet\Interfaces\VehicleInterface;
-use App\Modules\v0\Fleet\Models\Vehicle;
+use App\Modules\v0\Fleets\Interfaces\VehicleInterface;
+use App\Modules\v0\Fleets\Models\Vehicle;
 
 class VehicleRepository extends BaseRepository implements VehicleInterface
 {

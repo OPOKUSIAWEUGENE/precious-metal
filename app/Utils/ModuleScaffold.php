@@ -236,8 +236,7 @@ class ModuleScaffold
 
             $importResource = "\nuse " . JsonResource::class . ';';
             $resourceClass = "\n\nclass " . $this->model . "Resource extends JsonResource{\n";
-            $comment = "\t/**\n\t* Transform the resource into an array. \n\t*\n\t* @param \Illuminate\Http\Request \$request \n\t*
-                    @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable\n\t*/";
+            $comment = "\t/**\n\t* Transform the resource into an array. \n\t*\n\t* @param \Illuminate\Http\Request \$request \n\t*\n\t                     @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable\n\t*/";
             $toArray = "\n\tpublic function toArray(\$request)\n\t{\n\t\treturn parent::toArray(\$request);\n\t}";
 
             $filename = $this->path . '/Resources/' . $this->model . 'Resource.php';
@@ -284,8 +283,8 @@ class ModuleScaffold
             $importRepository = "\n\nuse App\Modules\\" . $this->moduleVersion . "\\" . $this->module . "\\Repositories\\" . $this->model . "Repository;";
             $baseService = "\nuse App\Modules\BaseService;";
             $serviceClass = "class " . $this->model . 'Service extends BaseService';
-            $repository = "\n\tprotected " . $this->model . "Repository \$repository; \n";
-            $constructor = "\n\tpublic function __construct(){\n\t\t\$this->repository = new " . $this->model . "Repository(); \n\t}";
+            $repoType = $this->model . 'Repository';
+            $constructor = "\n\tpublic function __construct({$repoType} \$repository){\n\t\t\$this->repository = \$repository;\n\t}";
 
             $filename = $this->path . '/Services/' . $this->model . 'Service.php';
 
@@ -312,7 +311,6 @@ class ModuleScaffold
                 fwrite($file, $importRepository);
                 fwrite($file, $baseService);
                 fwrite($file, "\n\n" . $serviceClass . "\n{\n");
-                fwrite($file, $repository);
                 fwrite($file, $constructor . "\n}");
                 fclose($file);
 

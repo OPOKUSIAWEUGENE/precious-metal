@@ -11,8 +11,6 @@ use Illuminate\Http\JsonResponse;
 
 class PaymentService extends BaseService
 {
-    protected PaymentInterface $repository;
-
     public function __construct(PaymentInterface $repository)
     {
         $this->repository = $repository;

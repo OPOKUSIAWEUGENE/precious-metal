@@ -4,7 +4,7 @@ namespace App\Http\Controllers\v0;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v0\Fleet\StoreDriverVehicleRequest;
-use App\Modules\v0\Fleet\Services\DriverVehicleService;
+use App\Modules\v0\Fleets\Services\DriverVehicleService;
 use Illuminate\Http\JsonResponse;
 
 class DriverVehicleController extends Controller

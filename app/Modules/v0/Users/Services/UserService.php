@@ -16,7 +16,6 @@ class UserService extends BaseService
 {
     use ApiResponse;
 
-    protected UserRepository $repository;
     protected ProfileRepository $profileRepository;
 
     public function __construct(UserRepository $repository, ProfileRepository $profileRepository)

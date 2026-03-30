@@ -12,7 +12,6 @@ class RouteStopService extends BaseService
 {
     use ApiResponse;
 
-    protected RouteStopRepository $repository;
 
     public function __construct(RouteStopRepository $repository)
     {

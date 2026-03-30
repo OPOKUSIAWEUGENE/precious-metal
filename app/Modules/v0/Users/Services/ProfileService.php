@@ -12,7 +12,6 @@ class ProfileService extends BaseService
 {
     use ApiResponse;
 
-    protected ProfileRepository $repository;
 
     public function __construct(ProfileRepository $repository)
     {

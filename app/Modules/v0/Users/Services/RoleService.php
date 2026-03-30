@@ -13,7 +13,6 @@ class RoleService extends BaseService
 {
     use ApiResponse;
 
-    protected RoleRepository $repository;
 
     public function __construct(RoleRepository $repository)
     {

@@ -13,9 +13,7 @@ class OperatorService extends BaseService
 {
     use ApiResponse;
 
-	protected OperatorRepository $repository; 
-
-	public function __construct(OperatorRepository $repository)
+    public function __construct(OperatorRepository $repository)
     {
 		$this->repository = $repository; 
 	}

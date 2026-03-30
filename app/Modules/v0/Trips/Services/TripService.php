@@ -7,7 +7,7 @@ use App\Modules\v0\Trips\Repositories\TripRepository;
 use App\Modules\v0\Trips\Repositories\BookingRepository;
 use App\Modules\v0\Routes\Repositories\RouteRepository;
 use App\Modules\v0\Routes\Repositories\RouteStopRepository;
-use App\Modules\v0\Fleet\Repositories\VehicleRepository;
+use App\Modules\v0\Fleets\Repositories\VehicleRepository;
 use App\Modules\v0\User\Repositories\ProfileRepository;
 use App\Modules\v0\Trips\Enums\TripStatus;
 use App\Traits\ApiResponse;
@@ -18,7 +18,6 @@ class TripService extends BaseService
 {
     use ApiResponse;
 
-    protected TripRepository $repository;
     protected RouteRepository $routeRepository;
     protected RouteStopRepository $stopRepository;
     protected VehicleRepository $vehicleRepository;

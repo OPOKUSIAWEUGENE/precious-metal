@@ -13,7 +13,6 @@ class RouteService extends BaseService
 {
     use ApiResponse;
 
-    protected RouteRepository $repository;
     protected RouteStopRepository $stopRepository;
 
     public function __construct(RouteRepository $repository, RouteStopRepository $stopRepository)

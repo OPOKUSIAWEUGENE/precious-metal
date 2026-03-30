@@ -10,8 +10,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class PaymentRepository extends BaseRepository implements PaymentInterface
 {
-    protected $model;
-
     public function __construct(Payment $model)
     {
         $this->model = $model;

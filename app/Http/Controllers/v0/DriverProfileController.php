@@ -5,7 +5,7 @@ namespace App\Http\Controllers\v0;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v0\Fleet\StoreDriverProfileRequest;
 use App\Http\Requests\v0\Fleet\UpdateDriverProfileRequest;
-use App\Modules\v0\Fleet\Services\DriverProfileService;
+use App\Modules\v0\Fleets\Services\DriverProfileService;
 use Illuminate\Http\JsonResponse;
 
 class DriverProfileController extends Controller

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\v0;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v0\Fleet\StoreVehicleRequest;
 use App\Http\Requests\v0\Fleet\UpdateVehicleRequest;
-use App\Modules\v0\Fleet\Services\VehicleService;
+use App\Modules\v0\Fleets\Services\VehicleService;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Annotations as OA;
 

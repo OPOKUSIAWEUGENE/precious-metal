@@ -3,12 +3,12 @@
 namespace App\Modules\v0\Fleets\Services;
 
 use App\Modules\BaseService;
-use App\Modules\v0\Fleet\Repositories\DriverVehicleRepository;
-use App\Modules\v0\Fleet\Repositories\VehicleRepository;
+use App\Modules\v0\Fleets\Repositories\DriverVehicleRepository;
+use App\Modules\v0\Fleets\Repositories\VehicleRepository;
 use App\Modules\v0\User\Repositories\ProfileRepository;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use App\Modules\v0\Fleet\Resources\DriverVehicleResource;
+use App\Modules\v0\Fleets\Resources\DriverVehicleResource;
 
 class DriverVehicleService extends BaseService
 {

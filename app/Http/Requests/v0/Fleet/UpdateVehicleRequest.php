@@ -4,7 +4,7 @@ namespace App\Http\Requests\v0\Fleet;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Modules\v0\Fleet\Enums\VehicleStatus;
+use App\Modules\v0\Fleets\Enums\VehicleStatus;
 
 class UpdateVehicleRequest extends FormRequest
 {

@@ -13,8 +13,6 @@ class SettlementService extends BaseService
 {
     use ApiResponse;
 
-    protected SettlementRepository $repository;
-
     public function __construct(SettlementRepository $repository)
     {
         $this->repository = $repository;

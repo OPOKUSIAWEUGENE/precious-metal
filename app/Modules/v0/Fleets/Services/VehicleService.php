@@ -3,18 +3,17 @@
 namespace App\Modules\v0\Fleets\Services;
 
 use App\Modules\BaseService;
-use App\Modules\v0\Fleet\Repositories\VehicleRepository;
+use App\Modules\v0\Fleets\Repositories\VehicleRepository;
 use App\Modules\v0\Operator\Repositories\OperatorRepository;
-use App\Modules\v0\Fleet\Enums\VehicleStatus;
+use App\Modules\v0\Fleets\Enums\VehicleStatus;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use App\Modules\v0\Fleet\Resources\VehicleResource;
+use App\Modules\v0\Fleets\Resources\VehicleResource;
 
 class VehicleService extends BaseService
 {
     use ApiResponse;
 
-    protected VehicleRepository $repository;
     protected OperatorRepository $operatorRepository;
 
     public function __construct(VehicleRepository $repository, OperatorRepository $operatorRepository)
