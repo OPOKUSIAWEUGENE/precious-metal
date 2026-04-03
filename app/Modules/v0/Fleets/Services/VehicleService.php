@@ -4,7 +4,7 @@ namespace App\Modules\v0\Fleets\Services;
 
 use App\Modules\BaseService;
 use App\Modules\v0\Fleets\Repositories\VehicleRepository;
-use App\Modules\v0\Operator\Repositories\OperatorRepository;
+use App\Modules\v0\Operators\Repositories\OperatorRepository;
 use App\Modules\v0\Fleets\Enums\VehicleStatus;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;

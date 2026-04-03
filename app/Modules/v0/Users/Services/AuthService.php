@@ -30,7 +30,6 @@ class AuthService extends BaseService
     {
         $identifier = $credentials['username'] ?? null;
         $password = $credentials['password'] ?? null;
-        $profileType = $credentials['profile_type'] ?? null;
 
         if (empty($identifier) || empty($password)) {
             return self::error('Username and password are required', code: 400);
@@ -57,8 +56,6 @@ class AuthService extends BaseService
             return self::error('Account is disabled', code: 403);
         }
 
-        // Ensure current profile is set
-        $this->userService->ensureCurrentProfile($user, $profileType);
         $this->userRepository->update($user->id, []);
 
         // Generate token

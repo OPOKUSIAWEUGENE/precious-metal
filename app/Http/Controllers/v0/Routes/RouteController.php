@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\v0;
+namespace App\Http\Controllers\v0\Routes;
 
 use App\Http\Controllers\Controller;
 use App\Modules\v0\Routes\Services\RouteService;

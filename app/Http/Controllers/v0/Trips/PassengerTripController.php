@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\v0;
+namespace App\Http\Controllers\v0\Trips;
 
 use App\Http\Controllers\Controller;
 use App\Modules\v0\Trips\Services\PassangerTripService;

@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Controllers\v0\OperatorController;
-use App\Http\Controllers\v0\UserController;
-use App\Http\Controllers\v0\ProfileController;
-use App\Http\Controllers\v0\RoleController;
-use App\Http\Controllers\v0\VehicleController;
-use App\Http\Controllers\v0\DriverVehicleController;
-use App\Http\Controllers\v0\DriverProfileController;
-use App\Http\Controllers\v0\TripController;
-use App\Http\Controllers\v0\BookingController;
-use App\Http\Controllers\v0\RouteController;
-use App\Http\Controllers\v0\AuthController;
-use App\Http\Controllers\v0\PassengerTripController;
-use App\Http\Controllers\v0\FinanceController;
+use App\Http\Controllers\v0\Operators\OperatorController;
+use App\Http\Controllers\v0\Users\UserController;
+use App\Http\Controllers\v0\Users\ProfileController;
+use App\Http\Controllers\v0\Users\RoleController;
+use App\Http\Controllers\v0\Fleets\VehicleController;
+use App\Http\Controllers\v0\Fleets\DriverVehicleController;
+use App\Http\Controllers\v0\Fleets\DriverProfileController;
+use App\Http\Controllers\v0\Trips\TripController;
+use App\Http\Controllers\v0\Trips\BookingController;
+use App\Http\Controllers\v0\Routes\RouteController;
+use App\Http\Controllers\v0\Users\AuthController;
+use App\Http\Controllers\v0\Trips\PassengerTripController;
+use App\Http\Controllers\v0\Finances\FinanceController;
 use App\Http\Controllers\v0\Gateways\CheckoutController;
 use App\Http\Controllers\v0\Callbacks\CallbackController;
 use Illuminate\Support\Facades\Route;

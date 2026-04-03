@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\v0;
+namespace App\Http\Controllers\v0\Operators;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\v0\User\StoreRoleRequest;
-use App\Http\Requests\v0\User\UpdateRoleRequest;
-use App\Modules\v0\User\Services\RoleService;
+use App\Http\Requests\v0\Operator\StoreOperatorRequest;
+use App\Http\Requests\v0\Operator\UpdateOperatorRequest;
+use App\Modules\v0\Operators\Services\OperatorService;
 use Illuminate\Http\JsonResponse;
 
-class RoleController extends Controller
+class OperatorController extends Controller
 {
-    protected RoleService $service;
+    protected OperatorService $service;
 
-    public function __construct(RoleService $service)
+    public function __construct(OperatorService $service)
     {
         $this->service = $service;
     }
 
     /**
-     * Display a listing of all roles.
+     * List all operators.
      */
     public function index(): JsonResponse
     {
@@ -26,15 +26,15 @@ class RoleController extends Controller
     }
 
     /**
-     * Store a newly created role.
+     * Create a new operator.
      */
-    public function store(StoreRoleRequest $request): JsonResponse
+    public function store(StoreOperatorRequest $request): JsonResponse
     {
         return $this->service->create($request->validated());
     }
 
     /**
-     * Display the specified role.
+     * Get operator details.
      */
     public function show(string $id): JsonResponse
     {
@@ -42,15 +42,15 @@ class RoleController extends Controller
     }
 
     /**
-     * Update the specified role.
+     * Update an operator.
      */
-    public function update(UpdateRoleRequest $request, string $id): JsonResponse
+    public function update(UpdateOperatorRequest $request, string $id): JsonResponse
     {
         return $this->service->update($id, $request->validated());
     }
 
     /**
-     * Remove the specified role.
+     * Delete an operator.
      */
     public function destroy(string $id): JsonResponse
     {

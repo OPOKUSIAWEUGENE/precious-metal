@@ -9,7 +9,7 @@ use App\Modules\v0\User\Repositories\ProfileRepository;
 use App\Modules\v0\User\Repositories\UserRepository;
 use App\Modules\v0\Fleets\Repositories\VehicleRepository;
 use App\Modules\v0\Fleets\Repositories\DriverVehicleRepository;
-use App\Modules\v0\Operator\Repositories\OperatorRepository;
+use App\Modules\v0\Operators\Repositories\OperatorRepository;
 use App\Modules\v0\Fleets\Models\DriverVehicle;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;

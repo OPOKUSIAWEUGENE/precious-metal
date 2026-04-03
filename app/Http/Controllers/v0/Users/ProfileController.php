@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\v0;
+namespace App\Http\Controllers\v0\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v0\User\StoreProfileRequest;

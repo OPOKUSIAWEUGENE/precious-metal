@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Log;
 
 class HubtelPaymentService implements PaymentGatewayInterface
 {
-    protected string $baseUrl;
-    protected string $clientId;
-    protected string $clientSecret;
-    protected string $merchantAccountNumber;
+    protected ?string $baseUrl = null;
+    protected ?string $clientId = null;
+    protected ?string $clientSecret = null;
+    protected ?string $merchantAccountNumber = null;
 
     public function __construct()
     {
