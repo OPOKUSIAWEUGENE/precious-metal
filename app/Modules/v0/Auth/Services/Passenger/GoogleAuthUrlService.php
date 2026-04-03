@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\v0\Users\Services;
+namespace App\Modules\v0\Auth\Services\Passenger;
 
 class GoogleAuthUrlService
 {

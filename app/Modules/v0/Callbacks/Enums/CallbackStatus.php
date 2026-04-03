@@ -9,9 +9,3 @@ enum CallbackStatus: string
     case FAILED = 'FAILED';
     case DELIVERED = 'DELIVERED';
 }
-
-enum CallbackType: string
-{
-    case INCOMING = 'INCOMING';
-    case OUTGOING = 'OUTGOING';
-}

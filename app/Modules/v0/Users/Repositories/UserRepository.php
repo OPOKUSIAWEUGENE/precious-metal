@@ -18,17 +18,17 @@ class UserRepository extends BaseRepository implements UserInterface
         return $this->model->all();
     }
 
-    public function find(string $id)
+    public function find(string $id): ?User
     {
         return $this->model->find($id);
     }
 
-    public function create(array $data)
+    public function create(array $data): User
     {
         return $this->model->create($data);
     }
 
-    public function update(string $id, array $data)
+    public function update(string $id, array $data): ?User
     {
         $user = $this->find($id);
         if ($user) {
@@ -47,17 +47,17 @@ class UserRepository extends BaseRepository implements UserInterface
         return false;
     }
 
-    public function findByEmail(string $email)
+    public function findByEmail(string $email): ?User
     {
         return $this->model->where('email', $email)->first();
     }
 
-    public function findByEmailIgnoreCase(string $email)
+    public function findByEmailIgnoreCase(string $email): ?User
     {
         return $this->model->whereRaw('LOWER(email) = ?', [strtolower($email)])->first();
     }
 
-    public function findByPhoneNumber(string $phone)
+    public function findByPhoneNumber(string $phone): ?User
     {
         return $this->model->where('phone_number', $phone)->first();
     }

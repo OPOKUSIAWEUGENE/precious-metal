@@ -10,30 +10,53 @@ use App\Http\Controllers\v0\Fleets\DriverProfileController;
 use App\Http\Controllers\v0\Trips\TripController;
 use App\Http\Controllers\v0\Trips\BookingController;
 use App\Http\Controllers\v0\Routes\RouteController;
-use App\Http\Controllers\v0\Users\AuthController;
+use App\Http\Controllers\v0\Auth\General\AuthController;
+use App\Http\Controllers\v0\Auth\Passenger\PassengerAuthController;
 use App\Http\Controllers\v0\Trips\PassengerTripController;
 use App\Http\Controllers\v0\Finances\FinanceController;
 use App\Http\Controllers\v0\Gateways\CheckoutController;
 use App\Http\Controllers\v0\Callbacks\CallbackController;
 use Illuminate\Support\Facades\Route;
 
-// ================== Authentication Routes ==================
+// =========================================================================
+// 🔐 AUTHENTICATION MODULE
+// =========================================================================
 
 Route::prefix('v0/auth')->group(function () {
-    // General auth
+    /**
+     * 👥 Staff & Operator Authentication
+     * Standard authentication routes for internal users.
+     */
+    Route::group(['prefix' => 'general'], function () {
+        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/login/email', [AuthController::class, 'loginWithEmail']);
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/me', [AuthController::class, 'me']);
+    });
+
+    /**
+     * 🚕 Passenger Authentication
+     * Routes for external passenger mobile/web clients.
+     */
+    Route::group(['prefix' => 'passenger'], function () {
+        Route::post('/login', [PassengerAuthController::class, 'login']);
+        Route::post('/register', [PassengerAuthController::class, 'register']);
+        Route::post('/logout', [PassengerAuthController::class, 'logout']);
+        
+        // Google OAuth Integration
+        Route::group(['prefix' => 'google'], function () {
+            Route::get('/url', [PassengerAuthController::class, 'googleAuthUrl']);
+            Route::post('/code', [PassengerAuthController::class, 'googleCodeSignIn']);
+            Route::post('/token', [PassengerAuthController::class, 'googleTokenSignIn']);
+        });
+    });
+
+    // --- Core Aliases (v0 Defaults) ---
     Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/login/email', [AuthController::class, 'loginWithEmail']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
-
-    // Passenger auth
-    Route::post('/passenger/login', [AuthController::class, 'passengerLogin']);
-    Route::post('/passenger/register', [AuthController::class, 'passengerRegister']);
-    Route::post('/passenger/google/code', [AuthController::class, 'passengerGoogleCodeSignIn']);
-    Route::post('/passenger/google/token', [AuthController::class, 'passengerGoogleTokenSignIn']);
-    Route::get('/passenger/google/url', [AuthController::class, 'passengerGoogleAuthUrl']);
-    Route::post('/passenger/logout', [AuthController::class, 'passengerLogout']);
 });
 
 // ================== Passenger Public Routes ==================

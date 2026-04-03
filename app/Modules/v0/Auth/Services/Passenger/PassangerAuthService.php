@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Modules\v0\Users\Services;
+namespace App\Modules\v0\Auth\Services\Passenger;
 
 use App\Modules\BaseService;
+use App\Modules\v0\Auth\Services\General\AuthService;
 use App\Modules\v0\Users\Repositories\UserRepository;
 use App\Modules\v0\Users\Models\User;
 use App\Modules\v0\Users\Enums\ProfileType;
+use App\Modules\v0\Users\Services\UserService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\v0\Users\Services;
+namespace App\Modules\v0\Auth\Services\Passenger;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;

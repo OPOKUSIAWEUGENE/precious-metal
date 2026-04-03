@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Modules\v0\Users\Services;
+namespace App\Modules\v0\Auth\Services\General;
 
 use App\Modules\BaseService;
 use App\Modules\v0\Users\Repositories\UserRepository;
 use App\Modules\v0\Users\Models\User;
+use App\Modules\v0\Users\Services\UserService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
