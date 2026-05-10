@@ -2,7 +2,7 @@
 
 namespace App\Utils;
 
-use App\Modules\v0\UserModule\Models\User;
+use App\Modules\v0\Users\Models\User;
 
 
 class CodeGenerator

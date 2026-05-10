@@ -43,6 +43,7 @@ return [
             'token_url' => env('GOOGLE_OAUTH_TOKEN_URL', 'https://oauth2.googleapis.com/token'),
             'userinfo_url' => env('GOOGLE_OAUTH_USERINFO_URL', 'https://openidconnect.googleapis.com/v1/userinfo'),
             'redirect_uri' => env('GOOGLE_OAUTH_REDIRECT_URI'),
+            'customer_redirect_uri' => env('GOOGLE_OAUTH_CUSTOMER_REDIRECT_URI', env('GOOGLE_OAUTH_PASSENGER_REDIRECT_URI')),
             'passenger_redirect_uri' => env('GOOGLE_OAUTH_PASSENGER_REDIRECT_URI'),
             'scope' => env('GOOGLE_OAUTH_SCOPE', 'openid email profile'),
             'response_type' => env('GOOGLE_OAUTH_RESPONSE_TYPE', 'code'),

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\v0\Users;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v0\User\StoreProfileRequest;
 use App\Http\Requests\v0\User\UpdateProfileRequest;
-use App\Modules\v0\User\Enums\ProfileType;
-use App\Modules\v0\User\Services\ProfileService;
+use App\Modules\v0\Users\Enums\ProfileType;
+use App\Modules\v0\Users\Services\ProfileService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
