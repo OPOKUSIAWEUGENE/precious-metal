@@ -153,9 +153,9 @@ class Helper
      * @param int $id
      * @return Customer|null
      */
-    public static function get_customer_by_auth(int $id): ?Customer
+    public static function get_customer_by_auth(string $id): ?Customer
     {
-        return Customer::where('user_id', $id)->select('id')->first();
+        return Customer::whereKey($id)->first();
     }
 
     /**

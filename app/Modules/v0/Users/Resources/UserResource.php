@@ -16,9 +16,8 @@ class UserResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'phone_number' => $this->phone_number,
-            'social_login_provider' => $this->social_login_provider,
-            'social_login_id' => $this->social_login_id,
             'profile_img' => $this->profile_img,
+            'roles' => $this->roles,
             'active' => $this->active,
             'profiles' => ProfileResource::collection($this->whenLoaded('profiles')),
             'current_profile' => $this->when($this->getCurrentProfile(), function() {

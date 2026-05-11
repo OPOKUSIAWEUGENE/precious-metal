@@ -35,24 +35,6 @@ return [
         ],
     ],
 
-    'google' => [
-        'client_id' => env('GOOGLE_CLIENT_ID'),
-        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'oauth' => [
-            'auth_url' => env('GOOGLE_OAUTH_AUTH_URL', 'https://accounts.google.com/o/oauth2/v2/auth'),
-            'token_url' => env('GOOGLE_OAUTH_TOKEN_URL', 'https://oauth2.googleapis.com/token'),
-            'userinfo_url' => env('GOOGLE_OAUTH_USERINFO_URL', 'https://openidconnect.googleapis.com/v1/userinfo'),
-            'redirect_uri' => env('GOOGLE_OAUTH_REDIRECT_URI'),
-            'customer_redirect_uri' => env('GOOGLE_OAUTH_CUSTOMER_REDIRECT_URI', env('GOOGLE_OAUTH_PASSENGER_REDIRECT_URI')),
-            'passenger_redirect_uri' => env('GOOGLE_OAUTH_PASSENGER_REDIRECT_URI'),
-            'scope' => env('GOOGLE_OAUTH_SCOPE', 'openid email profile'),
-            'response_type' => env('GOOGLE_OAUTH_RESPONSE_TYPE', 'code'),
-            'access_type' => env('GOOGLE_OAUTH_ACCESS_TYPE', 'offline'),
-            'prompt' => env('GOOGLE_OAUTH_PROMPT', 'consent'),
-            'include_granted_scopes' => env('GOOGLE_OAUTH_INCLUDE_GRANTED_SCOPES', 'true'),
-        ],
-    ],
-
     'hubtel' => [
         'base_url' => env('HUBTEL_BASE_URL', 'https://api.hubtel.com'),
         'client_id' => env('HUBTEL_CLIENT_ID'),

@@ -20,6 +20,12 @@ class RegisterRequest extends FormRequest
             'email' => 'nullable|email|max:255',
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
+            'date_of_birth' => 'nullable|date|before:today',
+            'nationality' => 'nullable|string|max:100',
+            'resident_address' => 'nullable|string|max:500',
+            'selfie' => 'nullable|string|max:255',
+            'kyc' => 'nullable|array',
+            'card_details' => 'nullable|array',
         ];
     }
 

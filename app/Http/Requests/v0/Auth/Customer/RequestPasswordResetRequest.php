@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\v0\Auth\PlatformOperator;
+namespace App\Http\Requests\v0\Auth\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class RequestPasswordResetRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,8 +14,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
         ];
     }
 }

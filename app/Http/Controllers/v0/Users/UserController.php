@@ -19,60 +19,45 @@ class UserController extends Controller
         $this->service = $service;
     }
 
-    /**
-     * Display a listing of all users.
-     */
+    // Listing
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('per_page', 15);
+
         return $this->service->paginate((int) $perPage);
     }
 
-    /**
-     * Store a newly created user.
-     */
+    // CRUD
     public function store(StoreUserRequest $request): JsonResponse
     {
         return $this->service->create($request->validated());
     }
 
-    /**
-     * Display the specified user.
-     */
     public function show(string $id): JsonResponse
     {
         return $this->service->find($id);
     }
 
-    /**
-     * Update the specified user.
-     */
     public function update(UpdateUserRequest $request, string $id): JsonResponse
     {
         return $this->service->update($id, $request->validated());
     }
 
-    /**
-     * Remove the specified user.
-     */
     public function destroy(string $id): JsonResponse
     {
         return $this->service->delete($id);
     }
 
-    /**
-     * Find user by email.
-     */
+    // Lookup
     public function findByEmail(string $email): JsonResponse
     {
         return $this->service->findByEmail($email);
     }
 
-    /**
-     * Add a profile to a user.
-     */
+    // Profile assignment
     public function addProfile(Request $request, string $userId): JsonResponse
     {
+        // Profile-specific columns are validated here before the service persists them.
         $request->validate([
             'profile_type' => 'required|string|in:PLATFORM_OPERATOR,CLIENT_OPERATOR,PASSENGER,DRIVER',
             'role_id' => 'nullable|uuid|exists:roles,id',
@@ -92,9 +77,7 @@ class UserController extends Controller
         return $this->service->addProfile($userId, $profileData);
     }
 
-    /**
-     * Set current profile for a user.
-     */
+    // Current profile
     public function setCurrentProfile(Request $request, string $userId): JsonResponse
     {
         $request->validate([
@@ -104,9 +87,7 @@ class UserController extends Controller
         return $this->service->setCurrentProfile($userId, $request->profile_id);
     }
 
-    /**
-     * Get users by profile type.
-     */
+    // Profile filter
     public function byProfileType(string $type): JsonResponse
     {
         try {
@@ -117,36 +98,14 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Deactivate a user.
-     */
+    // Status
     public function deactivate(string $id): JsonResponse
     {
         return $this->service->deactivate($id);
     }
 
-    /**
-     * Activate a user.
-     */
     public function activate(string $id): JsonResponse
     {
         return $this->service->activate($id);
-    }
-
-    /**
-     * Register user with social login.
-     */
-    public function registerWithSocialLogin(Request $request): JsonResponse
-    {
-        $request->validate([
-            'email' => 'required|email|unique:users,email',
-            'social_login_provider' => 'required|string',
-            'social_login_id' => 'required|string',
-            'first_name' => 'nullable|string|max:255',
-            'last_name' => 'nullable|string|max:255',
-            'profile_img' => 'nullable|string|url',
-        ]);
-
-        return $this->service->registerWithSocialLogin($request->validated());
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Customer;
 use App\Models\User;
+use App\Modules\v0\Users\Models\User as PlatformManagerUser;
 
 return [
 
@@ -67,6 +69,16 @@ return [
             'model' => env('AUTH_MODEL', User::class),
         ],
 
+        'platform_managers' => [
+            'driver' => 'eloquent',
+            'model' => PlatformManagerUser::class,
+        ],
+
+        'customers' => [
+            'driver' => 'eloquent',
+            'model' => Customer::class,
+        ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -96,6 +108,20 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'platform_managers' => [
+            'provider' => 'platform_managers',
+            'table' => 'platform_manager_password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'customers' => [
+            'provider' => 'customers',
+            'table' => 'customer_password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
         ],

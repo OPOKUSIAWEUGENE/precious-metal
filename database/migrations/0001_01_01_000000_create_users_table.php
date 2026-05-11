@@ -18,9 +18,8 @@ return new class extends Migration
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('phone_number', 20)->nullable();
-            $table->string('social_login_provider', 50)->nullable();
-            $table->string('social_login_id')->nullable();
             $table->string('profile_img')->nullable();
+            $table->json('roles')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
@@ -29,7 +28,6 @@ return new class extends Migration
             // Indexes
             $table->index('email');
             $table->index('phone_number');
-            $table->index('social_login_provider');
             $table->index('active');
         });
 

@@ -1,29 +1,24 @@
 <?php
 
-namespace App\Modules\v0\Auth\Services\PlatformOperator;
+namespace App\Modules\v0\Auth\Services\PlatformManager;
 
 use App\Modules\BaseService;
-use App\Modules\v0\Users\Enums\ProfileType;
 use App\Modules\v0\Users\Models\User;
 use App\Modules\v0\Users\Repositories\UserRepository;
-use App\Modules\v0\Users\Resources\UserResource;
-use App\Modules\v0\Users\Services\UserService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
-class AuthService extends BaseService
+class PlatformManagerAuthService extends BaseService
 {
     use ApiResponse;
 
-    protected UserRepository $userRepository;
-    protected UserService $userService;
-
-    public function __construct(UserRepository $userRepository, UserService $userService)
+    public function __construct(protected UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
-        $this->userService = $userService;
     }
 
     public function login(array $credentials): JsonResponse
@@ -46,7 +41,6 @@ class AuthService extends BaseService
             return self::error('Account is disabled', code: 403);
         }
 
-        $this->userRepository->update($user->id, []);
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return self::success([
@@ -78,31 +72,12 @@ class AuthService extends BaseService
         ]);
     }
 
-    public function register(array $userData): JsonResponse
-    {
-        $userData['profile_type'] = ProfileType::PLATFORM_OPERATOR->value;
-
-        $response = $this->userService->create($userData);
-        if ($response->getStatusCode() >= 400) {
-            return $response;
-        }
-
-        $user = $this->userRepository->findByEmailIgnoreCase($userData['email']);
-        if ($user) {
-            $this->userService->ensureCurrentProfile($user, ProfileType::PLATFORM_OPERATOR);
-            $user->load('profiles.role');
-            return self::success(new UserResource($user), 201);
-        }
-
-        return $response;
-    }
-
     public function logout(): JsonResponse
     {
-        $user = Auth::user();
+        $user = Auth::guard('sanctum')->user();
 
         if ($user) {
-            $user->currentAccessToken()->delete();
+            $user->currentAccessToken()?->delete();
         }
 
         return self::success(['message' => 'Logged out successfully']);
@@ -110,7 +85,7 @@ class AuthService extends BaseService
 
     public function me(): JsonResponse
     {
-        $user = Auth::user();
+        $user = Auth::guard('sanctum')->user();
 
         if (!$user) {
             return self::error('Unauthenticated', code: 401);
@@ -124,8 +99,8 @@ class AuthService extends BaseService
             'first_name' => $user->first_name,
             'last_name' => $user->last_name,
             'phone_number' => $user->phone_number,
-            'social_login_provider' => $user->social_login_provider,
             'profile_img' => $user->profile_img,
+            'roles' => $user->roles,
             'active' => $user->active,
             'profiles' => $user->profiles,
             'current_profile' => $user->getCurrentProfile(),
@@ -133,6 +108,80 @@ class AuthService extends BaseService
             'created_at' => $user->created_at,
             'updated_at' => $user->updated_at,
         ]);
+    }
+
+    public function requestPasswordReset(string $email): JsonResponse
+    {
+        $user = $this->userRepository->findByEmailIgnoreCase($email);
+
+        if (!$user) {
+            return self::error('User not found', code: 404);
+        }
+
+        $token = Str::random(64);
+        $expiresAt = now()->addMinutes(60);
+
+        DB::table('platform_manager_password_reset_tokens')->updateOrInsert(
+            ['email' => $user->email],
+            [
+                'token' => Hash::make($token),
+                'expires_at' => $expiresAt,
+                'updated_at' => now(),
+                'created_at' => now(),
+            ]
+        );
+
+        return self::success([
+            'message' => 'Password reset token generated',
+            'email' => $user->email,
+            'reset_token' => $token,
+            'expires_at' => $expiresAt,
+        ]);
+    }
+
+    public function resetPassword(array $data): JsonResponse
+    {
+        $email = $data['email'] ?? null;
+        $token = $data['token'] ?? null;
+        $password = $data['password'] ?? null;
+        $confirmation = $data['password_confirmation'] ?? null;
+
+        if (empty($email) || empty($token) || empty($password) || empty($confirmation)) {
+            return self::error('Email, token, password, and password confirmation are required', code: 400);
+        }
+
+        if ($password !== $confirmation) {
+            return self::error('Password and confirmation must match', code: 422);
+        }
+
+        $user = $this->userRepository->findByEmailIgnoreCase($email);
+        if (!$user) {
+            return self::error('User not found', code: 404);
+        }
+
+        $record = DB::table('platform_manager_password_reset_tokens')
+            ->whereRaw('LOWER(email) = ?', [strtolower($email)])
+            ->first();
+
+        if (!$record) {
+            return self::error('Reset token not found or expired', code: 404);
+        }
+
+        if (!empty($record->expires_at) && now()->greaterThan(Carbon::parse($record->expires_at))) {
+            DB::table('platform_manager_password_reset_tokens')->where('email', $record->email)->delete();
+            return self::error('Reset token expired', code: 422);
+        }
+
+        if (!Hash::check($token, $record->token)) {
+            return self::error('Invalid reset token', code: 422);
+        }
+
+        $user->password = $password;
+        $user->save();
+
+        DB::table('platform_manager_password_reset_tokens')->where('email', $record->email)->delete();
+
+        return self::success(['message' => 'Password reset successfully']);
     }
 
     protected function userPayload(User $user): array
@@ -146,6 +195,7 @@ class AuthService extends BaseService
             'last_name' => $user->last_name,
             'phone_number' => $user->phone_number,
             'active' => $user->active,
+            'roles' => $user->roles,
             'current_profile' => $user->getCurrentProfile(),
             'effective_profile_type' => $user->getEffectiveProfileType(),
         ];

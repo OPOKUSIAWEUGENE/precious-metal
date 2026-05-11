@@ -35,6 +35,7 @@ class UserSeeder extends Seeder
                 'first_name' => 'System',
                 'last_name' => 'Admin',
                 'phone_number' => '+233200000000',
+                'roles' => ['PLATFORM_OPERATOR'],
                 'active' => true,
             ]
         );
@@ -57,6 +58,7 @@ class UserSeeder extends Seeder
                 'first_name' => 'Test',
                 'last_name' => 'Operator',
                 'phone_number' => '+233200000001',
+                'roles' => ['CLIENT_OPERATOR'],
                 'active' => true,
             ]
         );
@@ -79,6 +81,7 @@ class UserSeeder extends Seeder
                 'first_name' => 'Test',
                 'last_name' => 'Driver',
                 'phone_number' => '+233200000002',
+                'roles' => ['DRIVER'],
                 'active' => true,
             ]
         );
@@ -102,6 +105,7 @@ class UserSeeder extends Seeder
                 'first_name' => 'Test',
                 'last_name' => 'Passenger',
                 'phone_number' => '+233200000003',
+                'roles' => ['PASSENGER'],
                 'active' => true,
             ]
         );

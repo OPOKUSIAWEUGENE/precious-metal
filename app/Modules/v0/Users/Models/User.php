@@ -23,9 +23,8 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'phone_number',
-        'social_login_provider',
-        'social_login_id',
         'profile_img',
+        'roles',
         'active',
     ];
 
@@ -37,6 +36,7 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
         'active' => 'boolean',
+        'roles' => 'array',
     ];
 
     /**

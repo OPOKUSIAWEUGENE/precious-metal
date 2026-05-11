@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\v0\Auth\Customer;
+namespace App\Http\Requests\v0\Auth\PlatformManager;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GoogleTokenRequest extends FormRequest
+class RequestPasswordResetRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,7 +14,7 @@ class GoogleTokenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_token' => 'required|string',
+            'email' => 'required|email|max:255',
         ];
     }
 }

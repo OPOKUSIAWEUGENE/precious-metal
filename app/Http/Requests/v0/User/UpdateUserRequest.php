@@ -36,9 +36,9 @@ class UpdateUserRequest extends FormRequest
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'phone_number' => 'nullable|string|max:20',
-            'social_login_provider' => 'nullable|string|max:50',
-            'social_login_id' => 'nullable|string|max:255',
             'profile_img' => 'nullable|string|url',
+            'roles' => 'nullable|array',
+            'roles.*' => 'string|max:255',
             'active' => 'nullable|boolean',
         ];
     }

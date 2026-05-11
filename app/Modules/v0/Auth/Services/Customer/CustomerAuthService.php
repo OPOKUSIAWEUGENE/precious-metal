@@ -4,64 +4,47 @@ namespace App\Modules\v0\Auth\Services\Customer;
 
 use App\Models\Customer;
 use App\Modules\BaseService;
-use App\Modules\v0\Auth\Services\PlatformOperator\AuthService;
-use App\Modules\v0\Users\Enums\ProfileType;
-use App\Modules\v0\Users\Models\User;
-use App\Modules\v0\Users\Repositories\ProfileRepository;
-use App\Modules\v0\Users\Repositories\UserRepository;
-use App\Modules\v0\Users\Services\UserService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerAuthService extends BaseService
 {
     use ApiResponse;
 
-    protected AuthService $authService;
-    protected UserRepository $userRepository;
-    protected UserService $userService;
-    protected ProfileRepository $profileRepository;
-    protected Customer $customer;
-    protected CustomerGoogleOauthService $googleOauthService;
-    protected CustomerGoogleAuthUrlService $googleAuthUrlService;
-
-    public function __construct(
-        AuthService $authService,
-        UserRepository $userRepository,
-        UserService $userService,
-        ProfileRepository $profileRepository,
-        Customer $customer,
-        CustomerGoogleOauthService $googleOauthService,
-        CustomerGoogleAuthUrlService $googleAuthUrlService
-    ) {
-        $this->authService = $authService;
-        $this->userRepository = $userRepository;
-        $this->userService = $userService;
-        $this->profileRepository = $profileRepository;
-        $this->customer = $customer;
-        $this->googleOauthService = $googleOauthService;
-        $this->googleAuthUrlService = $googleAuthUrlService;
+    public function __construct(protected Customer $customer)
+    {
     }
 
     public function login(array $credentials): JsonResponse
     {
-        $response = $this->authService->login($credentials);
+        $identifier = $credentials['username'] ?? null;
+        $password = $credentials['password'] ?? null;
 
-        if ($response->getStatusCode() >= 400) {
-            return $response;
+        if (empty($identifier) || empty($password)) {
+            return self::error('Username and password are required', code: 400);
         }
 
-        $payload = $response->getData()->data ?? null;
-        $user = $this->resolveUserFromPayload($payload);
-        if ($user) {
-            $this->ensureCustomerRecord($user);
-            $this->userService->ensureCurrentProfile($user, ProfileType::PASSENGER);
+        $customer = $this->findByIdentifier($identifier);
+
+        if (!$customer || !Hash::check($password, $customer->password)) {
+            return self::error('Invalid credentials', code: 401);
         }
 
-        return self::success($payload);
+        if (!$customer->active) {
+            return self::error('Account is disabled', code: 403);
+        }
+
+        $customer->update([]);
+        $token = $customer->createToken('auth-token')->plainTextToken;
+
+        return self::success([
+            'token' => $token,
+            'customer' => $this->customerPayload($customer),
+        ]);
     }
 
     public function register(array $request): JsonResponse
@@ -86,38 +69,30 @@ class CustomerAuthService extends BaseService
             return self::error('Password and confirmation must match', code: 400);
         }
 
-        $email = $request['email'] ?? null;
-        if (empty($email)) {
-            $email = $this->resolveEmail($phoneNumber);
-        }
-
+        $email = $request['email'] ?? $this->resolveEmail($phoneNumber);
         if (empty($email)) {
             return self::error('Unable to derive an email address', code: 400);
         }
 
-        if ($this->userRepository->findByEmailIgnoreCase($email)) {
-            return self::error('User with this email already exists', code: 400);
+        if ($this->customer->newQuery()->where('email', $email)->exists()) {
+            return self::error('Customer with this email already exists', code: 400);
         }
 
-        $userData = [
+        $customer = $this->customer->newInstance([
             'email' => $email,
             'password' => $password,
             'first_name' => $request['first_name'] ?? null,
             'last_name' => $request['last_name'] ?? null,
+            'date_of_birth' => $request['date_of_birth'] ?? null,
+            'nationality' => $request['nationality'] ?? null,
+            'resident_address' => $request['resident_address'] ?? null,
+            'selfie' => $request['selfie'] ?? null,
             'phone_number' => $phoneNumber,
+            'kyc' => $request['kyc'] ?? null,
+            'card_details' => $request['card_details'] ?? null,
             'active' => true,
-        ];
-
-        $registrationResponse = $this->userService->create($userData);
-        if ($registrationResponse->getStatusCode() >= 400) {
-            return $registrationResponse;
-        }
-
-        $user = $this->userRepository->findByEmailIgnoreCase($email);
-        if ($user) {
-            $this->ensureCustomerRecord($user);
-            $this->userService->ensureCurrentProfile($user, ProfileType::PASSENGER);
-        }
+        ]);
+        $customer->save();
 
         return $this->login([
             'username' => $email,
@@ -125,190 +100,115 @@ class CustomerAuthService extends BaseService
         ]);
     }
 
-    public function googleCodeSignIn(string $code): JsonResponse
-    {
-        if (empty($code)) {
-            return self::error('Google authorization code is required', code: 400);
-        }
-
-        try {
-            $profile = $this->googleOauthService->exchangeCodeForProfile($code, true);
-            if (empty($profile)) {
-                return self::error('Failed to exchange Google authorization code', code: 502);
-            }
-
-            return $this->processGoogleProfile($profile);
-        } catch (\Exception $e) {
-            Log::error('CustomerAuthService::googleCodeSignIn - ' . $e->getMessage());
-            return self::error($e->getMessage(), code: 502);
-        }
-    }
-
-    public function googleTokenSignIn(string $idToken): JsonResponse
-    {
-        if (empty($idToken)) {
-            return self::error('Google ID token is required', code: 400);
-        }
-
-        try {
-            $profile = $this->googleOauthService->decodeIdToken($idToken);
-            if (empty($profile)) {
-                return self::error('Unable to decode Google ID token', code: 400);
-            }
-
-            return $this->processGoogleProfile($profile);
-        } catch (\Exception $e) {
-            Log::error('CustomerAuthService::googleTokenSignIn - ' . $e->getMessage());
-            return self::error('Unable to decode Google ID token', code: 400);
-        }
-    }
-
-    public function getGoogleAuthUrl(): JsonResponse
-    {
-        try {
-            return self::success(['url' => $this->googleAuthUrlService->getCustomerAuthUrl()]);
-        } catch (\Exception $e) {
-            Log::error('CustomerAuthService::getGoogleAuthUrl - ' . $e->getMessage());
-            return self::error('Failed to generate Google auth URL');
-        }
-    }
-
     public function logout(): JsonResponse
     {
-        return $this->authService->logout();
+        $customer = Auth::guard('sanctum')->user();
+
+        if ($customer) {
+            $customer->currentAccessToken()?->delete();
+        }
+
+        return self::success(['message' => 'Logged out successfully']);
     }
 
-    protected function processGoogleProfile(array $profile): JsonResponse
+    public function me(): JsonResponse
     {
-        $email = $this->extractEmail($profile);
+        $customer = Auth::guard('sanctum')->user();
 
-        if (empty($email)) {
-            return self::error('Unable to obtain email address from Google', code: 400);
+        if (!$customer) {
+            return self::error('Unauthenticated', code: 401);
         }
-
-        $existingUser = $this->userRepository->findByEmailIgnoreCase($email);
-        if ($existingUser) {
-            $updated = $this->updateSocialInfo($existingUser, $profile);
-            return $this->respondWithToken($existingUser, $updated);
-        }
-
-        $rawPassword = Str::random(32);
-
-        $userData = [
-            'email' => $email,
-            'password' => $rawPassword,
-            'social_login_provider' => 'google',
-            'social_login_id' => $profile['sub'] ?? null,
-            'first_name' => $this->extractFirstName($profile),
-            'last_name' => $this->extractLastName($profile),
-            'phone_number' => $this->extractPhone($profile),
-            'active' => true,
-        ];
-
-        $registrationResponse = $this->userService->create($userData);
-        if ($registrationResponse->getStatusCode() >= 400) {
-            return $registrationResponse;
-        }
-
-        return $this->respondWithToken(
-            $this->userRepository->findByEmailIgnoreCase($email),
-            true,
-            $rawPassword
-        );
-    }
-
-    protected function extractEmail(array $profile): ?string
-    {
-        if (isset($profile['email'])) {
-            return $profile['email'];
-        }
-
-        if (isset($profile['email_verified']) && $profile['email_verified'] && isset($profile['sub'])) {
-            return $profile['sub'];
-        }
-
-        return null;
-    }
-
-    protected function extractPhone(array $profile): ?string
-    {
-        return $profile['phone_number'] ?? $profile['phone'] ?? null;
-    }
-
-    protected function extractFirstName(array $profile): ?string
-    {
-        if (isset($profile['given_name'])) {
-            return $profile['given_name'];
-        }
-
-        if (isset($profile['name'])) {
-            $parts = explode(' ', $profile['name']);
-            return $parts[0] ?? null;
-        }
-
-        return null;
-    }
-
-    protected function extractLastName(array $profile): ?string
-    {
-        if (isset($profile['family_name'])) {
-            return $profile['family_name'];
-        }
-
-        if (isset($profile['name'])) {
-            $parts = explode(' ', $profile['name']);
-            return count($parts) > 1 ? $parts[count($parts) - 1] : null;
-        }
-
-        return null;
-    }
-
-    protected function updateSocialInfo(User $user, array $profile): bool
-    {
-        $updated = false;
-
-        if (empty($user->social_login_provider)) {
-            $user->social_login_provider = 'google';
-            $updated = true;
-        }
-
-        if (empty($user->social_login_id) && isset($profile['sub'])) {
-            $user->social_login_id = $profile['sub'];
-            $updated = true;
-        }
-
-        if ($updated) {
-            $this->userRepository->update($user->id, [
-                'social_login_provider' => $user->social_login_provider,
-                'social_login_id' => $user->social_login_id,
-            ]);
-        }
-
-        return $updated;
-    }
-
-    protected function respondWithToken(User $user, bool $needsSave, ?string $password = null): JsonResponse
-    {
-        $this->ensureCustomerRecord($user);
-        $currentUpdated = $this->userService->ensureCurrentProfile($user, ProfileType::PASSENGER);
-
-        if ($needsSave || $currentUpdated) {
-            $this->userRepository->update($user->id, []);
-        }
-
-        $token = $user->createToken('auth-token')->plainTextToken;
 
         return self::success([
-            'token' => $token,
-            'user' => [
-                'id' => $user->id,
-                'email' => $user->email,
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'phone_number' => $user->phone_number,
-                'active' => $user->active,
-            ],
+            'id' => $customer->id,
+            'email' => $customer->email,
+            'first_name' => $customer->first_name,
+            'last_name' => $customer->last_name,
+            'date_of_birth' => $customer->date_of_birth,
+            'nationality' => $customer->nationality,
+            'resident_address' => $customer->resident_address,
+            'selfie' => $customer->selfie,
+            'phone_number' => $customer->phone_number,
+            'kyc' => $customer->kyc,
+            'card_details' => $customer->card_details,
+            'active' => $customer->active,
+            'created_at' => $customer->created_at,
+            'updated_at' => $customer->updated_at,
         ]);
+    }
+
+    public function requestPasswordReset(string $email): JsonResponse
+    {
+        $customer = $this->customer->newQuery()->whereRaw('LOWER(email) = ?', [strtolower($email)])->first();
+
+        if (!$customer) {
+            return self::error('Customer not found', code: 404);
+        }
+
+        $token = bin2hex(random_bytes(32));
+        $expiresAt = now()->addMinutes(60);
+
+        DB::table('customer_password_reset_tokens')->updateOrInsert(
+            ['email' => $customer->email],
+            [
+                'token' => Hash::make($token),
+                'expires_at' => $expiresAt,
+                'updated_at' => now(),
+                'created_at' => now(),
+            ]
+        );
+
+        return self::success([
+            'message' => 'Password reset token generated',
+            'email' => $customer->email,
+            'reset_token' => $token,
+            'expires_at' => $expiresAt,
+        ]);
+    }
+
+    public function resetPassword(array $data): JsonResponse
+    {
+        $email = $data['email'] ?? null;
+        $token = $data['token'] ?? null;
+        $password = $data['password'] ?? null;
+        $confirmation = $data['password_confirmation'] ?? null;
+
+        if (empty($email) || empty($token) || empty($password) || empty($confirmation)) {
+            return self::error('Email, token, password, and password confirmation are required', code: 400);
+        }
+
+        if ($password !== $confirmation) {
+            return self::error('Password and confirmation must match', code: 422);
+        }
+
+        $customer = $this->customer->newQuery()->whereRaw('LOWER(email) = ?', [strtolower($email)])->first();
+        if (!$customer) {
+            return self::error('Customer not found', code: 404);
+        }
+
+        $record = DB::table('customer_password_reset_tokens')
+            ->whereRaw('LOWER(email) = ?', [strtolower($email)])
+            ->first();
+
+        if (!$record) {
+            return self::error('Reset token not found or expired', code: 404);
+        }
+
+        if (!empty($record->expires_at) && now()->greaterThan(Carbon::parse($record->expires_at))) {
+            DB::table('customer_password_reset_tokens')->where('email', $record->email)->delete();
+            return self::error('Reset token expired', code: 422);
+        }
+
+        if (!Hash::check($token, $record->token)) {
+            return self::error('Invalid reset token', code: 422);
+        }
+
+        $customer->password = $password;
+        $customer->save();
+
+        DB::table('customer_password_reset_tokens')->where('email', $record->email)->delete();
+
+        return self::success(['message' => 'Password reset successfully']);
     }
 
     protected function resolveEmail(string $phone): string
@@ -317,21 +217,32 @@ class CustomerAuthService extends BaseService
         return $phoneClean . '@customer.rushhour.local';
     }
 
-    protected function ensureCustomerRecord(User $user): Customer
+    protected function findByIdentifier(string $identifier): ?Customer
     {
-        return $this->customer->firstOrCreate(
-            ['user_id' => $user->id],
-            ['active' => true]
-        );
-    }
+        $customer = $this->customer->newQuery()->whereRaw('LOWER(email) = ?', [strtolower($identifier)])->first();
 
-    protected function resolveUserFromPayload(mixed $payload): ?User
-    {
-        $email = $payload->user->email ?? null;
-        if (!$email) {
-            return null;
+        if ($customer) {
+            return $customer;
         }
 
-        return $this->userRepository->findByEmailIgnoreCase($email);
+        return $this->customer->newQuery()->where('phone_number', $identifier)->first();
+    }
+
+    protected function customerPayload(Customer $customer): array
+    {
+        return [
+            'id' => $customer->id,
+            'email' => $customer->email,
+            'first_name' => $customer->first_name,
+            'last_name' => $customer->last_name,
+            'date_of_birth' => $customer->date_of_birth,
+            'nationality' => $customer->nationality,
+            'resident_address' => $customer->resident_address,
+            'selfie' => $customer->selfie,
+            'phone_number' => $customer->phone_number,
+            'kyc' => $customer->kyc,
+            'card_details' => $customer->card_details,
+            'active' => $customer->active,
+        ];
     }
 }

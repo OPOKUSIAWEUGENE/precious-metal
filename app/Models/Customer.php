@@ -2,30 +2,45 @@
 
 namespace App\Models;
 
-use App\Modules\v0\Users\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as AuthenticatableUser;
+use Laravel\Sanctum\HasApiTokens;
 
-class Customer extends Model
+class Customer extends AuthenticatableUser
 {
-    use HasFactory, HasUuids;
+    use HasApiTokens, HasFactory, HasUuids;
 
     protected $table = 'customers';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'id',
-        'user_id',
+        'email',
+        'password',
+        'first_name',
+        'last_name',
+        'date_of_birth',
+        'nationality',
+        'resident_address',
+        'selfie',
+        'phone_number',
+        'kyc',
+        'card_details',
         'active',
     ];
 
-    protected $casts = [
-        'active' => 'boolean',
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $casts = [
+        'password' => 'hashed',
+        'active' => 'boolean',
+        'date_of_birth' => 'date',
+        'kyc' => 'array',
+        'card_details' => 'array',
+    ];
 }
