@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Modules\v0\Customers\Models;
 
 use App\Traits\BootTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +12,6 @@ class Customer extends AuthenticatableUser
     use HasApiTokens, HasFactory, BootTrait;
 
     protected $fillable = [
-        'id',
         'email',
         'password',
         'first_name',

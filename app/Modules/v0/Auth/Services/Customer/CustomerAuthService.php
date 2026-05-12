@@ -2,7 +2,7 @@
 
 namespace App\Modules\v0\Auth\Services\Customer;
 
-use App\Models\Customer;
+use App\Modules\v0\Customers\Models\Customer;
 use App\Modules\BaseService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;

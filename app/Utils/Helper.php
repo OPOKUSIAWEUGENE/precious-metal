@@ -3,7 +3,7 @@
 namespace App\Utils;
 
 use App\Models\Country;
-use App\Models\Customer;
+use App\Modules\v0\Customers\Models\Customer;
 use App\Models\PaymentChannel;
 use App\Models\PaymentMethod;
 use Exception;
