@@ -2,18 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Traits\BootTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as AuthenticatableUser;
 use Laravel\Sanctum\HasApiTokens;
 
 class Customer extends AuthenticatableUser
 {
-    use HasApiTokens, HasFactory, HasUuids;
-
-    protected $table = 'customers';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    use HasApiTokens, HasFactory, BootTrait;
 
     protected $fillable = [
         'id',
@@ -36,11 +32,19 @@ class Customer extends AuthenticatableUser
         'remember_token',
     ];
 
-    protected $casts = [
-        'password' => 'hashed',
-        'active' => 'boolean',
-        'date_of_birth' => 'date',
-        'kyc' => 'array',
-        'card_details' => 'array',
-    ];
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+            'active' => 'boolean',
+            'date_of_birth' => 'date',
+            'kyc' => 'array',
+            'card_details' => 'array',
+        ];
+    }
 }

@@ -2,19 +2,15 @@
 
 namespace App\Modules\v0\Users\Models;
 
-use App\Modules\v0\Users\Enums\ProfileType;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Traits\BootTrait;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, HasUuids;
-
-    protected $table = 'users';
+    use HasApiTokens, HasFactory, BootTrait;
 
     protected $fillable = [
         'id',
@@ -33,94 +29,43 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected $casts = [
-        'password' => 'hashed',
-        'active' => 'boolean',
-        'roles' => 'array',
-    ];
-
     /**
-     * Get the profiles associated with the user.
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
      */
-    public function profiles(): HasMany
+    protected function casts(): array
     {
-        return $this->hasMany(Profile::class);
-    }
-
-    /**
-     * Get the current active profile.
-     */
-    public function getCurrentProfile(): ?Profile
-    {
-        return $this->profiles->filter(fn($profile) => $profile->current)->first() 
-            ?? $this->profiles->first();
-    }
-
-    /**
-     * Get the effective profile type.
-     */
-    public function getEffectiveProfileType(): ProfileType
-    {
-        $current = $this->getCurrentProfile();
-        return ($current && $current->profileType) ? $current->profileType : ProfileType::PASSENGER;
-    }
-
-    /**
-     * Get the role from current profile.
-     */
-    public function getRole(): ?Role
-    {
-        $current = $this->getCurrentProfile();
-        return $current?->role;
-    }
-
-    /**
-     * Add a profile to the user.
-     */
-    public function addProfile(Profile $profile): void
-    {
-        $this->profiles()->save($profile);
-    }
-
-    /**
-     * Clear all profiles.
-     */
-    public function clearProfiles(): void
-    {
-        $this->profiles()->delete();
-    }
-
-    /**
-     * Get the role name for authorization.
-     */
-    public function getRoleName(): ?string
-    {
-        $role = $this->getRole();
-        return $role?->name;
-    }
-
-    /**
-     * Get authorities for authentication.
-     */
-    public function getAuthorities(): Collection
-    {
-        $roleName = $this->getRoleName();
-        if ($roleName) {
-            return collect(['ROLE_' . strtoupper($roleName)]);
-        }
-        return collect();
+        return [
+            'password' => 'hashed',
+            'active' => 'boolean',
+            'roles' => 'array',
+        ];
     }
 
     /**
      * Get the username (email) for authentication.
      */
-    public function getUsername(): string
+    protected function username(): Attribute
     {
-        return $this->email;
+        return Attribute::make(
+            get: fn () => $this->email,
+        );
     }
 
-    protected static function boot()
+    /**
+     * Check if the user has a specific role.
+     */
+    public function hasRole(string $role): bool
     {
-        parent::boot();
+        return in_array($role, $this->roles ?? []);
+    }
+
+    /**
+     * Get the list of roles.
+     */
+    public function getRoleNames(): array
+    {
+        return $this->roles ?? [];
     }
 }

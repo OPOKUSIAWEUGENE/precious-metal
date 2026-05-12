@@ -15,13 +15,11 @@ trait BootTrait
     /**
      * built in function in laravel
      */
-    protected static function boot()
+    protected static function bootBootTrait()
     {
         /**
          * boot other traitnns on model
          */
-        parent::boot();
-
         static::creating(function ($model) {
             /**
              * assign an ordered uuid string to model

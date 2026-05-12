@@ -2,8 +2,6 @@
 
 use App\Http\Controllers\v0\Auth\Customer\CustomerAuthController;
 use App\Http\Controllers\v0\Auth\PlatformManager\AuthController;
-use App\Http\Controllers\v0\Users\ProfileController;
-use App\Http\Controllers\v0\Users\RoleController;
 use App\Http\Controllers\v0\Users\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,29 +32,6 @@ Route::prefix('v0/users')->group(function () {
     Route::put('/{id}', [UserController::class, 'update']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
     Route::get('/email/{email}', [UserController::class, 'findByEmail']);
-    Route::post('/{userId}/profiles', [UserController::class, 'addProfile']);
-    Route::put('/{userId}/current-profile', [UserController::class, 'setCurrentProfile']);
-    Route::get('/profile-type/{type}', [UserController::class, 'byProfileType']);
     Route::put('/{id}/deactivate', [UserController::class, 'deactivate']);
     Route::put('/{id}/activate', [UserController::class, 'activate']);
-});
-
-Route::prefix('v0/profiles')->group(function () {
-    Route::get('/', [ProfileController::class, 'index']);
-    Route::post('/', [ProfileController::class, 'store']);
-    Route::get('/{id}', [ProfileController::class, 'show']);
-    Route::put('/{id}', [ProfileController::class, 'update']);
-    Route::delete('/{id}', [ProfileController::class, 'destroy']);
-    Route::get('/user/{userId}', [ProfileController::class, 'byUser']);
-    Route::get('/type/{type}', [ProfileController::class, 'byType']);
-    Route::put('/user/{userId}/current', [ProfileController::class, 'setCurrent']);
-});
-
-Route::prefix('v0/roles')->group(function () {
-    Route::get('/', [RoleController::class, 'index']);
-    Route::post('/', [RoleController::class, 'store']);
-    Route::get('/{id}', [RoleController::class, 'show']);
-    Route::put('/{id}', [RoleController::class, 'update']);
-    Route::delete('/{id}', [RoleController::class, 'destroy']);
-    Route::get('/name/{name}', [RoleController::class, 'findByName']);
 });

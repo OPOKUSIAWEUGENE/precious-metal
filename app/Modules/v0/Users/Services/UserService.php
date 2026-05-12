@@ -5,8 +5,6 @@ namespace App\Modules\v0\Users\Services;
 use App\Modules\BaseService;
 use App\Modules\v0\Users\Repositories\UserRepository;
 use App\Modules\v0\Users\Models\User;
-use App\Modules\v0\Users\Enums\ProfileType;
-use App\Modules\v0\Users\Repositories\ProfileRepository;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use App\Modules\v0\Users\Resources\UserResource;
@@ -16,12 +14,9 @@ class UserService extends BaseService
 {
     use ApiResponse;
 
-    protected ProfileRepository $profileRepository;
-
-    public function __construct(UserRepository $repository, ProfileRepository $profileRepository)
+    public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
-        $this->profileRepository = $profileRepository;
     }
 
     public function all(): JsonResponse
@@ -36,7 +31,6 @@ class UserService extends BaseService
         if (!$user) {
             return self::error('User not found', code: 404);
         }
-        $user->load('profiles.role');
         return self::success(new UserResource($user));
     }
 
@@ -62,7 +56,6 @@ class UserService extends BaseService
         if (!$user) {
             return self::error('User not found', code: 404);
         }
-        $user->load('profiles.role');
         return self::success(new UserResource($user), 200);
     }
 
@@ -81,47 +74,7 @@ class UserService extends BaseService
         if (!$user) {
             return self::error('User not found', code: 404);
         }
-        $user->load('profiles.role');
         return self::success(new UserResource($user));
-    }
-
-    /**
-     * Ensure the user has a current profile set.
-     */
-    public function ensureCurrentProfile(User $user, ?ProfileType $preferredProfile): bool
-    {
-        $currentProfile = $user->getCurrentProfile();
-        
-        if ($currentProfile) {
-            // If a preferred profile type is specified and current is different, switch
-            if ($preferredProfile && $currentProfile->profileType !== $preferredProfile) {
-                $profiles = $user->profiles;
-                foreach ($profiles as $profile) {
-                    if ($profile->profileType === $preferredProfile) {
-                        // Deactivate all other profiles
-                        foreach ($profiles as $p) {
-                            $p->current = ($p->id === $profile->id);
-                            $p->save();
-                        }
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        
-        // No current profile - create one if we have a preferred type
-        if ($preferredProfile) {
-            $this->profileRepository->create([
-                'user_id' => $user->id,
-                'profile_type' => $preferredProfile->value,
-                'active' => true,
-                'current' => true,
-            ]);
-            return true;
-        }
-        
-        return false;
     }
 
     /**
@@ -136,8 +89,6 @@ class UserService extends BaseService
             'last_name' => $user->last_name,
             'phone_number' => $user->phone_number,
             'active' => $user->active,
-            'current_profile' => $user->getCurrentProfile(),
-            'effective_profile_type' => $user->getEffectiveProfileType(),
         ];
     }
 }

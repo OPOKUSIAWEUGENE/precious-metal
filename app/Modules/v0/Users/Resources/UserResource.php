@@ -4,7 +4,6 @@ namespace App\Modules\v0\Users\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Modules\v0\Users\Resources\ProfileResource;
 
 class UserResource extends JsonResource
 {
@@ -19,11 +18,6 @@ class UserResource extends JsonResource
             'profile_img' => $this->profile_img,
             'roles' => $this->roles,
             'active' => $this->active,
-            'profiles' => ProfileResource::collection($this->whenLoaded('profiles')),
-            'current_profile' => $this->when($this->getCurrentProfile(), function() {
-                return new ProfileResource($this->getCurrentProfile());
-            }),
-            'effective_profile_type' => $this->getEffectiveProfileType(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
