@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\v0\User;
 
-use App\Modules\v0\Users\Enums\ProfileType;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreUserRequest extends FormRequest
 {
@@ -30,19 +28,8 @@ class StoreUserRequest extends FormRequest
             'last_name' => 'nullable|string|max:255',
             'phone_number' => 'nullable|string|max:20',
             'profile_img' => 'nullable|string|url',
-            'roles' => 'nullable|array',
-            'roles.*' => 'string|max:255',
+            'role' => 'nullable|string|max:255',
             'active' => 'nullable|boolean',
-            'profile' => 'nullable|array',
-            'profile.profile_type' => [
-                'nullable',
-                'string',
-                Rule::in(array_column(ProfileType::cases(), 'value')),
-            ],
-            'profile.role_id' => 'nullable|uuid|exists:roles,id',
-            'profile.operator_id' => 'nullable|uuid|exists:operators,id',
-            'profile.license' => 'nullable|string|max:255',
-            'profile.active' => 'nullable|boolean',
         ];
     }
 
@@ -61,10 +48,6 @@ class StoreUserRequest extends FormRequest
             'password.min' => 'The password must be at least 8 characters.',
             'phone_number.max' => 'The phone number cannot exceed 20 characters.',
             'profile_img.url' => 'Please provide a valid URL for the profile image.',
-            'roles.array' => 'Roles must be an array of strings.',
-            'profile.profile_type.in' => 'Invalid profile type. Valid types are: PLATFORM_OPERATOR, CLIENT_OPERATOR, PASSENGER, DRIVER.',
-            'profile.role_id.exists' => 'The specified role does not exist.',
-            'profile.operator_id.exists' => 'The specified operator does not exist.',
         ];
     }
 }

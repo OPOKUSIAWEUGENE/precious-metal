@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\v0\User;
 
-use App\Modules\v0\Users\Enums\ProfileType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -37,8 +36,7 @@ class UpdateUserRequest extends FormRequest
             'last_name' => 'nullable|string|max:255',
             'phone_number' => 'nullable|string|max:20',
             'profile_img' => 'nullable|string|url',
-            'roles' => 'nullable|array',
-            'roles.*' => 'string|max:255',
+            'role' => 'nullable|string|max:255',
             'active' => 'nullable|boolean',
         ];
     }

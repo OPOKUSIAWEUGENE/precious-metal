@@ -13,14 +13,13 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, BootTrait;
 
     protected $fillable = [
-        'id',
         'email',
         'password',
         'first_name',
         'last_name',
         'phone_number',
         'profile_img',
-        'roles',
+        'role',
         'active',
     ];
 
@@ -39,7 +38,6 @@ class User extends Authenticatable
         return [
             'password' => 'hashed',
             'active' => 'boolean',
-            'roles' => 'array',
         ];
     }
 
@@ -58,14 +56,14 @@ class User extends Authenticatable
      */
     public function hasRole(string $role): bool
     {
-        return in_array($role, $this->roles ?? []);
+        return $this->role === $role;
     }
 
     /**
-     * Get the list of roles.
+     * Get the list of roles (returns array for compatibility).
      */
     public function getRoleNames(): array
     {
-        return $this->roles ?? [];
+        return $this->role ? [$this->role] : [];
     }
 }

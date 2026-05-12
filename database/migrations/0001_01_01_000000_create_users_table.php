@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('last_name')->nullable();
             $table->string('phone_number', 20)->nullable();
             $table->string('profile_img')->nullable();
-            $table->json('roles')->nullable();
+            $table->string('role')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

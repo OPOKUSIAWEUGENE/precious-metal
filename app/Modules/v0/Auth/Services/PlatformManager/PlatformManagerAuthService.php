@@ -91,8 +91,6 @@ class PlatformManagerAuthService extends BaseService
             return self::error('Unauthenticated', code: 401);
         }
 
-        $user->load('profiles.role');
-
         return self::success([
             'id' => $user->id,
             'email' => $user->email,
@@ -100,11 +98,8 @@ class PlatformManagerAuthService extends BaseService
             'last_name' => $user->last_name,
             'phone_number' => $user->phone_number,
             'profile_img' => $user->profile_img,
-            'roles' => $user->roles,
+            'role' => $user->role,
             'active' => $user->active,
-            'profiles' => $user->profiles,
-            'current_profile' => $user->getCurrentProfile(),
-            'effective_profile_type' => $user->getEffectiveProfileType(),
             'created_at' => $user->created_at,
             'updated_at' => $user->updated_at,
         ]);
@@ -186,8 +181,6 @@ class PlatformManagerAuthService extends BaseService
 
     protected function userPayload(User $user): array
     {
-        $user->loadMissing('profiles.role');
-
         return [
             'id' => $user->id,
             'email' => $user->email,
@@ -195,9 +188,7 @@ class PlatformManagerAuthService extends BaseService
             'last_name' => $user->last_name,
             'phone_number' => $user->phone_number,
             'active' => $user->active,
-            'roles' => $user->roles,
-            'current_profile' => $user->getCurrentProfile(),
-            'effective_profile_type' => $user->getEffectiveProfileType(),
+            'role' => $user->role,
         ];
     }
 }
