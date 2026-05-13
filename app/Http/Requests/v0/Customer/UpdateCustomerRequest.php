@@ -2,11 +2,17 @@
 
 namespace App\Http\Requests\v0\Customer;
 
+use App\Traits\ApiResponse;
+use App\Traits\Errors;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
 class UpdateCustomerRequest extends FormRequest
 {
+    use ApiResponse, Errors;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -58,5 +64,16 @@ class UpdateCustomerRequest extends FormRequest
             'password.min' => 'The password must be at least 8 characters.',
             'phone_number.max' => 'The phone number cannot exceed 20 characters.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            self::error(
+                self::$badRequest,
+                $validator->errors()->all(),
+                400
+            )
+        );
     }
 }
