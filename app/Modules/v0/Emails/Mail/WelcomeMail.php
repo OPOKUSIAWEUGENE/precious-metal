@@ -21,8 +21,12 @@ class WelcomeMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(string $email, string $password, ?string $organizationName = null)
-    {
+    public function __construct(
+        string $email, 
+        string $password, 
+        ?string $organizationName = null,
+        public string $userType = ''
+    ) {
         $this->email = $email;
         $this->password = $password;
         $this->organizationName = $organizationName;
@@ -35,10 +39,13 @@ class WelcomeMail extends Mailable
     {
         $from = config('mail.from.address') ?: 'hello@neutek.com';
         $name = config('mail.from.name') ?: config('app.name');
+        
+        $titlePrefix = $this->userType ? $this->userType . ": " : "";
+        $subject = $titlePrefix . "Account Setup";
 
         return new Envelope(
             from: new Address($from, $name),
-            subject: config('app.name') . ": Account Setup",
+            subject: $subject,
         );
     }
 
@@ -49,7 +56,8 @@ class WelcomeMail extends Mailable
     {
         $portalUrl = config('app.url') . '/login';
         
-        $subject = config('app.name') . ": Account Setup"; 
+        $titlePrefix = $this->userType ? $this->userType . ": " : "";
+        $subject = $titlePrefix . "Account Setup";
         $intro = "Welcome to " . config('app.name') . "!";
         
         $content = "<p>Your account has been successfully created";
@@ -58,7 +66,7 @@ class WelcomeMail extends Mailable
         }
         $content .= ". Use the credentials below to access the portal:</p>";
         
-        $content .= "<p style='background-color: #f8f9fa; padding: 16px; border-radius: 6px; margin: 16px 0;'>";
+        $content .= "<p style='background-color: #f8fafc; padding: 16px; border-radius: 6px; border: 1px solid #e2e8f0; margin: 16px 0;'>";
         $content .= "<strong>Email:</strong> " . htmlspecialchars($this->email) . "<br>";
         $content .= "<strong>Password:</strong> " . htmlspecialchars($this->password);
         $content .= "</p>";

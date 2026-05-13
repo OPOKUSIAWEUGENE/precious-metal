@@ -15,11 +15,12 @@ class EmailService extends BaseService
      * @param string $email
      * @param string $token
      * @param string $resetUrl
+     * @param string $userType
      * @return void
      */
-    public function sendPasswordResetMail(string $email, string $token, string $resetUrl): void
+    public function sendPasswordResetMail(string $email, string $token, string $resetUrl, string $userType = ''): void
     {
-        Mail::to($email)->send(new PasswordResetMail($email, $token, $resetUrl));
+        Mail::to($email)->send(new PasswordResetMail($email, $token, $resetUrl, $userType));
     }
 
     /**
@@ -28,10 +29,11 @@ class EmailService extends BaseService
      * @param string $email
      * @param string $password
      * @param string|null $organizationName
+     * @param string $userType
      * @return void
      */
-    public function sendWelcomeMail(string $email, string $password, ?string $organizationName = null): void
+    public function sendWelcomeMail(string $email, string $password, ?string $organizationName = null, string $userType = ''): void
     {
-        Mail::to($email)->send(new WelcomeMail($email, $password, $organizationName));
+        Mail::to($email)->send(new WelcomeMail($email, $password, $organizationName, $userType));
     }
 }

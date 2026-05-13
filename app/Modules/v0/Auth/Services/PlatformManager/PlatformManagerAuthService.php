@@ -87,7 +87,7 @@ class PlatformManagerAuthService extends BaseService
 
         $resetUrl = config('app.url') . '/auth/platform-managers/password/reset?token=' . $token . '&email=' . urlencode($user->email);
 
-        $this->emailService->sendPasswordResetMail($user->email, $token, $resetUrl);
+        $this->emailService->sendPasswordResetMail($user->email, $token, $resetUrl, 'Platform Manager');
 
         return self::success([
             'message' => 'Password reset token generated',

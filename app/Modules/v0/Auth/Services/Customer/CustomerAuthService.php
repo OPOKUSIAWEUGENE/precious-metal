@@ -138,7 +138,7 @@ class CustomerAuthService extends BaseService
 
         $resetUrl = config('app.url') . '/auth/customers/password/reset?token=' . $token . '&email=' . urlencode($customer->email);
 
-        $this->emailService->sendPasswordResetMail($customer->email, $token, $resetUrl);
+        $this->emailService->sendPasswordResetMail($customer->email, $token, $resetUrl, 'Customer');
 
         return self::success([
             'message' => 'Password reset token generated',

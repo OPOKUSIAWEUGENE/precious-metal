@@ -7,35 +7,49 @@
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f4f7fa;
+            background-color: #f8fafc;
             margin: 0;
             padding: 0;
             -webkit-font-smoothing: antialiased;
         }
         .wrapper {
             width: 100%;
-            background-color: #f4f7fa;
+            background-color: #f8fafc;
             padding: 40px 0;
         }
         .container {
             max-width: 600px;
             margin: 0 auto;
             background-color: #ffffff;
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
         }
         .header {
-            background-color: #1e293b;
+            background-color: #f8fafc;
             padding: 40px 20px;
             text-align: center;
+            border-bottom: 1px solid #e2e8f0;
         }
-        .header h1 {
+        .logo-box {
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            background-color: #2563eb;
             color: #ffffff;
-            margin: 0;
             font-size: 24px;
+            font-weight: 800;
+            border-radius: 12px;
+            margin: 0 auto 16px;
+            text-align: center;
+        }
+        .brand-name {
+            color: #1e293b;
+            font-size: 18px;
             font-weight: 700;
-            letter-spacing: -0.5px;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .content {
             padding: 40px;
@@ -45,18 +59,37 @@
         .content h2 {
             color: #1e293b;
             margin-top: 0;
-            font-size: 20px;
+            font-size: 16px; /* Normal text size as requested */
             font-weight: 600;
+            margin-bottom: 24px;
         }
         .footer {
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
+            background-color: #ffffff;
+            border-top: 1px solid #f1f5f9;
+        }
+        .social-icons {
+            margin-bottom: 24px;
+        }
+        .social-icon {
+            display: inline-block;
+            margin: 0 8px;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            background-color: #f1f5f9;
+            border-radius: 50%;
+            color: #475569;
+            text-decoration: none;
+        }
+        .footer-text {
             font-size: 13px;
             color: #64748b;
-            background-color: #f8fafc;
+            line-height: 1.8;
         }
         .button-container {
-            margin: 30px 0;
+            margin: 35px 0;
             text-align: center;
         }
         .button {
@@ -67,13 +100,13 @@
             text-decoration: none;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 16px;
-            transition: background-color 0.2s;
+            font-size: 15px;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
         }
         .divider {
             height: 1px;
-            background-color: #e2e8f0;
-            margin: 30px 0;
+            background-color: #f1f5f9;
+            margin: 35px 0;
         }
     </style>
 </head>
@@ -81,7 +114,8 @@
     <div class="wrapper">
         <div class="container">
             <div class="header">
-                <h1>{{ config('app.name') }}</h1>
+                <div class="logo-box">FAS</div>
+                <h1 class="brand-name">{{ config('app.name') }}</h1>
             </div>
             <div class="content">
                 <h2>@yield('intro')</h2>
@@ -94,14 +128,22 @@
                 @endif
 
                 <div class="divider"></div>
-                <p style="margin-bottom: 0;">
+                <p style="margin-bottom: 0; font-size: 14px;">
                     @yield('outro')<br>
                     <strong>The {{ config('app.name') }} Team</strong>
                 </p>
             </div>
             <div class="footer">
-                &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.<br>
-                If you did not expect this email, you can safely ignore it.
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" width="16" alt="Facebook"></a>
+                    <a href="#" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" width="16" alt="Twitter"></a>
+                    <a href="#" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" width="16" alt="Instagram"></a>
+                    <a href="#" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/3536/3536445.png" width="16" alt="LinkedIn"></a>
+                </div>
+                <div class="footer-text">
+                    &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.<br>
+                    If you have any questions, please contact our support team.
+                </div>
             </div>
         </div>
     </div>

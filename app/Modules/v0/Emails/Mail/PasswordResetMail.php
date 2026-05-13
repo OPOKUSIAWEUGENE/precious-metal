@@ -20,8 +20,12 @@ class PasswordResetMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public string $email, public string $verification_code, public string $resetUrl)
-    {
+    public function __construct(
+        public string $email, 
+        public string $verification_code, 
+        public string $resetUrl,
+        public string $userType = ''
+    ) {
     }
 
     /**
@@ -31,10 +35,13 @@ class PasswordResetMail extends Mailable
     {
         $from = config('mail.from.address');
         $name = config('mail.from.name');
+        
+        $titlePrefix = $this->userType ? $this->userType . ": " : "";
+        $subject = $titlePrefix . "Password Reset Request";
 
         return new Envelope(
             from: new Address($from ?: 'hello@neutek.com', $name ?: config('app.name')),
-            subject: config('app.name') . ": Password Reset",
+            subject: $subject,
         );
     }
 
@@ -43,8 +50,9 @@ class PasswordResetMail extends Mailable
      */
     public function content(): Content
     {
-        $subject = config('app.name') . ": Password Reset"; 
-        $intro = "Password Reset Request"; 
+        $titlePrefix = $this->userType ? $this->userType . ": " : "";
+        $subject = $titlePrefix . "Password Reset Request";
+        $intro = $subject; 
         
         $content = "<p style='margin-bottom: 24px;'>Please use the following unique verification code to authorize this request:</p>";
         $content .= Helper::formatVerificationCodeBoxes($this->verification_code);
