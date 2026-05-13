@@ -15,17 +15,19 @@ class CustomerAuthService extends BaseService
 {
     use ApiResponse;
 
-    public function __construct(protected Customer $customer)
-    {
+    public function __construct(
+        protected Customer $customer,
+        protected \App\Modules\v0\Emails\Services\EmailService $emailService
+    ) {
     }
 
     public function login(array $credentials): JsonResponse
     {
-        $identifier = $credentials['username'] ?? null;
+        $identifier = $credentials['email'] ?? null;
         $password = $credentials['password'] ?? null;
 
         if (empty($identifier) || empty($password)) {
-            return self::error('Username and password are required', code: 400);
+            return self::error('Email and password are required', code: 400);
         }
 
         $customer = $this->findByIdentifier($identifier);
@@ -95,7 +97,7 @@ class CustomerAuthService extends BaseService
         $customer->save();
 
         return $this->login([
-            'username' => $email,
+            'email' => $email,
             'password' => $password,
         ]);
     }
@@ -111,31 +113,7 @@ class CustomerAuthService extends BaseService
         return self::success(['message' => 'Logged out successfully']);
     }
 
-    public function me(): JsonResponse
-    {
-        $customer = Auth::guard('sanctum')->user();
 
-        if (!$customer) {
-            return self::error('Unauthenticated', code: 401);
-        }
-
-        return self::success([
-            'id' => $customer->id,
-            'email' => $customer->email,
-            'first_name' => $customer->first_name,
-            'last_name' => $customer->last_name,
-            'date_of_birth' => $customer->date_of_birth,
-            'nationality' => $customer->nationality,
-            'resident_address' => $customer->resident_address,
-            'selfie' => $customer->selfie,
-            'phone_number' => $customer->phone_number,
-            'kyc' => $customer->kyc,
-            'card_details' => $customer->card_details,
-            'active' => $customer->active,
-            'created_at' => $customer->created_at,
-            'updated_at' => $customer->updated_at,
-        ]);
-    }
 
     public function requestPasswordReset(string $email): JsonResponse
     {
@@ -158,10 +136,15 @@ class CustomerAuthService extends BaseService
             ]
         );
 
+        $resetUrl = config('app.url') . '/auth/customers/password/reset?token=' . $token . '&email=' . urlencode($customer->email);
+
+        $this->emailService->sendPasswordResetMail($customer->email, $token, $resetUrl);
+
         return self::success([
             'message' => 'Password reset token generated',
             'email' => $customer->email,
             'reset_token' => $token,
+            'reset_url' => $resetUrl,
             'expires_at' => $expiresAt,
         ]);
     }

@@ -522,4 +522,22 @@ class Helper
 
         return $cleaned;
     }
+
+
+        /**
+     * Format verification code into individual boxes for emails
+     *
+     * @param string $code
+     * @return string
+     */
+    public static function formatVerificationCodeBoxes(string $code): string
+    {
+        $html = '<div style="display: flex; justify-content: center; gap: 8px; margin: 30px 0;">';
+        $chars = str_split((string) $code);
+        foreach ($chars as $char) {
+            $html .= '<div style="width: 45px; height: 55px; line-height: 55px; text-align: center; background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 26px; font-family: sans-serif; font-weight: 700; color: #2563eb; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">' . htmlspecialchars($char) . '</div>';
+        }
+        $html .= '</div>';
+        return $html;
+    }
 }

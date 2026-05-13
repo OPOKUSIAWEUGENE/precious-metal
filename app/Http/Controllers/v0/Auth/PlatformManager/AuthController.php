@@ -23,13 +23,7 @@ class AuthController extends Controller
         return $this->authService->login($request->validated());
     }
 
-    public function loginWithEmail(Request $request): JsonResponse
-    {
-        return $this->authService->loginWithEmail(
-            $request->input('email'),
-            $request->input('password')
-        );
-    }
+
 
     // Session
     public function logout(): JsonResponse
@@ -37,10 +31,7 @@ class AuthController extends Controller
         return $this->authService->logout();
     }
 
-    public function me(): JsonResponse
-    {
-        return $this->authService->me();
-    }
+
 
     // Password reset
     public function requestPasswordReset(RequestPasswordResetRequest $request): JsonResponse

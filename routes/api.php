@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v0/auth')->group(function () {
     Route::group(['prefix' => 'platform-managers'], function () {
         Route::post('/login', [AuthController::class, 'login']);
-        Route::post('/login/email', [AuthController::class, 'loginWithEmail']);
+
         Route::post('/password/request', [AuthController::class, 'requestPasswordReset']);
         Route::post('/password/reset', [AuthController::class, 'resetPassword']);
         
         Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('/logout', [AuthController::class, 'logout']);
-            Route::get('/me', [AuthController::class, 'me']);
+
         });
     });
 
@@ -27,7 +27,7 @@ Route::prefix('v0/auth')->group(function () {
 
         Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('/logout', [CustomerAuthController::class, 'logout']);
-            Route::get('/me', [CustomerAuthController::class, 'me']);
+
         });
     });
 });

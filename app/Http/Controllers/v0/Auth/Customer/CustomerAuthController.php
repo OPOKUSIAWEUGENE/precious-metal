@@ -47,8 +47,5 @@ class CustomerAuthController extends Controller
         return $this->customerAuthService->logout();
     }
 
-    public function me(): JsonResponse
-    {
-        return $this->customerAuthService->me();
-    }
+
 }

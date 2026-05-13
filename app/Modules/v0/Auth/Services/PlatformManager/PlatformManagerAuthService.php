@@ -17,45 +17,24 @@ class PlatformManagerAuthService extends BaseService
 {
     use ApiResponse;
 
-    public function __construct(protected UserRepository $userRepository)
-    {
+    public function __construct(
+        protected UserRepository $userRepository,
+        protected \App\Modules\v0\Emails\Services\EmailService $emailService
+    ) {
     }
 
     public function login(array $credentials): JsonResponse
     {
-        $identifier = $credentials['username'] ?? null;
+        $identifier = $credentials['email'] ?? null;
         $password = $credentials['password'] ?? null;
 
         if (empty($identifier) || empty($password)) {
-            return self::error('Username and password are required', code: 400);
+            return self::error('Email and password are required', code: 400);
         }
 
         $user = $this->userRepository->findByEmailIgnoreCase($identifier)
             ?? $this->userRepository->findByPhoneNumber($identifier);
 
-        if (!$user || !Hash::check($password, $user->password)) {
-            return self::error('Invalid credentials', code: 401);
-        }
-
-        if (!$user->active) {
-            return self::error('Account is disabled', code: 403);
-        }
-
-        $token = $user->createToken('auth-token')->plainTextToken;
-
-        return self::success([
-            'token' => $token,
-            'user' => $this->userPayload($user),
-        ]);
-    }
-
-    public function loginWithEmail(string $email, string $password): JsonResponse
-    {
-        if (empty($email) || empty($password)) {
-            return self::error('Email and password are required', code: 400);
-        }
-
-        $user = $this->userRepository->findByEmailIgnoreCase($email);
         if (!$user || !Hash::check($password, $user->password)) {
             return self::error('Invalid credentials', code: 401);
         }
@@ -83,27 +62,7 @@ class PlatformManagerAuthService extends BaseService
         return self::success(['message' => 'Logged out successfully']);
     }
 
-    public function me(): JsonResponse
-    {
-        $user = Auth::guard('sanctum')->user();
 
-        if (!$user) {
-            return self::error('Unauthenticated', code: 401);
-        }
-
-        return self::success([
-            'id' => $user->id,
-            'email' => $user->email,
-            'first_name' => $user->first_name,
-            'last_name' => $user->last_name,
-            'phone_number' => $user->phone_number,
-            'profile_img' => $user->profile_img,
-            'role' => $user->role,
-            'active' => $user->active,
-            'created_at' => $user->created_at,
-            'updated_at' => $user->updated_at,
-        ]);
-    }
 
     public function requestPasswordReset(string $email): JsonResponse
     {
@@ -126,10 +85,15 @@ class PlatformManagerAuthService extends BaseService
             ]
         );
 
+        $resetUrl = config('app.url') . '/auth/platform-managers/password/reset?token=' . $token . '&email=' . urlencode($user->email);
+
+        $this->emailService->sendPasswordResetMail($user->email, $token, $resetUrl);
+
         return self::success([
             'message' => 'Password reset token generated',
             'email' => $user->email,
             'reset_token' => $token,
+            'reset_url' => $resetUrl,
             'expires_at' => $expiresAt,
         ]);
     }
