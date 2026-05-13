@@ -14,7 +14,8 @@ class CustomerSeeder extends Seeder
         Customer::firstOrCreate(
             ['email' => 'customer@neutek.local'],
             [
-                'password' => Hash::make('password123'),
+                'id' => (string) \Illuminate\Support\Str::orderedUuid(),
+                'password' => 'password123',
                 'first_name' => 'John',
                 'last_name' => 'Customer',
                 'phone_number' => '+233240000000',

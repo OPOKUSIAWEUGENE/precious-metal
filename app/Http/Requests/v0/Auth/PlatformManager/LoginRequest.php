@@ -34,7 +34,7 @@ class LoginRequest extends FormRequest
             /**
              * @example admin@neutek.local
              */
-            'username' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
             /**
              * @example password123
              */

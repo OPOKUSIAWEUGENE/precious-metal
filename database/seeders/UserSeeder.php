@@ -14,7 +14,8 @@ class UserSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'admin@neutek.local'],
             [
-                'password' => Hash::make('password123'),
+                'id' => (string) \Illuminate\Support\Str::orderedUuid(),
+                'password' => 'password123',
                 'first_name' => 'System',
                 'last_name' => 'Admin',
                 'phone_number' => '+233200000000',
@@ -27,7 +28,8 @@ class UserSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'staff@neutek.local'],
             [
-                'password' => Hash::make('password123'),
+                'id' => (string) \Illuminate\Support\Str::orderedUuid(),
+                'password' => 'password123',
                 'first_name' => 'Support',
                 'last_name' => 'Staff',
                 'phone_number' => '+233200000001',

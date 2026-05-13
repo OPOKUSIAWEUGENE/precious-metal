@@ -15,7 +15,7 @@ trait BootTrait
     /**
      * built in function in laravel
      */
-    protected static function bootBootTrait()
+    public static function bootBootTrait()
     {
         /**
          * boot other traitnns on model
@@ -24,8 +24,8 @@ trait BootTrait
             /**
              * assign an ordered uuid string to model
              */
-            if ($model->getKey() === null) {
-                $model->setAttribute($model->getKeyName(), Str::orderedUuid()->toString());
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = (string) Str::orderedUuid();
             }
             /**
              * if password column exists, hash password

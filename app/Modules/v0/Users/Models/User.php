@@ -12,7 +12,11 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, BootTrait;
 
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
+        'id',
         'email',
         'password',
         'first_name',
@@ -39,6 +43,15 @@ class User extends Authenticatable
             'password' => 'hashed',
             'active' => 'boolean',
         ];
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = (string) \Illuminate\Support\Str::orderedUuid();
+            }
+        });
     }
 
     /**

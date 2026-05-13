@@ -11,7 +11,11 @@ class Customer extends AuthenticatableUser
 {
     use HasApiTokens, HasFactory, BootTrait;
 
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
+        'id',
         'email',
         'password',
         'first_name',
@@ -45,5 +49,14 @@ class Customer extends AuthenticatableUser
             'kyc' => 'array',
             'card_details' => 'array',
         ];
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = (string) \Illuminate\Support\Str::orderedUuid();
+            }
+        });
     }
 }
