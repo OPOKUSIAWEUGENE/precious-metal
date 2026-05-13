@@ -1,3 +1,693 @@
 {
-    "openapi": "3.0.0"
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Precious Metal API",
+        "description": "API documentation for the Precious Metal platform, including Platform Operator and Customer modules.",
+        "contact": {
+            "email": "support@neutek.local"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Primary API Server"
+        }
+    ],
+    "paths": {
+        "/v0/auth/customers/login": {
+            "post": {
+                "tags": [
+                    "Customer Authentication"
+                ],
+                "summary": "Customer Login",
+                "operationId": "7fa1159c161cd00905063308c3d37b02",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "customer@neutek.local"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/v0/auth/customers/register": {
+            "post": {
+                "tags": [
+                    "Customer API"
+                ],
+                "summary": "Customer Registration",
+                "operationId": "16611c1308db58c1ed61d490a5a6d000",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Registration successful"
+                    },
+                    "400": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/v0/auth/customers/password/request": {
+            "post": {
+                "tags": [
+                    "Customer API"
+                ],
+                "summary": "Request Customer Password Reset",
+                "operationId": "c90393c8273e2adc1447d0f310d2098c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "customer@neutek.local"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Reset link sent"
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    }
+                }
+            }
+        },
+        "/v0/auth/customers/password/reset": {
+            "post": {
+                "tags": [
+                    "Customer API"
+                ],
+                "summary": "Reset Customer Password",
+                "operationId": "e1716d3a1fab9c679eb675f34b153e52",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "customer@neutek.local"
+                                    },
+                                    "token": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password reset successful"
+                    },
+                    "400": {
+                        "description": "Invalid token or data"
+                    }
+                }
+            }
+        },
+        "/v0/auth/customers/logout": {
+            "post": {
+                "tags": [
+                    "Customer API"
+                ],
+                "summary": "Customer Logout",
+                "operationId": "431dd6a856c78571cd923d4dc5b9c26a",
+                "responses": {
+                    "200": {
+                        "description": "Logged out successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/auth/platform-managers/login": {
+            "post": {
+                "tags": [
+                    "Platform Authentication"
+                ],
+                "summary": "Platform Manager Login",
+                "operationId": "2efab4f87002f60e0da713bf2f14684b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@neutek.local"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/v0/auth/platform-managers/logout": {
+            "post": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "Platform Manager Logout",
+                "operationId": "e39594a68a77044b0d5174f0b7386c85",
+                "responses": {
+                    "200": {
+                        "description": "Logged out successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/auth/platform-managers/password/request": {
+            "post": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "Request Password Reset",
+                "operationId": "077031f6165b3b75bb2c8893ff181fa6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@neutek.local"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Reset link sent"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/v0/auth/platform-managers/password/reset": {
+            "post": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "Reset Password",
+                "operationId": "7886356f457645ee819e0503d57c2e7e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@neutek.local"
+                                    },
+                                    "token": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password reset successful"
+                    },
+                    "400": {
+                        "description": "Invalid token or data"
+                    }
+                }
+            }
+        },
+        "/v0/customers": {
+            "get": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "List all customers (Admin)",
+                "operationId": "5aa5c3f410d84dfc04a83e36c3c22707",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "Create a new customer (Admin)",
+                "operationId": "8a44c04e726a68aa125e32ecd9b0742d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/{id}": {
+            "get": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "Get customer details (Admin)",
+                "operationId": "0444fbe551b25a6c1c8302ab4873e654",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "Update customer details (Admin)",
+                "operationId": "83d11087a2145fe0da98f3b7cbc2a6b4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "Delete a customer (Admin)",
+                "operationId": "cd83a25341c9745d13cc6dc45631ca96",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/users": {
+            "get": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "List all platform users",
+                "operationId": "58cefde9ea53cae25f67848fadff6d16",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "Create a new platform user",
+                "operationId": "64c7612e274724a4bf7b92d21c774c39",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/users/{id}": {
+            "get": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "Get user details",
+                "operationId": "46a1d8565c0bfcc01d5cc15759f909a2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "Update user details",
+                "operationId": "5ede35bc94ba06600b6f996a244266b0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Platform Operator API"
+                ],
+                "summary": "Delete a user",
+                "operationId": "fb739ebd1af8454bffe2d76a0da4d065",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Customer API",
+            "description": "Customer-facing endpoints and authentication"
+        },
+        {
+            "name": "Platform Operator API",
+            "description": "Internal platform management, user administration, and customer oversight"
+        },
+        {
+            "name": "Customer Authentication",
+            "description": "Customer Authentication"
+        },
+        {
+            "name": "Platform Authentication",
+            "description": "Platform Authentication"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "security": [
+        {
+            "sanctum": []
+        }
+    ]
 }

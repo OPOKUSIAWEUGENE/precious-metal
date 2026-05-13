@@ -8,7 +8,7 @@ use App\Http\Requests\v0\Auth\PlatformManager\RequestPasswordResetRequest;
 use App\Http\Requests\v0\Auth\PlatformManager\ResetPasswordRequest;
 use App\Modules\v0\Auth\Services\PlatformManager\PlatformManagerAuthService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use OpenApi\Attributes as OA;
 
 class AuthController extends Controller
 {
@@ -17,28 +17,85 @@ class AuthController extends Controller
     ) {
     }
 
-    // Authentication
+    #[OA\Post(
+        path: "/v0/auth/platform-managers/login",
+        summary: "Platform Manager Login",
+        tags: ["Platform Operator Auth"],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "email", type: "string", format: "email", example: "admin@neutek.local"),
+                    new OA\Property(property: "password", type: "string", format: "password", example: "password123")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Login successful"),
+            new OA\Response(response: 401, description: "Invalid credentials")
+        ]
+    )]
     public function login(LoginRequest $request): JsonResponse
     {
         return $this->authService->login($request->validated());
     }
 
-
-
-    // Session
+    #[OA\Post(
+        path: "/v0/auth/platform-managers/logout",
+        summary: "Platform Manager Logout",
+        tags: ["Platform Operator Auth"],
+        security: [["sanctum" => []]],
+        responses: [
+            new OA\Response(response: 200, description: "Logged out successfully")
+        ]
+    )]
     public function logout(): JsonResponse
     {
         return $this->authService->logout();
     }
 
-
-
-    // Password reset
+    #[OA\Post(
+        path: "/v0/auth/platform-managers/password/request",
+        summary: "Request Password Reset",
+        tags: ["Platform Operator Auth"],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "email", type: "string", format: "email", example: "admin@neutek.local")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Reset link sent"),
+            new OA\Response(response: 404, description: "User not found")
+        ]
+    )]
     public function requestPasswordReset(RequestPasswordResetRequest $request): JsonResponse
     {
         return $this->authService->requestPasswordReset($request->input('email'));
     }
 
+    #[OA\Post(
+        path: "/v0/auth/platform-managers/password/reset",
+        summary: "Reset Password",
+        tags: ["Platform Operator Auth"],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "email", type: "string", format: "email", example: "admin@neutek.local"),
+                    new OA\Property(property: "token", type: "string", example: "123456"),
+                    new OA\Property(property: "password", type: "string", format: "password", example: "newpassword123"),
+                    new OA\Property(property: "password_confirmation", type: "string", format: "password", example: "newpassword123")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Password reset successful"),
+            new OA\Response(response: 400, description: "Invalid token or data")
+        ]
+    )]
     public function resetPassword(ResetPasswordRequest $request): JsonResponse
     {
         return $this->authService->resetPassword($request->validated());

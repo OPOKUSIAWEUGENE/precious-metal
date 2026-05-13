@@ -8,6 +8,7 @@ use App\Http\Requests\v0\User\UpdateUserRequest;
 use App\Modules\v0\Users\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use OpenApi\Attributes as OA;
 
 class UserController extends Controller
 {
@@ -18,7 +19,18 @@ class UserController extends Controller
         $this->service = $service;
     }
 
-    // Listing
+    #[OA\Get(
+        path: "/v0/users",
+        summary: "List all platform users",
+        tags: ["Users"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(name: "per_page", in: "query", schema: new OA\Schema(type: "integer", default: 15))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Success")
+        ]
+    )]
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('per_page', 15);
@@ -26,34 +38,87 @@ class UserController extends Controller
         return $this->service->paginate((int) $perPage);
     }
 
-    // CRUD
+    #[OA\Post(
+        path: "/v0/users",
+        summary: "Create a new platform user",
+        tags: ["Users"],
+        security: [["sanctum" => []]],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "first_name", type: "string"),
+                    new OA\Property(property: "last_name", type: "string"),
+                    new OA\Property(property: "email", type: "string", format: "email"),
+                    new OA\Property(property: "password", type: "string", format: "password")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Created")
+        ]
+    )]
     public function store(StoreUserRequest $request): JsonResponse
     {
         return $this->service->create($request->validated());
     }
 
+    #[OA\Get(
+        path: "/v0/users/{id}",
+        summary: "Get user details",
+        tags: ["Users"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Success")
+        ]
+    )]
     public function show(string $id): JsonResponse
     {
         return $this->service->find($id);
     }
 
+    #[OA\Put(
+        path: "/v0/users/{id}",
+        summary: "Update user details",
+        tags: ["Users"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Updated")
+        ]
+    )]
     public function update(UpdateUserRequest $request, string $id): JsonResponse
     {
         return $this->service->update($id, $request->validated());
     }
 
+    #[OA\Delete(
+        path: "/v0/users/{id}",
+        summary: "Delete a user",
+        tags: ["Users"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 204, description: "Deleted")
+        ]
+    )]
     public function destroy(string $id): JsonResponse
     {
         return $this->service->delete($id);
     }
 
-    // Lookup
     public function findByEmail(string $email): JsonResponse
     {
         return $this->service->findByEmail($email);
     }
 
-    // Status
     public function deactivate(string $id): JsonResponse
     {
         return $this->service->deactivate($id);
