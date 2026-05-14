@@ -559,23 +559,10 @@
     "components": {
         "securitySchemes": {
             "sanctum": {
-                "type": "apiKey",
-                "description": "Enter token in format (Bearer <token>)",
-                "name": "Authorization",
-                "in": "header"
-            },
-            "accept": {
-                "type": "apiKey",
-                "description": "Accept application/json",
-                "name": "Accept",
-                "in": "header"
+                "type": "http",
+                "scheme": "bearer",
+                "description": "Enter your Sanctum token"
             }
         }
-    },
-    "security": [
-        {
-            "sanctum": [],
-            "accept": []
-        }
-    ]
+    }
 }

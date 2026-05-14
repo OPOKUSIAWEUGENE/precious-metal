@@ -13,7 +13,7 @@ Route::prefix('v0/auth')->group(function () {
         Route::post('/password/request', [AuthController::class, 'requestPasswordReset']);
         Route::post('/password/reset', [AuthController::class, 'resetPassword']);
         
-        Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::group(['middleware' => 'auth:sanctum,platform_managers'], function () {
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::post('/change-password', [AuthController::class, 'changePassword']);
         });
@@ -25,9 +25,8 @@ Route::prefix('v0/auth')->group(function () {
         Route::post('/password/request', [CustomerAuthController::class, 'requestPasswordReset']);
         Route::post('/password/reset', [CustomerAuthController::class, 'resetPassword']);
 
-        Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::group(['middleware' => 'auth:sanctum,customers'], function () {
             Route::post('/logout', [CustomerAuthController::class, 'logout']);
-            Route::post('/change-password', [CustomerAuthController::class, 'changePassword']);
         });
     });
 });

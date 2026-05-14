@@ -80,24 +80,12 @@ return [
         'securityDefinitions' => [
             'securitySchemes' => [
                 'sanctum' => [
-                    'type' => 'apiKey',
-                    'description' => 'Enter token in format (Bearer <token>)',
-                    'name' => 'Authorization',
-                    'in' => 'header',
-                ],
-                'accept' => [
-                    'type' => 'apiKey',
-                    'description' => 'Accept application/json',
-                    'name' => 'Accept',
-                    'in' => 'header',
+                    'type' => 'http',
+                    'scheme' => 'bearer',
+                    'description' => 'Enter your Sanctum token',
                 ],
             ],
-            'security' => [
-                [
-                    'sanctum' => [],
-                    'accept' => [],
-                ],
-            ],
+            'security' => [],
         ],
         'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', false),
         'generate_yaml_copy' => env('L5_SWAGGER_GENERATE_YAML_COPY', false),

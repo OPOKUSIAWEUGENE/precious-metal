@@ -53,7 +53,7 @@ class PlatformManagerAuthService extends BaseService
 
     public function logout(): JsonResponse
     {
-        $user = Auth::guard('sanctum')->user();
+        $user = Auth::user();
 
         if ($user) {
             $user->currentAccessToken()?->delete();

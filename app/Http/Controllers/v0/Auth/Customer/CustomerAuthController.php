@@ -7,7 +7,6 @@ use App\Http\Requests\v0\Auth\Customer\LoginRequest;
 use App\Http\Requests\v0\Auth\Customer\RequestPasswordResetRequest;
 use App\Http\Requests\v0\Auth\Customer\RegisterRequest;
 use App\Http\Requests\v0\Auth\Customer\ResetPasswordRequest;
-use App\Http\Requests\v0\Auth\Customer\ChangePasswordRequest;
 use App\Modules\v0\Auth\Services\Customer\CustomerAuthService;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;
@@ -119,32 +118,6 @@ class CustomerAuthController extends Controller
     public function resetPassword(ResetPasswordRequest $request): JsonResponse
     {
         return $this->customerAuthService->resetPassword($request->validated());
-    }
-
-    #[OA\Post(
-        path: "/v0/auth/customers/change-password",
-        summary: "Change Customer Password",
-        tags: ["Customer API"],
-        security: [["sanctum" => []]],
-        requestBody: new OA\RequestBody(
-            required: true,
-            content: new OA\JsonContent(
-                properties: [
-                    new OA\Property(property: "current_password", type: "string", format: "password", example: "password123"),
-                    new OA\Property(property: "password", type: "string", format: "password", example: "newpassword123"),
-                    new OA\Property(property: "password_confirmation", type: "string", format: "password", example: "newpassword123")
-                ]
-            )
-        ),
-        responses: [
-            new OA\Response(response: 200, description: "Password changed successfully", content: new OA\JsonContent()),
-            new OA\Response(response: 422, description: "Validation error or incorrect current password", content: new OA\JsonContent()),
-            new OA\Response(response: 401, description: "Unauthorized", content: new OA\JsonContent())
-        ]
-    )]
-    public function changePassword(ChangePasswordRequest $request): JsonResponse
-    {
-        return $this->customerAuthService->changePassword($request->validated());
     }
 
     #[OA\Post(

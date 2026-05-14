@@ -252,73 +252,6 @@
                 }
             }
         },
-        "/v0/auth/customers/change-password": {
-            "post": {
-                "tags": [
-                    "Customer API"
-                ],
-                "summary": "Change Customer Password",
-                "operationId": "64126934ae2bf89d00709bee992cfc4a",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "current_password": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "password123"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "newpassword123"
-                                    },
-                                    "password_confirmation": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "newpassword123"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Password changed successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error or incorrect current password",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
         "/v0/auth/customers/logout": {
             "post": {
                 "tags": [
@@ -353,23 +286,10 @@
     "components": {
         "securitySchemes": {
             "sanctum": {
-                "type": "apiKey",
-                "description": "Enter token in format (Bearer <token>)",
-                "name": "Authorization",
-                "in": "header"
-            },
-            "accept": {
-                "type": "apiKey",
-                "description": "Accept application/json",
-                "name": "Accept",
-                "in": "header"
+                "type": "http",
+                "scheme": "bearer",
+                "description": "Enter your Sanctum token"
             }
         }
-    },
-    "security": [
-        {
-            "sanctum": [],
-            "accept": []
-        }
-    ]
+    }
 }

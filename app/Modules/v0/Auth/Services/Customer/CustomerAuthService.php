@@ -104,7 +104,7 @@ class CustomerAuthService extends BaseService
 
     public function logout(): JsonResponse
     {
-        $customer = Auth::guard('sanctum')->user();
+        $customer = Auth::user();
 
         if ($customer) {
             $customer->currentAccessToken()?->delete();
@@ -192,25 +192,6 @@ class CustomerAuthService extends BaseService
         DB::table('customer_password_reset_tokens')->where('email', $record->email)->delete();
 
         return self::success(['message' => 'Password reset successfully']);
-    }
-
-    public function changePassword(array $data): JsonResponse
-    {
-        /** @var Customer $customer */
-        $customer = Auth::guard('sanctum')->user();
-
-        if (!$customer) {
-            return self::error('Unauthorized', code: 401);
-        }
-
-        if (!Hash::check($data['current_password'], $customer->password)) {
-            return self::error('Current password does not match', code: 422);
-        }
-
-        $customer->password = $data['password'];
-        $customer->save();
-
-        return self::success(['message' => 'Password changed successfully']);
     }
 
     protected function resolveEmail(string $phone): string

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Customer;
+use App\Modules\v0\Customers\Models\Customer;
 use App\Models\User;
 use App\Modules\v0\Users\Models\User as PlatformManagerUser;
 
@@ -43,6 +43,14 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'customers' => [
+            'driver' => 'session',
+            'provider' => 'customers',
+        ],
+        'platform_managers' => [
+            'driver' => 'session',
+            'provider' => 'platform_managers',
         ],
     ],
 
