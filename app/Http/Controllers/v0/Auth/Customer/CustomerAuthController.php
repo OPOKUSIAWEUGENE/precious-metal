@@ -7,6 +7,7 @@ use App\Http\Requests\v0\Auth\Customer\LoginRequest;
 use App\Http\Requests\v0\Auth\Customer\RequestPasswordResetRequest;
 use App\Http\Requests\v0\Auth\Customer\RegisterRequest;
 use App\Http\Requests\v0\Auth\Customer\ResetPasswordRequest;
+use App\Http\Requests\v0\Auth\Customer\ChangePasswordRequest;
 use App\Modules\v0\Auth\Services\Customer\CustomerAuthService;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;
@@ -23,7 +24,7 @@ class CustomerAuthController extends Controller
     #[OA\Post(
         path: "/v0/auth/customers/login",
         summary: "Customer Login",
-        tags: ["Customer Auth"],
+        tags: ["Customer API"],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -34,19 +35,23 @@ class CustomerAuthController extends Controller
             )
         ),
         responses: [
-            new OA\Response(response: 200, description: "Login successful"),
-            new OA\Response(response: 401, description: "Invalid credentials")
+            new OA\Response(response: 200, description: "Successful operation", content: new OA\JsonContent()),
+            new OA\Response(response: 401, description: "Unauthorized", content: new OA\JsonContent()),
+            new OA\Response(response: 404, description: "Not Found", content: new OA\JsonContent()),
+            new OA\Response(response: 400, description: "Bad Request", content: new OA\JsonContent()),
+            new OA\Response(response: 201, description: "Created", content: new OA\JsonContent())
         ]
     )]
     public function login(LoginRequest $request): JsonResponse
     {
+        \Illuminate\Support\Facades\Log::info('Login attempt', $request->validated());
         return $this->customerAuthService->login($request->validated());
     }
 
     #[OA\Post(
         path: "/v0/auth/customers/register",
         summary: "Customer Registration",
-        tags: ["Customer Auth"],
+        tags: ["Customer API"],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -60,8 +65,8 @@ class CustomerAuthController extends Controller
             )
         ),
         responses: [
-            new OA\Response(response: 201, description: "Registration successful"),
-            new OA\Response(response: 400, description: "Validation error")
+            new OA\Response(response: 201, description: "Registration successful", content: new OA\JsonContent()),
+            new OA\Response(response: 400, description: "Validation error", content: new OA\JsonContent())
         ]
     )]
     public function register(RegisterRequest $request): JsonResponse
@@ -72,7 +77,7 @@ class CustomerAuthController extends Controller
     #[OA\Post(
         path: "/v0/auth/customers/password/request",
         summary: "Request Customer Password Reset",
-        tags: ["Customer Auth"],
+        tags: ["Customer API"],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -82,8 +87,8 @@ class CustomerAuthController extends Controller
             )
         ),
         responses: [
-            new OA\Response(response: 200, description: "Reset link sent"),
-            new OA\Response(response: 404, description: "Customer not found")
+            new OA\Response(response: 200, description: "Reset link sent", content: new OA\JsonContent()),
+            new OA\Response(response: 404, description: "Customer not found", content: new OA\JsonContent())
         ]
     )]
     public function requestPasswordReset(RequestPasswordResetRequest $request): JsonResponse
@@ -94,7 +99,7 @@ class CustomerAuthController extends Controller
     #[OA\Post(
         path: "/v0/auth/customers/password/reset",
         summary: "Reset Customer Password",
-        tags: ["Customer Auth"],
+        tags: ["Customer API"],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -107,8 +112,8 @@ class CustomerAuthController extends Controller
             )
         ),
         responses: [
-            new OA\Response(response: 200, description: "Password reset successful"),
-            new OA\Response(response: 400, description: "Invalid token or data")
+            new OA\Response(response: 200, description: "Password reset successful", content: new OA\JsonContent()),
+            new OA\Response(response: 400, description: "Invalid token or data", content: new OA\JsonContent())
         ]
     )]
     public function resetPassword(ResetPasswordRequest $request): JsonResponse
@@ -117,12 +122,38 @@ class CustomerAuthController extends Controller
     }
 
     #[OA\Post(
+        path: "/v0/auth/customers/change-password",
+        summary: "Change Customer Password",
+        tags: ["Customer API"],
+        security: [["sanctum" => []]],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "current_password", type: "string", format: "password", example: "password123"),
+                    new OA\Property(property: "password", type: "string", format: "password", example: "newpassword123"),
+                    new OA\Property(property: "password_confirmation", type: "string", format: "password", example: "newpassword123")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Password changed successfully", content: new OA\JsonContent()),
+            new OA\Response(response: 422, description: "Validation error or incorrect current password", content: new OA\JsonContent()),
+            new OA\Response(response: 401, description: "Unauthorized", content: new OA\JsonContent())
+        ]
+    )]
+    public function changePassword(ChangePasswordRequest $request): JsonResponse
+    {
+        return $this->customerAuthService->changePassword($request->validated());
+    }
+
+    #[OA\Post(
         path: "/v0/auth/customers/logout",
         summary: "Customer Logout",
-        tags: ["Customer Auth"],
+        tags: ["Customer API"],
         security: [["sanctum" => []]],
         responses: [
-            new OA\Response(response: 200, description: "Logged out successfully")
+            new OA\Response(response: 200, description: "Logged out successfully", content: new OA\JsonContent())
         ]
     )]
     public function logout(): JsonResponse

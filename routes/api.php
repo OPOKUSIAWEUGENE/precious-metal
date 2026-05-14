@@ -15,19 +15,19 @@ Route::prefix('v0/auth')->group(function () {
         
         Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('/logout', [AuthController::class, 'logout']);
-
+            Route::post('/change-password', [AuthController::class, 'changePassword']);
         });
     });
 
     Route::group(['prefix' => 'customers'], function () {
-        Route::post('/login', [CustomerAuthController::class, 'login']);
+        Route::post('/login', [CustomerAuthController::class, 'login'])->name('login');
         Route::post('/register', [CustomerAuthController::class, 'register']);
         Route::post('/password/request', [CustomerAuthController::class, 'requestPasswordReset']);
         Route::post('/password/reset', [CustomerAuthController::class, 'resetPassword']);
 
         Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('/logout', [CustomerAuthController::class, 'logout']);
-
+            Route::post('/change-password', [CustomerAuthController::class, 'changePassword']);
         });
     });
 });

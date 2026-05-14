@@ -21,7 +21,6 @@ return [
                 'annotations' => [
                     base_path('app/Http/Controllers/Controller.php'),
                     base_path('app/Http/Controllers/v0/Auth/Customer'),
-                    base_path('app/Http/Controllers/v0/Customers'),
                 ],
             ],
         ],
@@ -86,10 +85,17 @@ return [
                     'name' => 'Authorization',
                     'in' => 'header',
                 ],
+                'accept' => [
+                    'type' => 'apiKey',
+                    'description' => 'Accept application/json',
+                    'name' => 'Accept',
+                    'in' => 'header',
+                ],
             ],
             'security' => [
                 [
-                    'sanctum' => []
+                    'sanctum' => [],
+                    'accept' => [],
                 ],
             ],
         ],
@@ -113,7 +119,7 @@ return [
             ],
         ],
         'constants' => [
-            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://localhost:8000'),
+            'L5_SWAGGER_CONST_HOST' => env('APP_URL', 'http://localhost:8000'),
         ],
     ],
 ];

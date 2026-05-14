@@ -10,7 +10,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000",
+            "url": "http://127.0.0.1:8003/api",
             "description": "Primary API Server"
         }
     ],
@@ -46,10 +46,20 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Login successful"
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "401": {
-                        "description": "Invalid credentials"
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
                 }
             }
@@ -153,6 +163,73 @@
                         "description": "Invalid token or data"
                     }
                 }
+            }
+        },
+        "/v0/auth/platform-managers/change-password": {
+            "post": {
+                "tags": [
+                    "Platform Operator Auth"
+                ],
+                "summary": "Change Platform Manager Password",
+                "operationId": "be623cf5894e05c6878bc238911f52e5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "current_password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password changed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error or incorrect current password",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/v0/customers": {
@@ -486,12 +563,19 @@
                 "description": "Enter token in format (Bearer <token>)",
                 "name": "Authorization",
                 "in": "header"
+            },
+            "accept": {
+                "type": "apiKey",
+                "description": "Accept application/json",
+                "name": "Accept",
+                "in": "header"
             }
         }
     },
     "security": [
         {
-            "sanctum": []
+            "sanctum": [],
+            "accept": []
         }
     ]
 }

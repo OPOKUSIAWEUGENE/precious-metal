@@ -10,7 +10,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000",
+            "url": "http://127.0.0.1:8003/api",
             "description": "Primary API Server"
         }
     ],
@@ -18,7 +18,7 @@
         "/v0/auth/customers/login": {
             "post": {
                 "tags": [
-                    "Customer Auth"
+                    "Customer API"
                 ],
                 "summary": "Customer Login",
                 "operationId": "7fa1159c161cd00905063308c3d37b02",
@@ -46,10 +46,44 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Login successful"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "401": {
-                        "description": "Invalid credentials"
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
                 }
             }
@@ -57,7 +91,7 @@
         "/v0/auth/customers/register": {
             "post": {
                 "tags": [
-                    "Customer Auth"
+                    "Customer API"
                 ],
                 "summary": "Customer Registration",
                 "operationId": "16611c1308db58c1ed61d490a5a6d000",
@@ -98,10 +132,20 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Registration successful"
+                        "description": "Registration successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Validation error"
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
                 }
             }
@@ -109,7 +153,7 @@
         "/v0/auth/customers/password/request": {
             "post": {
                 "tags": [
-                    "Customer Auth"
+                    "Customer API"
                 ],
                 "summary": "Request Customer Password Reset",
                 "operationId": "c90393c8273e2adc1447d0f310d2098c",
@@ -132,10 +176,20 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Reset link sent"
+                        "description": "Reset link sent",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Customer not found"
+                        "description": "Customer not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
                 }
             }
@@ -143,7 +197,7 @@
         "/v0/auth/customers/password/reset": {
             "post": {
                 "tags": [
-                    "Customer Auth"
+                    "Customer API"
                 ],
                 "summary": "Reset Customer Password",
                 "operationId": "e1716d3a1fab9c679eb675f34b153e52",
@@ -180,85 +234,51 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Password reset successful"
+                        "description": "Password reset successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Invalid token or data"
+                        "description": "Invalid token or data",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
                 }
             }
         },
-        "/v0/auth/customers/logout": {
+        "/v0/auth/customers/change-password": {
             "post": {
                 "tags": [
-                    "Customer Auth"
+                    "Customer API"
                 ],
-                "summary": "Customer Logout",
-                "operationId": "431dd6a856c78571cd923d4dc5b9c26a",
-                "responses": {
-                    "200": {
-                        "description": "Logged out successfully"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/v0/customers": {
-            "get": {
-                "tags": [
-                    "Customers"
-                ],
-                "summary": "List all customers (Admin)",
-                "operationId": "5aa5c3f410d84dfc04a83e36c3c22707",
-                "parameters": [
-                    {
-                        "name": "per_page",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer",
-                            "default": 15
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "Customers"
-                ],
-                "summary": "Create a new customer (Admin)",
-                "operationId": "8a44c04e726a68aa125e32ecd9b0742d",
+                "summary": "Change Customer Password",
+                "operationId": "64126934ae2bf89d00709bee992cfc4a",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "first_name": {
-                                        "type": "string"
-                                    },
-                                    "last_name": {
-                                        "type": "string"
-                                    },
-                                    "email": {
+                                    "current_password": {
                                         "type": "string",
-                                        "format": "email"
+                                        "format": "password",
+                                        "example": "password123"
                                     },
-                                    "phone": {
-                                        "type": "string"
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
                                     }
                                 },
                                 "type": "object"
@@ -267,8 +287,29 @@
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "Created"
+                    "200": {
+                        "description": "Password changed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error or incorrect current password",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -278,80 +319,21 @@
                 ]
             }
         },
-        "/v0/customers/{id}": {
-            "get": {
+        "/v0/auth/customers/logout": {
+            "post": {
                 "tags": [
-                    "Customers"
+                    "Customer API"
                 ],
-                "summary": "Get customer details (Admin)",
-                "operationId": "0444fbe551b25a6c1c8302ab4873e654",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
+                "summary": "Customer Logout",
+                "operationId": "431dd6a856c78571cd923d4dc5b9c26a",
                 "responses": {
                     "200": {
-                        "description": "Success"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "Customers"
-                ],
-                "summary": "Update customer details (Admin)",
-                "operationId": "83d11087a2145fe0da98f3b7cbc2a6b4",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                        "description": "Logged out successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
                         }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Updated"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Customers"
-                ],
-                "summary": "Delete a customer (Admin)",
-                "operationId": "cd83a25341c9745d13cc6dc45631ca96",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "Deleted"
                     }
                 },
                 "security": [
@@ -364,12 +346,8 @@
     },
     "tags": [
         {
-            "name": "Customer Auth",
-            "description": "Customer Auth"
-        },
-        {
-            "name": "Customers",
-            "description": "Customers"
+            "name": "Customer API",
+            "description": "Customer-facing endpoints and authentication"
         }
     ],
     "components": {
@@ -379,12 +357,19 @@
                 "description": "Enter token in format (Bearer <token>)",
                 "name": "Authorization",
                 "in": "header"
+            },
+            "accept": {
+                "type": "apiKey",
+                "description": "Accept application/json",
+                "name": "Accept",
+                "in": "header"
             }
         }
     },
     "security": [
         {
-            "sanctum": []
+            "sanctum": [],
+            "accept": []
         }
     ]
 }

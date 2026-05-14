@@ -194,6 +194,25 @@ class CustomerAuthService extends BaseService
         return self::success(['message' => 'Password reset successfully']);
     }
 
+    public function changePassword(array $data): JsonResponse
+    {
+        /** @var Customer $customer */
+        $customer = Auth::guard('sanctum')->user();
+
+        if (!$customer) {
+            return self::error('Unauthorized', code: 401);
+        }
+
+        if (!Hash::check($data['current_password'], $customer->password)) {
+            return self::error('Current password does not match', code: 422);
+        }
+
+        $customer->password = $data['password'];
+        $customer->save();
+
+        return self::success(['message' => 'Password changed successfully']);
+    }
+
     protected function resolveEmail(string $phone): string
     {
         $phoneClean = preg_replace('/\s+/', '', $phone);
