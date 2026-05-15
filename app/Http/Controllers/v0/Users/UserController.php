@@ -49,8 +49,7 @@ class UserController extends Controller
                 properties: [
                     new OA\Property(property: "first_name", type: "string"),
                     new OA\Property(property: "last_name", type: "string"),
-                    new OA\Property(property: "email", type: "string", format: "email"),
-                    new OA\Property(property: "password", type: "string", format: "password")
+                    new OA\Property(property: "email", type: "string", format: "email")
                 ]
             )
         ),

@@ -10,7 +10,7 @@
     },
     "servers": [
         {
-            "url": "http://127.0.0.1:8003/api",
+            "url": "http://127.0.0.1:8002/api",
             "description": "Primary API Server"
         }
     ],
@@ -435,10 +435,6 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "format": "password"
                                     }
                                 },
                                 "type": "object"

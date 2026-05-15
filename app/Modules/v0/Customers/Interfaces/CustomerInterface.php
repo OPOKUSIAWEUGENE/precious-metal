@@ -7,6 +7,7 @@ use App\Modules\v0\Customers\Models\Customer;
 interface CustomerInterface
 {
     public function all();
+    public function paginate(int $perPage = 15);
     public function find(string $id): ?Customer;
     public function create(array $data): Customer;
     public function update(string $id, array $data): ?Customer;

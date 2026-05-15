@@ -25,6 +25,12 @@ class CustomerService extends BaseService
         return self::success(CustomerResource::collection($customers));
     }
 
+    public function paginate(int $perPage = 15): JsonResponse
+    {
+        $customers = $this->repository->paginate($perPage);
+        return self::success(CustomerResource::collection($customers)->response()->getData(true));
+    }
+
     public function find(string $id): JsonResponse
     {
         $customer = $this->repository->find($id);

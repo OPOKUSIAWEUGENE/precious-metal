@@ -7,6 +7,7 @@ use App\Modules\v0\Users\Models\User;
 interface UserInterface
 {
     public function all();
+    public function paginate(int $perPage = 15);
     public function find(string $id): ?User;
     public function create(array $data): User;
     public function update(string $id, array $data): ?User;

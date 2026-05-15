@@ -40,7 +40,6 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'phone_number' => 'nullable|string|max:20',
@@ -61,8 +60,6 @@ class StoreUserRequest extends FormRequest
             'email.required' => 'The email address is required.',
             'email.email' => 'Please provide a valid email address.',
             'email.unique' => 'This email address is already registered.',
-            'password.required' => 'The password is required.',
-            'password.min' => 'The password must be at least 8 characters.',
             'phone_number.max' => 'The phone number cannot exceed 20 characters.',
             'profile_img.url' => 'Please provide a valid URL for the profile image.',
         ];

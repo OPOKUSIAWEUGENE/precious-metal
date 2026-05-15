@@ -9,6 +9,9 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use App\Modules\v0\Users\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use App\Mail\UserModule\WelcomeMail;
 
 class UserService extends BaseService
 {
@@ -25,6 +28,12 @@ class UserService extends BaseService
         return self::success(UserResource::collection($users));
     }
 
+    public function paginate(int $perPage = 15): JsonResponse
+    {
+        $users = $this->repository->paginate($perPage);
+        return self::success(UserResource::collection($users)->response()->getData(true));
+    }
+
     public function find(string $id): JsonResponse
     {
         $user = $this->repository->find($id);
@@ -36,12 +45,15 @@ class UserService extends BaseService
 
     public function create(array $data): JsonResponse
     {
-        // Hash the password if provided
-        if (isset($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        }
+        // Generate a random password
+        $plainPassword = Str::random(10);
+        $data['password'] = Hash::make($plainPassword);
         
         $user = $this->repository->create($data);
+
+        // Send welcome email with the plain password
+        Mail::to($user->email)->send(new WelcomeMail($user->email, $plainPassword));
+
         return self::success(new UserResource($user), 201);
     }
 

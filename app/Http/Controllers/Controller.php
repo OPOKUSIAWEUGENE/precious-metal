@@ -12,7 +12,7 @@ use OpenApi\Attributes as OA;
     contact: new OA\Contact(email: "support@neutek.local")
 )]
 #[OA\Server(
-    url: L5_SWAGGER_CONST_HOST . "/api",
+    url: L5_SWAGGER_CONST_HOST,
     description: "Primary API Server"
 )]
 #[OA\Tag(
