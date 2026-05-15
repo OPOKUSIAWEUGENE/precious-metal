@@ -10,7 +10,7 @@
     },
     "servers": [
         {
-            "url": "http://127.0.0.1:8002/api",
+            "url": "http://127.0.0.1:8000/api",
             "description": "Primary API Server"
         }
     ],
@@ -358,6 +358,36 @@
                     }
                 ]
             },
+            "post": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Request a password reset for a customer",
+                "operationId": "requestCustomerPasswordReset",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reset token generated"
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
             "delete": {
                 "tags": [
                     "Customers"
@@ -501,6 +531,36 @@
                 "responses": {
                     "200": {
                         "description": "Updated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Request a password reset for a user",
+                "operationId": "requestUserPasswordReset",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reset token generated"
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 },
                 "security": [

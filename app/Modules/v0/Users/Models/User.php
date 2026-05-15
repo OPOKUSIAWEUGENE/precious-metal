@@ -19,6 +19,7 @@ class User extends Authenticatable
         'id',
         'email',
         'password',
+        'change_password',
         'first_name',
         'last_name',
         'phone_number',
@@ -41,6 +42,7 @@ class User extends Authenticatable
     {
         return [
             'password' => 'hashed',
+            'change_password' => 'boolean',
             'active' => 'boolean',
         ];
     }

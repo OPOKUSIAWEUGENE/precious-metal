@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
                 'last_name' => 'Admin',
                 'phone_number' => '+233200000000',
                 'role' => 'admin',
+                'change_password' => false,
                 'active' => true,
             ]
         );
@@ -34,6 +35,7 @@ class UserSeeder extends Seeder
                 'last_name' => 'Staff',
                 'phone_number' => '+233200000001',
                 'role' => 'staff',
+                'change_password' => false,
                 'active' => true,
             ]
         );

@@ -40,6 +40,7 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'email' => 'required|email|unique:users,email',
+            'change_password' => 'nullable|boolean',
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'phone_number' => 'nullable|string|max:20',

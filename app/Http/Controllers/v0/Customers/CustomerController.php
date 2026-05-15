@@ -97,6 +97,24 @@ class CustomerController extends Controller
         return $this->service->update($id, $request->validated());
     }
 
+    #[OA\Post(
+        path: "/v0/customers/{id}/password/request",
+        summary: "Request a password reset for a customer",
+        tags: ["Customers"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Reset token generated"),
+            new OA\Response(response: 404, description: "Customer not found")
+        ]
+    )]
+    public function requestPasswordReset(string $id): JsonResponse
+    {
+        return $this->service->requestPasswordReset($id);
+    }
+
     #[OA\Delete(
         path: "/v0/customers/{id}",
         summary: "Delete a customer (Admin)",

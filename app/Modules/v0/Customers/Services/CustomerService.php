@@ -3,11 +3,13 @@
 namespace App\Modules\v0\Customers\Services;
 
 use App\Modules\BaseService;
-use App\Modules\v0\Customers\Repositories\CustomerRepository;
 use App\Modules\v0\Customers\Models\Customer;
+use App\Modules\v0\Customers\Repositories\CustomerRepository;
+use App\Modules\v0\Customers\Resources\CustomerResource;
+use App\Modules\v0\Emails\Services\EmailService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use App\Modules\v0\Customers\Resources\CustomerResource;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class CustomerService extends BaseService
@@ -63,6 +65,40 @@ class CustomerService extends BaseService
             return self::error('Customer not found', code: 404);
         }
         return self::success(new CustomerResource($customer), 200);
+    }
+
+    public function requestPasswordReset(string $id): JsonResponse
+    {
+        $customer = $this->repository->find($id);
+
+        if (!$customer) {
+            return self::error('Customer not found', code: 404);
+        }
+
+        $token = bin2hex(random_bytes(32));
+        $expiresAt = now()->addMinutes(60);
+
+        DB::table('customer_password_reset_tokens')->updateOrInsert(
+            ['email' => $customer->email],
+            [
+                'token' => Hash::make($token),
+                'expires_at' => $expiresAt,
+                'updated_at' => now(),
+                'created_at' => now(),
+            ]
+        );
+
+        $resetUrl = config('app.url') . '/auth/customers/password/reset?token=' . $token . '&email=' . urlencode($customer->email);
+
+        app(EmailService::class)->sendPasswordResetMail($customer->email, $token, $resetUrl, 'Customer');
+
+        return self::success([
+            'message' => 'Password reset token generated',
+            'email' => $customer->email,
+            'reset_token' => $token,
+            'reset_url' => $resetUrl,
+            'expires_at' => $expiresAt,
+        ]);
     }
 
     public function delete(string $id): JsonResponse

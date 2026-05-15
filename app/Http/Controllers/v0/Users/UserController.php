@@ -49,7 +49,8 @@ class UserController extends Controller
                 properties: [
                     new OA\Property(property: "first_name", type: "string"),
                     new OA\Property(property: "last_name", type: "string"),
-                    new OA\Property(property: "email", type: "string", format: "email")
+                    new OA\Property(property: "email", type: "string", format: "email"),
+                    new OA\Property(property: "change_password", type: "boolean", example: true)
                 ]
             )
         ),
@@ -87,6 +88,22 @@ class UserController extends Controller
         parameters: [
             new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
         ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "email", type: "string", format: "email"),
+                    new OA\Property(property: "password", type: "string", format: "password"),
+                    new OA\Property(property: "change_password", type: "boolean"),
+                    new OA\Property(property: "first_name", type: "string"),
+                    new OA\Property(property: "last_name", type: "string"),
+                    new OA\Property(property: "phone_number", type: "string"),
+                    new OA\Property(property: "profile_img", type: "string"),
+                    new OA\Property(property: "role", type: "string"),
+                    new OA\Property(property: "active", type: "boolean")
+                ]
+            )
+        ),
         responses: [
             new OA\Response(response: 200, description: "Updated")
         ]
@@ -94,6 +111,24 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, string $id): JsonResponse
     {
         return $this->service->update($id, $request->validated());
+    }
+
+    #[OA\Post(
+        path: "/v0/users/{id}/password/request",
+        summary: "Request a password reset for a user",
+        tags: ["Users"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Reset token generated"),
+            new OA\Response(response: 404, description: "User not found")
+        ]
+    )]
+    public function requestPasswordReset(string $id): JsonResponse
+    {
+        return $this->service->requestPasswordReset($id);
     }
 
     #[OA\Delete(

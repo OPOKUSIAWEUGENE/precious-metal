@@ -2,16 +2,18 @@
 
 namespace App\Modules\v0\Users\Services;
 
+use App\Mail\UserModule\WelcomeMail;
 use App\Modules\BaseService;
-use App\Modules\v0\Users\Repositories\UserRepository;
+use App\Modules\v0\Emails\Services\EmailService;
 use App\Modules\v0\Users\Models\User;
+use App\Modules\v0\Users\Repositories\UserRepository;
+use App\Modules\v0\Users\Resources\UserResource;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use App\Modules\v0\Users\Resources\UserResource;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use App\Mail\UserModule\WelcomeMail;
 
 class UserService extends BaseService
 {
@@ -48,6 +50,7 @@ class UserService extends BaseService
         // Generate a random password
         $plainPassword = Str::random(10);
         $data['password'] = Hash::make($plainPassword);
+        $data['change_password'] = $data['change_password'] ?? true;
         
         $user = $this->repository->create($data);
 
@@ -62,6 +65,7 @@ class UserService extends BaseService
         // Hash the password if provided
         if (isset($data['password'])) {
             $data['password'] = Hash::make($data['password']);
+            $data['change_password'] = $data['change_password'] ?? true;
         }
         
         $user = $this->repository->update($id, $data);
@@ -69,6 +73,40 @@ class UserService extends BaseService
             return self::error('User not found', code: 404);
         }
         return self::success(new UserResource($user), 200);
+    }
+
+    public function requestPasswordReset(string $id): JsonResponse
+    {
+        $user = $this->repository->find($id);
+
+        if (!$user) {
+            return self::error('User not found', code: 404);
+        }
+
+        $token = Str::random(64);
+        $expiresAt = now()->addMinutes(60);
+
+        DB::table('platform_manager_password_reset_tokens')->updateOrInsert(
+            ['email' => $user->email],
+            [
+                'token' => Hash::make($token),
+                'expires_at' => $expiresAt,
+                'updated_at' => now(),
+                'created_at' => now(),
+            ]
+        );
+
+        $resetUrl = config('app.url') . '/auth/platform-managers/password/reset?token=' . $token . '&email=' . urlencode($user->email);
+
+        app(EmailService::class)->sendPasswordResetMail($user->email, $token, $resetUrl, 'Platform Manager');
+
+        return self::success([
+            'message' => 'Password reset token generated',
+            'email' => $user->email,
+            'reset_token' => $token,
+            'reset_url' => $resetUrl,
+            'expires_at' => $expiresAt,
+        ]);
     }
 
     public function delete(string $id): JsonResponse
@@ -101,6 +139,7 @@ class UserService extends BaseService
             'last_name' => $user->last_name,
             'phone_number' => $user->phone_number,
             'role' => $user->role,
+            'change_password' => $user->change_password,
             'active' => $user->active,
         ];
     }

@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [UserController::class, 'store']);
         Route::get('/{id}', [UserController::class, 'show']);
         Route::put('/{id}', [UserController::class, 'update']);
+        Route::post('/{id}/password/request', [UserController::class, 'requestPasswordReset']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
         Route::get('/email/{email}', [UserController::class, 'findByEmail']);
         Route::put('/{id}/deactivate', [UserController::class, 'deactivate']);
@@ -48,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [CustomerController::class, 'store']);
         Route::get('/{id}', [CustomerController::class, 'show']);
         Route::put('/{id}', [CustomerController::class, 'update']);
+        Route::post('/{id}/password/request', [CustomerController::class, 'requestPasswordReset']);
         Route::delete('/{id}', [CustomerController::class, 'destroy']);
         Route::get('/email/{email}', [CustomerController::class, 'findByEmail']);
         Route::put('/{id}/deactivate', [CustomerController::class, 'deactivate']);
