@@ -3,7 +3,10 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return response()->json([
+        'timestamp' => now()->toIso8601String(),
+        'status' => 'running',
+    ]);
 });
 
 use App\Http\Controllers\v0\Debug\MailPreviewController;
