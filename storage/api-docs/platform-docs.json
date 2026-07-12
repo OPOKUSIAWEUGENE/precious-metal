@@ -358,12 +358,41 @@
                     }
                 ]
             },
+            "delete": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Delete a customer (Admin)",
+                "operationId": "cd83a25341c9745d13cc6dc45631ca96",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/{id}/password/request": {
             "post": {
                 "tags": [
                     "Customers"
                 ],
                 "summary": "Request a password reset for a customer",
-                "operationId": "requestCustomerPasswordReset",
+                "operationId": "02431dff08180e5d4ee9d4f764bdb4d3",
                 "parameters": [
                     {
                         "name": "id",
@@ -387,26 +416,146 @@
                         "sanctum": []
                     }
                 ]
-            },
-            "delete": {
+            }
+        },
+        "/v0/auth/customers/gold-wallets": {
+            "get": {
                 "tags": [
-                    "Customers"
+                    "Customer API"
                 ],
-                "summary": "Delete a customer (Admin)",
-                "operationId": "cd83a25341c9745d13cc6dc45631ca96",
+                "summary": "Get the authenticated customer's gold wallets",
+                "description": "Returns the current authenticated customer wallets from the shared gold wallet store.",
+                "operationId": "4395f1da28160e0017e0d2b8924a41be",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/GoldWallet"
+                                            }
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/gold-wallets": {
+            "get": {
+                "tags": [
+                    "Gold Wallets"
+                ],
+                "summary": "Get the authenticated user's gold wallets",
+                "description": "Returns the current authenticated platform manager's gold wallets.",
+                "operationId": "398bead95b4bc2c08435bafda7382acb",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/GoldWallet"
+                                            }
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/gold-wallets/all": {
+            "get": {
+                "tags": [
+                    "Gold Wallets"
+                ],
+                "summary": "Get all users' gold wallets",
+                "description": "Returns every gold wallet in the system for platform administrators.",
+                "operationId": "7875fa7657dcb5c431cf57e80362fb57",
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
+                        "name": "per_page",
+                        "in": "query",
                         "schema": {
-                            "type": "string"
+                            "type": "integer",
+                            "default": 15
                         }
                     }
                 ],
                 "responses": {
-                    "204": {
-                        "description": "Deleted"
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/GoldWallet"
+                                                    }
+                                                },
+                                                "links": {
+                                                    "type": "object"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     }
                 },
                 "security": [
@@ -465,8 +614,7 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email"
-                                    }
-                                    ,
+                                    },
                                     "change_password": {
                                         "type": "boolean",
                                         "example": true
@@ -585,36 +733,6 @@
                     }
                 ]
             },
-            "post": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Request a password reset for a user",
-                "operationId": "requestUserPasswordReset",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Reset token generated"
-                    },
-                    "404": {
-                        "description": "User not found"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            },
             "delete": {
                 "tags": [
                     "Users"
@@ -642,9 +760,110 @@
                     }
                 ]
             }
+        },
+        "/v0/users/{id}/password/request": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Request a password reset for a user",
+                "operationId": "fa4bbec9320f60dbf8cf74b4fb434154",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reset token generated"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "GoldWallet": {
+                "title": "Gold Wallet",
+                "description": "A gold wallet belonging to a user.",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "wallet_reference": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "available_weight": {
+                        "type": "string",
+                        "example": "0.00000000"
+                    },
+                    "reserved_weight": {
+                        "type": "string",
+                        "example": "0.00000000"
+                    },
+                    "weight_unit": {
+                        "type": "string",
+                        "example": "gram"
+                    },
+                    "purity": {
+                        "type": "string",
+                        "example": "0.999900"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "last_transaction_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "scheme": "bearer",
+                "description": "Enter your Sanctum token"
+            }
         }
     },
     "tags": [
+        {
+            "name": "Customer API",
+            "description": "Customer-facing endpoints and authentication"
+        },
         {
             "name": "Platform Operator Auth",
             "description": "Platform Operator Auth"
@@ -654,17 +873,12 @@
             "description": "Customers"
         },
         {
+            "name": "Gold Wallets",
+            "description": "Gold Wallets"
+        },
+        {
             "name": "Users",
             "description": "Users"
         }
-    ],
-    "components": {
-        "securitySchemes": {
-            "sanctum": {
-                "type": "http",
-                "scheme": "bearer",
-                "description": "Enter your Sanctum token"
-            }
-        }
-    }
+    ]
 }

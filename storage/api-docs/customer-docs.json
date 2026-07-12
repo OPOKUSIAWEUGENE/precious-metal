@@ -275,15 +275,293 @@
                     }
                 ]
             }
+        },
+        "/v0/customers": {
+            "get": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "List all customers (Admin)",
+                "operationId": "5aa5c3f410d84dfc04a83e36c3c22707",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Create a new customer (Admin)",
+                "operationId": "8a44c04e726a68aa125e32ecd9b0742d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/{id}": {
+            "get": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get customer details (Admin)",
+                "operationId": "0444fbe551b25a6c1c8302ab4873e654",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Update customer details (Admin)",
+                "operationId": "83d11087a2145fe0da98f3b7cbc2a6b4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Delete a customer (Admin)",
+                "operationId": "cd83a25341c9745d13cc6dc45631ca96",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/{id}/password/request": {
+            "post": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Request a password reset for a customer",
+                "operationId": "02431dff08180e5d4ee9d4f764bdb4d3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reset token generated"
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/auth/customers/gold-wallets": {
+            "get": {
+                "tags": [
+                    "Customer API"
+                ],
+                "summary": "Get the authenticated customer's gold wallets",
+                "description": "Returns the current authenticated customer wallets from the shared gold wallet store.",
+                "operationId": "4395f1da28160e0017e0d2b8924a41be",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/GoldWallet"
+                                            }
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
-    "tags": [
-        {
-            "name": "Customer API",
-            "description": "Customer-facing endpoints and authentication"
-        }
-    ],
     "components": {
+        "schemas": {
+            "GoldWallet": {
+                "title": "Gold Wallet",
+                "description": "A gold wallet belonging to a user.",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "wallet_reference": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "available_weight": {
+                        "type": "string",
+                        "example": "0.00000000"
+                    },
+                    "reserved_weight": {
+                        "type": "string",
+                        "example": "0.00000000"
+                    },
+                    "weight_unit": {
+                        "type": "string",
+                        "example": "gram"
+                    },
+                    "purity": {
+                        "type": "string",
+                        "example": "0.999900"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "last_transaction_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "sanctum": {
                 "type": "http",
@@ -291,5 +569,15 @@
                 "description": "Enter your Sanctum token"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Customer API",
+            "description": "Customer-facing endpoints and authentication"
+        },
+        {
+            "name": "Customers",
+            "description": "Customers"
+        }
+    ]
 }

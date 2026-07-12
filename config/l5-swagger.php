@@ -20,6 +20,7 @@ return [
                 'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
                 'annotations' => [
                     base_path('app/Http/Controllers/Controller.php'),
+                    base_path('app/Http/Controllers/v0/GoldWallets'),
                     base_path('app/Http/Controllers/v0/Auth/Customer'),
                     base_path('app/Http/Controllers/v0/Customers'),
                 ],
@@ -43,6 +44,7 @@ return [
                 'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
                 'annotations' => [
                     base_path('app/Http/Controllers/Controller.php'),
+                    base_path('app/Http/Controllers/v0/GoldWallets'),
                     base_path('app/Http/Controllers/v0/Auth/PlatformManager'),
                     base_path('app/Http/Controllers/v0/Users'),
                     base_path('app/Http/Controllers/v0/Customers'),
