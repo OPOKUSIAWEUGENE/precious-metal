@@ -2,9 +2,11 @@
 
 namespace App\Modules\v0\Users\Models;
 
+use App\Modules\v0\GoldWallets\Models\GoldWallet;
 use App\Traits\BootTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -54,6 +56,20 @@ class User extends Authenticatable
                 $model->id = (string) \Illuminate\Support\Str::orderedUuid();
             }
         });
+
+        static::created(function (self $user): void {
+            $user->goldWallets()->firstOrCreate(
+                [
+                    'weight_unit' => 'gram',
+                    'purity' => '0.999900',
+                ],
+                [
+                    'available_weight' => 0,
+                    'reserved_weight' => 0,
+                    'status' => 'active',
+                ]
+            );
+        });
     }
 
     /**
@@ -80,5 +96,15 @@ class User extends Authenticatable
     public function getRoleNames(): array
     {
         return $this->role ? [$this->role] : [];
+    }
+
+    public function isPlatformAdmin(): bool
+    {
+        return in_array($this->role, ['admin', 'platform_admin'], true);
+    }
+
+    public function goldWallets(): HasMany
+    {
+        return $this->hasMany(GoldWallet::class, 'user_id');
     }
 }

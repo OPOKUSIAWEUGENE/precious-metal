@@ -21,6 +21,7 @@ return [
                 'annotations' => [
                     base_path('app/Http/Controllers/Controller.php'),
                     base_path('app/Http/Controllers/v0/Auth/Customer'),
+                    base_path('app/Http/Controllers/v0/Customers'),
                 ],
             ],
         ],

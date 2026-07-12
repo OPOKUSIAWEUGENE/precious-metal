@@ -47,12 +47,13 @@ class UserService extends BaseService
 
     public function create(array $data): JsonResponse
     {
-        // Generate a random password
         $plainPassword = Str::random(10);
         $data['password'] = Hash::make($plainPassword);
         $data['change_password'] = $data['change_password'] ?? true;
-        
-        $user = $this->repository->create($data);
+
+        $user = DB::transaction(function () use ($data) {
+            return $this->repository->create($data);
+        });
 
         // Send welcome email with the plain password
         Mail::to($user->email)->send(new WelcomeMail($user->email, $plainPassword));
