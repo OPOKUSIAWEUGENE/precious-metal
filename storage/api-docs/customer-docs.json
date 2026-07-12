@@ -18,7 +18,7 @@
         "/v0/auth/customers/login": {
             "post": {
                 "tags": [
-                    "Customer API"
+                    "Auth"
                 ],
                 "summary": "Customer Login",
                 "operationId": "7fa1159c161cd00905063308c3d37b02",
@@ -91,7 +91,7 @@
         "/v0/auth/customers/register": {
             "post": {
                 "tags": [
-                    "Customer API"
+                    "Auth"
                 ],
                 "summary": "Customer Registration",
                 "operationId": "16611c1308db58c1ed61d490a5a6d000",
@@ -153,7 +153,7 @@
         "/v0/auth/customers/password/request": {
             "post": {
                 "tags": [
-                    "Customer API"
+                    "Auth"
                 ],
                 "summary": "Request Customer Password Reset",
                 "operationId": "c90393c8273e2adc1447d0f310d2098c",
@@ -197,7 +197,7 @@
         "/v0/auth/customers/password/reset": {
             "post": {
                 "tags": [
-                    "Customer API"
+                    "Auth"
                 ],
                 "summary": "Reset Customer Password",
                 "operationId": "e1716d3a1fab9c679eb675f34b153e52",
@@ -255,7 +255,7 @@
         "/v0/auth/customers/logout": {
             "post": {
                 "tags": [
-                    "Customer API"
+                    "Auth"
                 ],
                 "summary": "Customer Logout",
                 "operationId": "431dd6a856c78571cd923d4dc5b9c26a",
@@ -279,7 +279,7 @@
         "/v0/customers": {
             "get": {
                 "tags": [
-                    "Customers"
+                    "Customer"
                 ],
                 "summary": "List all customers (Admin)",
                 "operationId": "5aa5c3f410d84dfc04a83e36c3c22707",
@@ -306,7 +306,7 @@
             },
             "post": {
                 "tags": [
-                    "Customers"
+                    "Customer"
                 ],
                 "summary": "Create a new customer (Admin)",
                 "operationId": "8a44c04e726a68aa125e32ecd9b0742d",
@@ -350,7 +350,7 @@
         "/v0/customers/{id}": {
             "get": {
                 "tags": [
-                    "Customers"
+                    "Customer"
                 ],
                 "summary": "Get customer details (Admin)",
                 "operationId": "0444fbe551b25a6c1c8302ab4873e654",
@@ -377,7 +377,7 @@
             },
             "put": {
                 "tags": [
-                    "Customers"
+                    "Customer"
                 ],
                 "summary": "Update customer details (Admin)",
                 "operationId": "83d11087a2145fe0da98f3b7cbc2a6b4",
@@ -404,7 +404,7 @@
             },
             "delete": {
                 "tags": [
-                    "Customers"
+                    "Customer"
                 ],
                 "summary": "Delete a customer (Admin)",
                 "operationId": "cd83a25341c9745d13cc6dc45631ca96",
@@ -433,7 +433,7 @@
         "/v0/customers/{id}/password/request": {
             "post": {
                 "tags": [
-                    "Customers"
+                    "Customer"
                 ],
                 "summary": "Request a password reset for a customer",
                 "operationId": "02431dff08180e5d4ee9d4f764bdb4d3",
@@ -465,7 +465,7 @@
         "/v0/auth/customers/gold-wallets": {
             "get": {
                 "tags": [
-                    "Customer API"
+                    "Assets"
                 ],
                 "summary": "Get the authenticated customer's gold wallets",
                 "description": "Returns the current authenticated customer wallets from the shared gold wallet store.",
@@ -572,12 +572,16 @@
     },
     "tags": [
         {
-            "name": "Customer API",
-            "description": "Customer-facing endpoints and authentication"
+            "name": "Auth",
+            "description": "Customer authentication and session endpoints"
         },
         {
-            "name": "Customers",
-            "description": "Customers"
+            "name": "Assets",
+            "description": "Customer assets and gold wallets"
+        },
+        {
+            "name": "Customer",
+            "description": "Customer profile and account management"
         }
     ]
 }

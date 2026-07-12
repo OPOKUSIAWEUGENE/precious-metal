@@ -22,7 +22,7 @@ return [
                     base_path('app/Http/Controllers/Controller.php'),
                     base_path('app/Http/Controllers/v0/GoldWallets'),
                     base_path('app/Http/Controllers/v0/Auth/Customer'),
-                    base_path('app/Http/Controllers/v0/Customers'),
+                    base_path('app/Http/Controllers/v0/Customers/GoldWalletController.php'),
                 ],
             ],
         ],
@@ -45,6 +45,7 @@ return [
                 'annotations' => [
                     base_path('app/Http/Controllers/Controller.php'),
                     base_path('app/Http/Controllers/v0/GoldWallets'),
+                    base_path('app/Http/Controllers/v0/Rates'),
                     base_path('app/Http/Controllers/v0/Auth/PlatformManager'),
                     base_path('app/Http/Controllers/v0/Users'),
                     base_path('app/Http/Controllers/v0/Customers'),

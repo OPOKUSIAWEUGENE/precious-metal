@@ -16,7 +16,7 @@ class GoldWalletController extends Controller
     #[OA\Get(
         path: "/v0/auth/customers/gold-wallets",
         summary: "Get the authenticated customer's gold wallets",
-        tags: ["Customer API"],
+        tags: ["Assets"],
         security: [["sanctum" => []]],
         description: "Returns the current authenticated customer wallets from the shared gold wallet store.",
         responses: [

@@ -22,7 +22,7 @@ class CustomerController extends Controller
     #[OA\Get(
         path: "/v0/customers",
         summary: "List all customers (Admin)",
-        tags: ["Customers"],
+        tags: ["Customer"],
         security: [["sanctum" => []]],
         parameters: [
             new OA\Parameter(name: "per_page", in: "query", schema: new OA\Schema(type: "integer", default: 15))
@@ -41,7 +41,7 @@ class CustomerController extends Controller
     #[OA\Post(
         path: "/v0/customers",
         summary: "Create a new customer (Admin)",
-        tags: ["Customers"],
+        tags: ["Customer"],
         security: [["sanctum" => []]],
         requestBody: new OA\RequestBody(
             required: true,
@@ -66,7 +66,7 @@ class CustomerController extends Controller
     #[OA\Get(
         path: "/v0/customers/{id}",
         summary: "Get customer details (Admin)",
-        tags: ["Customers"],
+        tags: ["Customer"],
         security: [["sanctum" => []]],
         parameters: [
             new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
@@ -83,7 +83,7 @@ class CustomerController extends Controller
     #[OA\Put(
         path: "/v0/customers/{id}",
         summary: "Update customer details (Admin)",
-        tags: ["Customers"],
+        tags: ["Customer"],
         security: [["sanctum" => []]],
         parameters: [
             new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
@@ -100,7 +100,7 @@ class CustomerController extends Controller
     #[OA\Post(
         path: "/v0/customers/{id}/password/request",
         summary: "Request a password reset for a customer",
-        tags: ["Customers"],
+        tags: ["Customer"],
         security: [["sanctum" => []]],
         parameters: [
             new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
@@ -118,7 +118,7 @@ class CustomerController extends Controller
     #[OA\Delete(
         path: "/v0/customers/{id}",
         summary: "Delete a customer (Admin)",
-        tags: ["Customers"],
+        tags: ["Customer"],
         security: [["sanctum" => []]],
         parameters: [
             new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))

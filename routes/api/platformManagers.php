@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\v0\Auth\PlatformManager\AuthController;
 use App\Http\Controllers\v0\Customers\CustomerController;
+use App\Http\Controllers\v0\Rates\RateController;
 use App\Http\Controllers\v0\Users\GoldWalletController as UserGoldWalletController;
 use App\Http\Controllers\v0\Users\UserController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,11 @@ Route::middleware('auth:sanctum,platform_managers')->group(function () {
     Route::prefix('v0/gold-wallets')->group(function () {
         Route::get('/', [UserGoldWalletController::class, 'index']);
         Route::get('/all', [UserGoldWalletController::class, 'all']);
+    });
+
+    Route::prefix('v0/rates')->group(function () {
+        Route::get('/', [RateController::class, 'index']);
+        Route::post('/', [RateController::class, 'store']);
     });
 });
 

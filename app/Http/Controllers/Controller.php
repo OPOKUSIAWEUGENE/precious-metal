@@ -16,12 +16,16 @@ use OpenApi\Attributes as OA;
     description: "Primary API Server"
 )]
 #[OA\Tag(
-    name: "Customer API",
-    description: "Customer-facing endpoints and authentication"
+    name: "Auth",
+    description: "Customer authentication and session endpoints"
 )]
 #[OA\Tag(
-    name: "Platform Operator API",
-    description: "Internal platform management, user administration, and customer oversight"
+    name: "Assets",
+    description: "Customer assets and gold wallets"
+)]
+#[OA\Tag(
+    name: "Customer",
+    description: "Customer profile and account management"
 )]
 abstract class Controller extends BaseController
 {

@@ -23,7 +23,7 @@ class CustomerAuthController extends Controller
     #[OA\Post(
         path: "/v0/auth/customers/login",
         summary: "Customer Login",
-        tags: ["Customer API"],
+        tags: ["Auth"],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -50,7 +50,7 @@ class CustomerAuthController extends Controller
     #[OA\Post(
         path: "/v0/auth/customers/register",
         summary: "Customer Registration",
-        tags: ["Customer API"],
+        tags: ["Auth"],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -76,7 +76,7 @@ class CustomerAuthController extends Controller
     #[OA\Post(
         path: "/v0/auth/customers/password/request",
         summary: "Request Customer Password Reset",
-        tags: ["Customer API"],
+        tags: ["Auth"],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -98,7 +98,7 @@ class CustomerAuthController extends Controller
     #[OA\Post(
         path: "/v0/auth/customers/password/reset",
         summary: "Reset Customer Password",
-        tags: ["Customer API"],
+        tags: ["Auth"],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -123,7 +123,7 @@ class CustomerAuthController extends Controller
     #[OA\Post(
         path: "/v0/auth/customers/logout",
         summary: "Customer Logout",
-        tags: ["Customer API"],
+        tags: ["Auth"],
         security: [["sanctum" => []]],
         responses: [
             new OA\Response(response: 200, description: "Logged out successfully", content: new OA\JsonContent())

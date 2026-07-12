@@ -235,7 +235,7 @@
         "/v0/customers": {
             "get": {
                 "tags": [
-                    "Customers"
+                    "Customer"
                 ],
                 "summary": "List all customers (Admin)",
                 "operationId": "5aa5c3f410d84dfc04a83e36c3c22707",
@@ -262,7 +262,7 @@
             },
             "post": {
                 "tags": [
-                    "Customers"
+                    "Customer"
                 ],
                 "summary": "Create a new customer (Admin)",
                 "operationId": "8a44c04e726a68aa125e32ecd9b0742d",
@@ -306,7 +306,7 @@
         "/v0/customers/{id}": {
             "get": {
                 "tags": [
-                    "Customers"
+                    "Customer"
                 ],
                 "summary": "Get customer details (Admin)",
                 "operationId": "0444fbe551b25a6c1c8302ab4873e654",
@@ -333,7 +333,7 @@
             },
             "put": {
                 "tags": [
-                    "Customers"
+                    "Customer"
                 ],
                 "summary": "Update customer details (Admin)",
                 "operationId": "83d11087a2145fe0da98f3b7cbc2a6b4",
@@ -360,7 +360,7 @@
             },
             "delete": {
                 "tags": [
-                    "Customers"
+                    "Customer"
                 ],
                 "summary": "Delete a customer (Admin)",
                 "operationId": "cd83a25341c9745d13cc6dc45631ca96",
@@ -389,7 +389,7 @@
         "/v0/customers/{id}/password/request": {
             "post": {
                 "tags": [
-                    "Customers"
+                    "Customer"
                 ],
                 "summary": "Request a password reset for a customer",
                 "operationId": "02431dff08180e5d4ee9d4f764bdb4d3",
@@ -421,7 +421,7 @@
         "/v0/auth/customers/gold-wallets": {
             "get": {
                 "tags": [
-                    "Customer API"
+                    "Assets"
                 ],
                 "summary": "Get the authenticated customer's gold wallets",
                 "description": "Returns the current authenticated customer wallets from the shared gold wallet store.",
@@ -451,6 +451,129 @@
                     },
                     "401": {
                         "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/rates": {
+            "get": {
+                "tags": [
+                    "Rates"
+                ],
+                "summary": "Get all rates",
+                "operationId": "32fd6ff5e003328d001785ca5aa60fe3",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Rate"
+                                                    }
+                                                },
+                                                "links": {
+                                                    "type": "object"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Rates"
+                ],
+                "summary": "Set a new rate",
+                "operationId": "cdd9ee2ce09485cf62449a679bfd047c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "rate"
+                                ],
+                                "properties": {
+                                    "rate": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 0.05
+                                    },
+                                    "effective_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Rate"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     }
                 },
                 "security": [
@@ -849,6 +972,49 @@
                     }
                 },
                 "type": "object"
+            },
+            "Rate": {
+                "title": "Rate",
+                "description": "A historical rate entry.",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "rate": {
+                        "type": "string",
+                        "example": "0.0500"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "effective_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "notes": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "added_by": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
@@ -861,16 +1027,20 @@
     },
     "tags": [
         {
-            "name": "Customer API",
-            "description": "Customer-facing endpoints and authentication"
+            "name": "Assets",
+            "description": "Customer assets and gold wallets"
+        },
+        {
+            "name": "Customer",
+            "description": "Customer profile and account management"
         },
         {
             "name": "Platform Operator Auth",
             "description": "Platform Operator Auth"
         },
         {
-            "name": "Customers",
-            "description": "Customers"
+            "name": "Rates",
+            "description": "Rates"
         },
         {
             "name": "Gold Wallets",
