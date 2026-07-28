@@ -276,14 +276,14 @@
                 ]
             }
         },
-        "/v0/auth/customers/gold-wallets": {
+        "/v0/assets/customers/gold-wallets": {
             "get": {
                 "tags": [
                     "Assets"
                 ],
                 "summary": "Get the authenticated customer's gold wallets",
                 "description": "Returns the current authenticated customer wallets from the shared gold wallet store.",
-                "operationId": "4395f1da28160e0017e0d2b8924a41be",
+                "operationId": "b3d6a2e2efc8f69c9f01da1646f9ff49",
                 "responses": {
                     "200": {
                         "description": "Success",

@@ -131,18 +131,6 @@ class UserController extends Controller
         return $this->service->requestPasswordReset($id);
     }
 
-    #[OA\Delete(
-        path: "/v0/users/{id}",
-        summary: "Delete a user",
-        tags: ["Users"],
-        security: [["sanctum" => []]],
-        parameters: [
-            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
-        ],
-        responses: [
-            new OA\Response(response: 204, description: "Deleted")
-        ]
-    )]
     public function destroy(string $id): JsonResponse
     {
         return $this->service->delete($id);
@@ -153,11 +141,35 @@ class UserController extends Controller
         return $this->service->findByEmail($email);
     }
 
+    #[OA\Put(
+        path: "/v0/users/{id}/deactivate",
+        summary: "Deactivate a user",
+        tags: ["Users"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "User deactivated successfully")
+        ]
+    )]
     public function deactivate(string $id): JsonResponse
     {
         return $this->service->deactivate($id);
     }
 
+    #[OA\Put(
+        path: "/v0/users/{id}/activate",
+        summary: "Activate a user",
+        tags: ["Users"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "User activated successfully")
+        ]
+    )]
     public function activate(string $id): JsonResponse
     {
         return $this->service->activate($id);

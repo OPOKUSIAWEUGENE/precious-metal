@@ -418,14 +418,13 @@
                 ]
             }
         },
-        "/v0/auth/customers/gold-wallets": {
+        "/v0/fees": {
             "get": {
                 "tags": [
-                    "Assets"
+                    "Fees"
                 ],
-                "summary": "Get the authenticated customer's gold wallets",
-                "description": "Returns the current authenticated customer wallets from the shared gold wallet store.",
-                "operationId": "4395f1da28160e0017e0d2b8924a41be",
+                "summary": "Get all fees",
+                "operationId": "a1d7205d0a97c71845e2b5b9f2a0c8a1",
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -434,10 +433,21 @@
                                 "schema": {
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/GoldWallet"
-                                            }
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Fee"
+                                                    }
+                                                },
+                                                "links": {
+                                                    "type": "object"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
                                         },
                                         "status": {
                                             "type": "string",
@@ -451,6 +461,77 @@
                     },
                     "401": {
                         "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Fees"
+                ],
+                "summary": "Set a new fee",
+                "operationId": "15507f88b3d71c6ca98d2f3347c152e3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "fee"
+                                ],
+                                "properties": {
+                                    "fee": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 0.05
+                                    },
+                                    "effective_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Fee"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     }
                 },
                 "security": [
@@ -919,6 +1000,49 @@
     },
     "components": {
         "schemas": {
+            "Fee": {
+                "title": "Fee",
+                "description": "A historical fee entry.",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "fee": {
+                        "type": "string",
+                        "example": "0.0500"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "effective_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "notes": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "added_by": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
             "GoldWallet": {
                 "title": "Gold Wallet",
                 "description": "A gold wallet belonging to a user.",
@@ -1027,16 +1151,16 @@
     },
     "tags": [
         {
-            "name": "Assets",
-            "description": "Customer assets and gold wallets"
-        },
-        {
             "name": "Customer",
             "description": "Customer profile and account management"
         },
         {
             "name": "Platform Operator Auth",
             "description": "Platform Operator Auth"
+        },
+        {
+            "name": "Fees",
+            "description": "Fees"
         },
         {
             "name": "Rates",

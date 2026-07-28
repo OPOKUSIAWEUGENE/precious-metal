@@ -2,11 +2,12 @@
 
 namespace App\Modules\v0\Users\Models;
 
-use App\Modules\v0\GoldWallets\Models\GoldWallet;
+use App\Modules\v0\Assets\Models\AssetWallet;
+use App\Modules\v0\Assets\Models\Withdrawal;
 use App\Traits\BootTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -58,12 +59,13 @@ class User extends Authenticatable
         });
 
         static::created(function (self $user): void {
-            $user->goldWallets()->firstOrCreate(
+            $user->assetWallets()->firstOrCreate(
                 [
                     'weight_unit' => 'gram',
                     'purity' => '0.999900',
                 ],
                 [
+                    'user_id' => $user->id,
                     'available_weight' => 0,
                     'reserved_weight' => 0,
                     'status' => 'active',
@@ -103,8 +105,13 @@ class User extends Authenticatable
         return in_array($this->role, ['admin', 'platform_admin'], true);
     }
 
-    public function goldWallets(): HasMany
+    public function assetWallets(): MorphMany
     {
-        return $this->hasMany(GoldWallet::class, 'user_id');
+        return $this->morphMany(AssetWallet::class, 'owner');
+    }
+
+    public function withdrawals(): MorphMany
+    {
+        return $this->morphMany(Withdrawal::class, 'owner');
     }
 }

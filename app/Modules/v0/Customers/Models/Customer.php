@@ -3,7 +3,10 @@
 namespace App\Modules\v0\Customers\Models;
 
 use App\Traits\BootTrait;
+use App\Modules\v0\Assets\Models\AssetWallet;
+use App\Modules\v0\Assets\Models\Withdrawal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as AuthenticatableUser;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -58,5 +61,29 @@ class Customer extends AuthenticatableUser
                 $model->id = (string) \Illuminate\Support\Str::orderedUuid();
             }
         });
+
+        static::created(function (self $customer): void {
+            $customer->assetWallets()->firstOrCreate(
+                [
+                    'weight_unit' => 'gram',
+                    'purity' => '0.999900',
+                ],
+                [
+                    'available_weight' => 0,
+                    'reserved_weight' => 0,
+                    'status' => 'active',
+                ]
+            );
+        });
+    }
+
+    public function assetWallets(): MorphMany
+    {
+        return $this->morphMany(AssetWallet::class, 'owner');
+    }
+
+    public function withdrawals(): MorphMany
+    {
+        return $this->morphMany(Withdrawal::class, 'owner');
     }
 }

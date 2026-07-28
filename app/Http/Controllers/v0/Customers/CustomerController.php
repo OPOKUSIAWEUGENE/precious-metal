@@ -80,18 +80,6 @@ class CustomerController extends Controller
         return $this->service->find($id);
     }
 
-    #[OA\Put(
-        path: "/v0/customers/{id}",
-        summary: "Update customer details (Admin)",
-        tags: ["Customer"],
-        security: [["sanctum" => []]],
-        parameters: [
-            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
-        ],
-        responses: [
-            new OA\Response(response: 200, description: "Updated")
-        ]
-    )]
     public function update(UpdateCustomerRequest $request, string $id): JsonResponse
     {
         return $this->service->update($id, $request->validated());
@@ -100,7 +88,7 @@ class CustomerController extends Controller
     #[OA\Post(
         path: "/v0/customers/{id}/password/request",
         summary: "Request a password reset for a customer",
-        tags: ["Customer"],
+        tags: ["Customers"],
         security: [["sanctum" => []]],
         parameters: [
             new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
@@ -115,18 +103,6 @@ class CustomerController extends Controller
         return $this->service->requestPasswordReset($id);
     }
 
-    #[OA\Delete(
-        path: "/v0/customers/{id}",
-        summary: "Delete a customer (Admin)",
-        tags: ["Customer"],
-        security: [["sanctum" => []]],
-        parameters: [
-            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
-        ],
-        responses: [
-            new OA\Response(response: 204, description: "Deleted")
-        ]
-    )]
     public function destroy(string $id): JsonResponse
     {
         return $this->service->delete($id);
@@ -137,11 +113,35 @@ class CustomerController extends Controller
         return $this->service->findByEmail($email);
     }
 
+    #[OA\Put(
+        path: "/v0/customers/{id}/deactivate",
+        summary: "Deactivate a customer (Admin)",
+        tags: ["Customers"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Customer deactivated successfully")
+        ]
+    )]
     public function deactivate(string $id): JsonResponse
     {
         return $this->service->deactivate($id);
     }
 
+    #[OA\Put(
+        path: "/v0/customers/{id}/activate",
+        summary: "Activate a customer (Admin)",
+        tags: ["Customers"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Customer activated successfully")
+        ]
+    )]
     public function activate(string $id): JsonResponse
     {
         return $this->service->activate($id);

@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Modules\v0\GoldWallets\Resources;
+namespace App\Modules\v0\Assets\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GoldWalletResource extends JsonResource
+class AssetWalletResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
+            'owner_type' => $this->owner_type,
+            'owner_id' => $this->owner_id,
             'user_id' => $this->user_id,
             'wallet_reference' => $this->wallet_reference,
             'available_weight' => $this->available_weight,
@@ -19,15 +21,14 @@ class GoldWalletResource extends JsonResource
             'purity' => $this->purity,
             'status' => $this->status,
             'last_transaction_at' => $this->last_transaction_at,
-            'user' => $this->whenLoaded('user', function () {
+            'owner' => $this->whenLoaded('owner', function () {
                 return [
-                    'id' => $this->user->id,
-                    'email' => $this->user->email,
-                    'first_name' => $this->user->first_name,
-                    'last_name' => $this->user->last_name,
-                    'phone_number' => $this->user->phone_number,
-                    'role' => $this->user->role,
-                    'active' => $this->user->active,
+                    'id' => $this->owner->getAuthIdentifier(),
+                    'email' => $this->owner->email ?? null,
+                    'first_name' => $this->owner->first_name ?? null,
+                    'last_name' => $this->owner->last_name ?? null,
+                    'phone_number' => $this->owner->phone_number ?? null,
+                    'active' => $this->owner->active ?? null,
                 ];
             }),
             'created_at' => $this->created_at,

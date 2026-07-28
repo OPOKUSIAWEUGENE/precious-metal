@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\v0\Auth\PlatformManager\AuthController;
 use App\Http\Controllers\v0\Customers\CustomerController;
+use App\Http\Controllers\v0\Users\AssetController as UserAssetController;
 use App\Http\Controllers\v0\Fees\FeeController;
 use App\Http\Controllers\v0\Rates\RateController;
-use App\Http\Controllers\v0\Users\GoldWalletController as UserGoldWalletController;
 use App\Http\Controllers\v0\Users\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,9 +20,10 @@ Route::prefix('v0/auth/platform-managers')->group(function () {
 });
 
 Route::middleware('auth:sanctum,platform_managers')->group(function () {
-    Route::prefix('v0/gold-wallets')->group(function () {
-        Route::get('/', [UserGoldWalletController::class, 'index']);
-        Route::get('/all', [UserGoldWalletController::class, 'all']);
+    Route::prefix('v0/assets')->group(function () {
+        Route::get('/wallets', [UserAssetController::class, 'wallets']);
+        Route::get('/withdrawals', [UserAssetController::class, 'withdrawals']);
+        Route::post('/withdrawals/{id}/approve', [UserAssetController::class, 'approve']);
     });
 
     Route::prefix('v0/rates')->group(function () {

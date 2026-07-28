@@ -20,6 +20,15 @@ class RateRepository extends BaseRepository
             ->paginate($perPage);
     }
 
+    public function currentActive(): ?Rate
+    {
+        return $this->model->newQuery()
+            ->where('status', 'active')
+            ->orderByDesc('effective_at')
+            ->orderByDesc('created_at')
+            ->first();
+    }
+
     public function deactivateActiveRates(): int
     {
         return $this->model->newQuery()

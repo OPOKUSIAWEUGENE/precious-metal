@@ -1,20 +1,23 @@
 <?php
 
-namespace App\Modules\v0\GoldWallets\Models;
+namespace App\Modules\v0\Assets\Models;
 
-use App\Modules\v0\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 
-class GoldWallet extends Model
+class AssetWallet extends Model
 {
     use HasFactory;
 
-    protected $table = 'gold_wallets';
+    protected $table = 'asset_wallets';
 
     protected $fillable = [
+        'owner_type',
+        'owner_id',
         'user_id',
         'wallet_reference',
         'available_weight',
@@ -44,8 +47,13 @@ class GoldWallet extends Model
         });
     }
 
-    public function user(): BelongsTo
+    public function owner(): MorphTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->morphTo();
+    }
+
+    public function withdrawals(): HasMany
+    {
+        return $this->hasMany(Withdrawal::class, 'asset_wallet_id');
     }
 }
