@@ -8,6 +8,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 
+#[OA\Tag(
+    name: 'Platform Assets',
+    description: 'Platform manager oversight for wallets, withdrawals, transactions, quotes, and pricing'
+)]
 class AssetController extends Controller
 {
     public function __construct(protected AssetService $service)
@@ -17,7 +21,7 @@ class AssetController extends Controller
     #[OA\Get(
         path: '/v0/assets/wallets',
         summary: 'Get all asset wallets',
-        tags: ['Assets'],
+        tags: ['Platform Assets'],
         security: [['sanctum' => []]],
         responses: [
             new OA\Response(
@@ -41,7 +45,7 @@ class AssetController extends Controller
     #[OA\Get(
         path: '/v0/assets/withdrawals',
         summary: 'Get all withdrawal requests',
-        tags: ['Assets'],
+        tags: ['Platform Assets'],
         security: [['sanctum' => []]],
         parameters: [
             new OA\Parameter(name: 'per_page', in: 'query', schema: new OA\Schema(type: 'integer', default: 15))
@@ -68,7 +72,7 @@ class AssetController extends Controller
     #[OA\Get(
         path: '/v0/assets/transactions',
         summary: 'Get all wallet transactions',
-        tags: ['Assets'],
+        tags: ['Platform Assets'],
         security: [['sanctum' => []]],
         parameters: [
             new OA\Parameter(name: 'per_page', in: 'query', schema: new OA\Schema(type: 'integer', default: 15))
@@ -95,7 +99,7 @@ class AssetController extends Controller
     #[OA\Get(
         path: '/v0/assets/quotes',
         summary: 'Get all wallet quotes',
-        tags: ['Assets'],
+        tags: ['Platform Assets'],
         security: [['sanctum' => []]],
         parameters: [
             new OA\Parameter(name: 'per_page', in: 'query', schema: new OA\Schema(type: 'integer', default: 15))
@@ -122,7 +126,7 @@ class AssetController extends Controller
     #[OA\Get(
         path: '/v0/assets/prices/current',
         summary: 'Get current gold pricing',
-        tags: ['Assets'],
+        tags: ['Platform Assets'],
         security: [['sanctum' => []]],
         responses: [
             new OA\Response(
@@ -144,7 +148,7 @@ class AssetController extends Controller
     #[OA\Post(
         path: '/v0/assets/withdrawals/{id}/approve',
         summary: 'Approve a withdrawal request',
-        tags: ['Assets'],
+        tags: ['Platform Assets'],
         security: [['sanctum' => []]],
         parameters: [
             new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid'))

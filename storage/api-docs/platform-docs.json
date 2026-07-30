@@ -679,7 +679,7 @@
         "/v0/assets/wallets": {
             "get": {
                 "tags": [
-                    "Assets"
+                    "Platform Assets"
                 ],
                 "summary": "Get all asset wallets",
                 "operationId": "60ef206e9163be486607d658ae3db3d0",
@@ -717,7 +717,7 @@
         "/v0/assets/withdrawals": {
             "get": {
                 "tags": [
-                    "Assets"
+                    "Platform Assets"
                 ],
                 "summary": "Get all withdrawal requests",
                 "operationId": "afc2a8904af22b65bcdc152afc068912",
@@ -765,7 +765,7 @@
         "/v0/assets/transactions": {
             "get": {
                 "tags": [
-                    "Assets"
+                    "Platform Assets"
                 ],
                 "summary": "Get all wallet transactions",
                 "operationId": "b2e319f565111bcacfc1897f559f5d2b",
@@ -813,7 +813,7 @@
         "/v0/assets/quotes": {
             "get": {
                 "tags": [
-                    "Assets"
+                    "Platform Assets"
                 ],
                 "summary": "Get all wallet quotes",
                 "operationId": "01ddc996cd3a063538c304f36765cf18",
@@ -861,7 +861,7 @@
         "/v0/assets/prices/current": {
             "get": {
                 "tags": [
-                    "Assets"
+                    "Platform Assets"
                 ],
                 "summary": "Get current gold pricing",
                 "operationId": "9bdaf8bef7fa1f9f01338b9259f4ad1b",
@@ -899,7 +899,7 @@
         "/v0/assets/withdrawals/{id}/approve": {
             "post": {
                 "tags": [
-                    "Assets"
+                    "Platform Assets"
                 ],
                 "summary": "Approve a withdrawal request",
                 "operationId": "fc68022aa35b5010172d5ac8687d2f01",
@@ -1681,12 +1681,12 @@
     },
     "tags": [
         {
-            "name": "Assets",
-            "description": "Customer assets and gold wallets"
-        },
-        {
             "name": "Customer",
             "description": "Customer profile and account management"
+        },
+        {
+            "name": "Platform Assets",
+            "description": "Platform manager oversight for wallets, withdrawals, transactions, quotes, and pricing"
         },
         {
             "name": "Platform Operator Auth",

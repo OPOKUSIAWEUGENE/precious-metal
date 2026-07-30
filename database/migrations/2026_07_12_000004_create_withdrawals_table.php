@@ -22,7 +22,8 @@ return new class extends Migration
                 ->constrained('asset_wallets')
                 ->cascadeOnDelete();
 
-            $table->uuidMorphs('owner');
+            $table->string('owner_type');
+            $table->uuid('owner_id');
 
             $table->foreignUuid('rate_id')
                 ->nullable()
@@ -55,6 +56,7 @@ return new class extends Migration
             $table->index('status');
             $table->index('asset_wallet_id');
             $table->index('rate_id');
+            $table->index(['owner_type', 'owner_id'], 'withdrawals_owner_lookup_index');
         });
     }
 

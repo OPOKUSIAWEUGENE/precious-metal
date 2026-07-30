@@ -17,11 +17,11 @@ use OpenApi\Attributes as OA;
 )]
 #[OA\Tag(
     name: "Auth",
-    description: "Customer authentication and session endpoints"
+    description: "Authentication and session endpoints"
 )]
 #[OA\Tag(
     name: "Assets",
-    description: "Customer assets and gold wallets"
+    description: "Asset wallets, quotes, pricing, and withdrawal endpoints"
 )]
 #[OA\Tag(
     name: "Customer",
