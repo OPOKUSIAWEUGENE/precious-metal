@@ -40,9 +40,19 @@ class AssetController extends Controller
 
     #[OA\Get(
         path: '/v0/assets/rate',
-        summary: 'Get the current asset conversion rate',
+        summary: 'Get the current asset rates',
         tags: ['Assets'],
         security: [['sanctum' => []]],
+        parameters: [
+            new OA\Parameter(
+                name: 'rate_type',
+                description: 'Filter by rate type',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', enum: ['buying', 'selling']),
+                example: 'buying'
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
@@ -54,16 +64,9 @@ class AssetController extends Controller
                             type: 'object',
                             properties: [
                                 new OA\Property(
-                                    property: 'rate',
+                                    property: 'rates',
                                     type: 'object',
-                                    properties: [
-                                        new OA\Property(property: 'id', type: 'string', format: 'uuid'),
-                                        new OA\Property(property: 'gold_to_cash_rate', type: 'string', example: '1250.0000'),
-                                        new OA\Property(property: 'cash_to_gold_rate', type: 'string', example: '0.00080000'),
-                                        new OA\Property(property: 'status', type: 'string', example: 'active'),
-                                        new OA\Property(property: 'effective_at', type: 'string', format: 'date-time', nullable: true),
-                                        new OA\Property(property: 'notes', type: 'string', nullable: true),
-                                    ]
+                                    additionalProperties: new OA\AdditionalProperties(ref: '#/components/schemas/CustomerRate')
                                 ),
                                 new OA\Property(property: 'status', type: 'string', example: 'success'),
                             ]
@@ -73,9 +76,9 @@ class AssetController extends Controller
             ),
         ]
     )]
-    public function rate(): JsonResponse
+    public function rate(Request $request): JsonResponse
     {
-        return $this->service->currentRate();
+        return $this->service->currentRate($request->query('rate_type'));
     }
 
     #[OA\Post(

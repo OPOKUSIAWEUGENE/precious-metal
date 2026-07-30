@@ -16,6 +16,7 @@ use OpenApi\Attributes as OA;
     properties: [
         new OA\Property(property: 'id', type: 'string', format: 'uuid'),
         new OA\Property(property: 'rate', type: 'string', example: '0.0500'),
+        new OA\Property(property: 'rate_type', type: 'string', example: 'buying'),
         new OA\Property(property: 'status', type: 'string', example: 'active'),
         new OA\Property(property: 'effective_at', type: 'string', format: 'date-time', nullable: true),
         new OA\Property(property: 'notes', type: 'string', nullable: true),
@@ -71,9 +72,10 @@ class RateController extends Controller
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
-                required: ['rate'],
+                required: ['rate', 'rate_type'],
                 properties: [
                     new OA\Property(property: 'rate', type: 'number', format: 'float', example: 0.0500),
+                    new OA\Property(property: 'rate_type', type: 'string', enum: ['buying', 'selling']),
                     new OA\Property(property: 'effective_at', type: 'string', format: 'date-time', nullable: true),
                     new OA\Property(property: 'notes', type: 'string', nullable: true),
                 ]

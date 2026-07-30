@@ -12,6 +12,7 @@ class RateResource extends JsonResource
         return [
             'id' => $this->id,
             'rate' => $this->rate,
+            'rate_type' => $this->rate_type,
             'status' => $this->status,
             'effective_at' => $this->effective_at,
             'notes' => $this->notes,

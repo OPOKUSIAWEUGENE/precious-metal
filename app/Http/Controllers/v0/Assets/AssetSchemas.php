@@ -50,6 +50,19 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'updated_at', type: 'string', format: 'date-time', nullable: true),
     ]
 )]
+#[OA\Schema(
+    schema: 'CustomerRate',
+    title: 'Customer Rate',
+    description: 'A customer-facing active rate entry.',
+    properties: [
+        new OA\Property(property: 'id', type: 'string', format: 'uuid'),
+        new OA\Property(property: 'rate_type', type: 'string', example: 'buying', enum: ['buying', 'selling']),
+        new OA\Property(property: 'rate', type: 'string', example: '1250.0000'),
+        new OA\Property(property: 'status', type: 'string', example: 'active'),
+        new OA\Property(property: 'effective_at', type: 'string', format: 'date-time', nullable: true),
+        new OA\Property(property: 'notes', type: 'string', nullable: true),
+    ]
+)]
 class AssetSchemas
 {
 }

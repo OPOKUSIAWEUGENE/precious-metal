@@ -32,6 +32,7 @@ class StoreRateRequest extends FormRequest
     {
         return [
             'rate' => 'required|numeric|min:0',
+            'rate_type' => 'required|string|in:buying,selling',
             'effective_at' => 'nullable|date',
             'notes' => 'nullable|string|max:2000',
         ];

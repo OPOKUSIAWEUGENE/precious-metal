@@ -16,6 +16,7 @@ class Rate extends Model
     protected $fillable = [
         'id',
         'rate',
+        'rate_type',
         'status',
         'effective_at',
         'notes',

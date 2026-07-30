@@ -53,26 +53,34 @@ class AssetService extends BaseService
         );
     }
 
-    public function currentRate(): JsonResponse
+    public function currentRate(?string $rateType = null): JsonResponse
     {
-        $rate = $this->rateRepository->currentActive();
+        if ($rateType !== null && ! in_array($rateType, ['buying', 'selling'], true)) {
+            return self::error('Invalid rate type', code: 422);
+        }
 
-        if (!$rate) {
+        $rates = $this->rateRepository->currentActiveByType($rateType);
+
+        if ($rateType !== null) {
+            $rate = $rates->get($rateType);
+
+            if (! $rate) {
+                return self::error('Active rate not found', code: 404);
+            }
+
+            return self::success([
+                'rates' => [
+                    $rateType => $this->formatRate($rate),
+                ],
+            ]);
+        }
+
+        if ($rates->isEmpty()) {
             return self::error('Active rate not found', code: 404);
         }
 
-        $numericRate = (float) $rate->rate;
-        $inverseRate = $numericRate > 0 ? 1 / $numericRate : null;
-
         return self::success([
-            'rate' => [
-                'id' => $rate->id,
-                'gold_to_cash_rate' => $rate->rate,
-                'cash_to_gold_rate' => $inverseRate !== null ? number_format($inverseRate, 8, '.', '') : null,
-                'status' => $rate->status,
-                'effective_at' => $rate->effective_at,
-                'notes' => $rate->notes,
-            ],
+            'rates' => $rates->map(fn ($rate) => $this->formatRate($rate)),
         ]);
     }
 
@@ -90,7 +98,7 @@ class AssetService extends BaseService
             return self::error('Asset wallet not found', code: 404);
         }
 
-        $rate = $this->rateRepository->currentActive();
+        $rate = $this->rateRepository->currentActive('buying');
 
         if (!$rate) {
             return self::error('Active rate not found', code: 404);
@@ -133,6 +141,18 @@ class AssetService extends BaseService
         });
 
         return self::success(new WithdrawalResource($withdrawal->load(['owner', 'wallet', 'rate'])), 201);
+    }
+
+    private function formatRate(object $rate): array
+    {
+        return [
+            'id' => $rate->id,
+            'rate_type' => $rate->rate_type,
+            'rate' => $rate->rate,
+            'status' => $rate->status,
+            'effective_at' => $rate->effective_at,
+            'notes' => $rate->notes,
+        ];
     }
 
     public function allWithdrawals(int $perPage = 15): JsonResponse

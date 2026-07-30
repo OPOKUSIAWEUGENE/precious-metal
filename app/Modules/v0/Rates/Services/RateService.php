@@ -52,10 +52,11 @@ class RateService extends BaseService
         }
 
         $rate = DB::transaction(function () use ($data) {
-            $this->repository->deactivateActiveRates();
+            $this->repository->deactivateActiveRates($data['rate_type']);
 
             return $this->repository->create([
                 'rate' => $data['rate'],
+                'rate_type' => $data['rate_type'],
                 'status' => 'active',
                 'effective_at' => $data['effective_at'] ?? now(),
                 'notes' => $data['notes'] ?? null,

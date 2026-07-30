@@ -605,20 +605,28 @@
                     "required": true,
                     "content": {
                         "application/json": {
-                            "schema": {
-                                "required": [
-                                    "rate"
-                                ],
-                                "properties": {
-                                    "rate": {
-                                        "type": "number",
-                                        "format": "float",
-                                        "example": 0.05
-                                    },
-                                    "effective_at": {
-                                        "type": "string",
-                                        "format": "date-time",
-                                        "nullable": true
+                                "schema": {
+                                    "required": [
+                                        "rate",
+                                        "rate_type"
+                                    ],
+                                    "properties": {
+                                        "rate": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 0.05
+                                        },
+                                        "rate_type": {
+                                            "type": "string",
+                                            "enum": [
+                                                "buying",
+                                                "selling"
+                                            ]
+                                        },
+                                        "effective_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "nullable": true
                                     },
                                     "notes": {
                                         "type": "string",
@@ -1108,6 +1116,10 @@
                     "rate": {
                         "type": "string",
                         "example": "0.0500"
+                    },
+                    "rate_type": {
+                        "type": "string",
+                        "example": "buying"
                     },
                     "status": {
                         "type": "string",
