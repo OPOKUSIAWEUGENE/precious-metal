@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiDocumentationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -8,6 +9,11 @@ Route::get('/', function () {
         'status' => 'running',
     ]);
 });
+
+Route::get('/docs', [ApiDocumentationController::class, 'index'])->name('docs.index');
+Route::get('/developer/docs/{documentation}', [ApiDocumentationController::class, 'show'])
+    ->whereIn('documentation', ['customer', 'platform'])
+    ->name('docs.show');
 
 use App\Http\Controllers\v0\Debug\MailPreviewController;
 
