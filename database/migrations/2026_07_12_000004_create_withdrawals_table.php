@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasTable('withdrawals')) {
+            return;
+        }
+
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
@@ -51,7 +55,6 @@ return new class extends Migration
             $table->index('status');
             $table->index('asset_wallet_id');
             $table->index('rate_id');
-            $table->index(['owner_type', 'owner_id']);
         });
     }
 

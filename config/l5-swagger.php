@@ -22,7 +22,7 @@ return [
                     base_path('app/Http/Controllers/Controller.php'),
                     base_path('app/Http/Controllers/v0/Assets'),
                     base_path('app/Http/Controllers/v0/Auth/Customer'),
-                    base_path('app/Http/Controllers/v0/Customers'),
+                    base_path('app/Http/Controllers/v0/Customers/AssetController.php'),
                 ],
             ],
         ],

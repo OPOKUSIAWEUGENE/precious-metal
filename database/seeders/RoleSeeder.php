@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Modules\v0\Users\Models\Role;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class RoleSeeder extends Seeder
 {
@@ -13,7 +14,6 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         $roles = [
-            // Platform Operator roles
             [
                 'name' => 'platform_admin',
                 'description' => 'Platform administrator with full system access',
@@ -30,7 +30,6 @@ class RoleSeeder extends Seeder
                 'name' => 'platform_support',
                 'description' => 'Platform support personnel',
             ],
-            // Client Operator roles
             [
                 'name' => 'client_admin',
                 'description' => 'Client organization administrator with full access to their organization',
@@ -47,7 +46,6 @@ class RoleSeeder extends Seeder
                 'name' => 'client_staff',
                 'description' => 'Client organization staff member',
             ],
-            // Driver roles
             [
                 'name' => 'driver',
                 'description' => 'Driver with vehicle operation access',
@@ -56,7 +54,6 @@ class RoleSeeder extends Seeder
                 'name' => 'driver_supervisor',
                 'description' => 'Driver supervisor with driver management access',
             ],
-            // Passenger roles
             [
                 'name' => 'passenger',
                 'description' => 'Regular passenger user',
@@ -64,9 +61,14 @@ class RoleSeeder extends Seeder
         ];
 
         foreach ($roles as $role) {
-            Role::updateOrCreate(
+            DB::table('roles')->updateOrInsert(
                 ['name' => $role['name']],
-                $role
+                [
+                    'id' => DB::table('roles')->where('name', $role['name'])->value('id') ?? (string) Str::orderedUuid(),
+                    'description' => $role['description'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
             );
         }
     }

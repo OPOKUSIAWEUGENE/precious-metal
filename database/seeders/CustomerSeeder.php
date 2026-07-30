@@ -2,20 +2,21 @@
 
 namespace Database\Seeders;
 
-use App\Modules\v0\Customers\Models\Customer;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CustomerSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create Test Customer
-        Customer::firstOrCreate(
-            ['email' => 'customer@neutek.local'],
+        $customerId = DB::table('customers')->where('email', 'customer@gmail.com')->value('id') ?? (string) Str::orderedUuid();
+
+        DB::table('customers')->updateOrInsert(
+            ['email' => 'customer@gmail.com'],
             [
-                'id' => (string) \Illuminate\Support\Str::orderedUuid(),
-                'password' => 'password123',
+                'id' => $customerId,
+                'password' => bcrypt('12345'),
                 'first_name' => 'John',
                 'last_name' => 'Customer',
                 'phone_number' => '+233240000000',
@@ -23,9 +24,11 @@ class CustomerSeeder extends Seeder
                 'nationality' => 'Ghanaian',
                 'resident_address' => '123 Tech Street, Accra',
                 'active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]
         );
 
-        $this->command->info('Customers seeded successfully! Credentials: customer@neutek.local / password123');
+        $this->command->info('Customers seeded successfully! Credentials: customer@gmail.com / 12345');
     }
 }

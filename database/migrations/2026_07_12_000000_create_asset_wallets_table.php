@@ -12,10 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('gold_wallets', function (Blueprint $table) {
+        Schema::create('asset_wallets', function (Blueprint $table) {
             $table->id();
 
+            $table->string('owner_type')->nullable();
+            $table->uuid('owner_id')->nullable();
+
             $table->foreignUuid('user_id')
+                ->nullable()
                 ->constrained('users')
                 ->cascadeOnDelete();
 
@@ -35,15 +39,19 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['user_id', 'weight_unit', 'purity']);
+            $table->unique(['owner_type', 'owner_id', 'weight_unit', 'purity']);
             $table->index('status');
+            $table->index('user_id');
+            $table->index(['owner_type', 'owner_id']);
         });
 
         $now = now();
         $existingUsers = DB::table('users')->select('id')->get();
 
         foreach ($existingUsers as $user) {
-            DB::table('gold_wallets')->insertOrIgnore([
+            DB::table('asset_wallets')->insertOrIgnore([
+                'owner_type' => \App\Modules\v0\Users\Models\User::class,
+                'owner_id' => $user->id,
                 'user_id' => $user->id,
                 'wallet_reference' => (string) \Illuminate\Support\Str::uuid(),
                 'available_weight' => 0,
@@ -63,6 +71,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gold_wallets');
+        Schema::dropIfExists('asset_wallets');
     }
 };
