@@ -15,13 +15,13 @@
         }
     ],
     "paths": {
-        "/v0/auth/customers/login": {
+        "/v0/customers/auth/login": {
             "post": {
                 "tags": [
                     "Auth"
                 ],
                 "summary": "Customer Login",
-                "operationId": "7fa1159c161cd00905063308c3d37b02",
+                "operationId": "bafe1ff8c35fa1b7d355bd8899c17c7a",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -88,13 +88,13 @@
                 }
             }
         },
-        "/v0/auth/customers/register": {
+        "/v0/customers/auth/register": {
             "post": {
                 "tags": [
                     "Auth"
                 ],
                 "summary": "Customer Registration",
-                "operationId": "16611c1308db58c1ed61d490a5a6d000",
+                "operationId": "4a4d206a368ad4d0dbd9878673279e90",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -150,13 +150,13 @@
                 }
             }
         },
-        "/v0/auth/customers/password/request": {
+        "/v0/customers/auth/password/request": {
             "post": {
                 "tags": [
                     "Auth"
                 ],
                 "summary": "Request Customer Password Reset",
-                "operationId": "c90393c8273e2adc1447d0f310d2098c",
+                "operationId": "fdc576ef8637cabc00583d448be18c74",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -194,13 +194,13 @@
                 }
             }
         },
-        "/v0/auth/customers/password/reset": {
+        "/v0/customers/auth/password/reset": {
             "post": {
                 "tags": [
                     "Auth"
                 ],
                 "summary": "Reset Customer Password",
-                "operationId": "e1716d3a1fab9c679eb675f34b153e52",
+                "operationId": "d63433b3634586c8cad59556a3a38e37",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -252,13 +252,13 @@
                 }
             }
         },
-        "/v0/auth/customers/logout": {
+        "/v0/customers/auth/logout": {
             "post": {
                 "tags": [
                     "Auth"
                 ],
                 "summary": "Customer Logout",
-                "operationId": "431dd6a856c78571cd923d4dc5b9c26a",
+                "operationId": "1944790bd4c3d659239a68cd65b7b572",
                 "responses": {
                     "200": {
                         "description": "Logged out successfully",
@@ -276,13 +276,13 @@
                 ]
             }
         },
-        "/v0/assets/wallets": {
+        "/v0/customers/assets/wallets": {
             "get": {
                 "tags": [
                     "Assets"
                 ],
                 "summary": "Get the authenticated customer asset wallets",
-                "operationId": "5fee022256ccb8c98faa837f5d3363ff",
+                "operationId": "93b2c41258a79929973f69245d70541d",
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -314,13 +314,13 @@
                 ]
             }
         },
-        "/v0/assets/rate": {
+        "/v0/customers/assets/rate": {
             "get": {
                 "tags": [
                     "Assets"
                 ],
                 "summary": "Get the current asset rates",
-                "operationId": "d78c82a72085509e97d08258a4832f31",
+                "operationId": "ab938f6ba85249fa1206e35b5e548cb6",
                 "parameters": [
                     {
                         "name": "rate_type",
@@ -373,13 +373,533 @@
                 ]
             }
         },
-        "/v0/assets/withdrawals": {
+        "/v0/customers/assets/balance": {
+            "get": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get the authenticated wallet balance",
+                "operationId": "4973008062dc51966621c1f879187283",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/transactions": {
+            "get": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get the authenticated wallet transactions",
+                "operationId": "4f24617cdfaf55aaa4016cd3fbcd09f7",
+                "parameters": [
+                    {
+                        "name": "operation",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "date_from",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "date_to",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/transactions/{reference}": {
+            "get": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get a wallet transaction by reference",
+                "operationId": "e61e521e195b52dfad359b3778eacdb0",
+                "parameters": [
+                    {
+                        "name": "reference",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/prices/current": {
+            "get": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get current gold pricing",
+                "operationId": "9f55382ec6b29eff0b147c104e6bb9c3",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/quotes": {
+            "post": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Create a wallet quote",
+                "operationId": "007c669e45c720ee4c674ec92fc1bb13",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "operation": {
+                                        "type": "string",
+                                        "enum": [
+                                            "buy",
+                                            "sell",
+                                            "transfer"
+                                        ]
+                                    },
+                                    "cash_amount": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "nullable": true
+                                    },
+                                    "gold_weight": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "nullable": true
+                                    },
+                                    "recipient_id": {
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "nullable": true
+                                    },
+                                    "currency": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/quotes/{reference}": {
+            "get": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get a wallet quote by reference",
+                "operationId": "9704aab906a8d5cf5f545430936b2fa9",
+                "parameters": [
+                    {
+                        "name": "reference",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/transfers/recipient-enquiry": {
+            "post": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Resolve a transfer recipient",
+                "operationId": "44993c17b764090f55069a853e270429",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "identifier_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "email",
+                                            "phone",
+                                            "id"
+                                        ]
+                                    },
+                                    "identifier": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/transfers/quote": {
+            "post": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get a transfer quote",
+                "operationId": "be39706eaf520b08c969ea558ac4e85b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "recipient_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "gold_weight": {
+                                        "type": "number",
+                                        "format": "float"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/transfers": {
+            "post": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Execute a gold transfer",
+                "operationId": "4b41a7c9534fafcd9455c0572bbaa2cc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "recipient_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "gold_weight": {
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "quote_reference": {
+                                        "type": "string"
+                                    },
+                                    "narration": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/sales/quote": {
+            "post": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get a sell quotation",
+                "operationId": "114aa0127b28aed6c1cf215d25395503",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "gold_weight": {
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "settlement_currency": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/sales": {
+            "post": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Sell gold",
+                "operationId": "0ea2852997cb13b696098059aa63a7c2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "quote_reference": {
+                                        "type": "string"
+                                    },
+                                    "credit_destination": {
+                                        "type": "string",
+                                        "example": "cash_wallet"
+                                    },
+                                    "narration": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/purchases/quote": {
+            "post": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get a purchase quote",
+                "operationId": "4e6d43bde99be2cd310ca2b766354340",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "cash_amount": {
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "currency": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/purchases": {
+            "post": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Buy gold",
+                "operationId": "614a792669d98a30d19f9b71e4b7baec",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "quote_reference": {
+                                        "type": "string"
+                                    },
+                                    "payment_method": {
+                                        "type": "string",
+                                        "example": "cash_wallet"
+                                    },
+                                    "narration": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/assets/withdrawals": {
             "post": {
                 "tags": [
                     "Assets"
                 ],
                 "summary": "Request an asset withdrawal",
-                "operationId": "2be77c76dee55d6f4d6300a604e0b830",
+                "operationId": "f0221e54b12997eccd5875d916d33b99",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -635,6 +1155,186 @@
                     },
                     "notes": {
                         "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "WalletQuote": {
+                "title": "Wallet Quote",
+                "description": "A quotation for buying, selling, or transferring gold.",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "reference": {
+                        "type": "string",
+                        "example": "BUY-20260730-ABC123"
+                    },
+                    "operation": {
+                        "type": "string",
+                        "example": "buy"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "currency": {
+                        "type": "string",
+                        "example": "GHS"
+                    },
+                    "cash_amount": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "gold_weight": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "price_per_gram": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "fee_rate": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "fee_amount": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "total_payable": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "total_receivable": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "recipient_type": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "recipient_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "WalletTransaction": {
+                "title": "Wallet Transaction",
+                "description": "A wallet transaction record.",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "reference": {
+                        "type": "string",
+                        "example": "BUY-20260730-ABC123"
+                    },
+                    "group_reference": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "operation": {
+                        "type": "string",
+                        "example": "buy"
+                    },
+                    "direction": {
+                        "type": "string",
+                        "example": "credit"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "completed"
+                    },
+                    "wallet_id": {
+                        "type": "integer"
+                    },
+                    "owner_type": {
+                        "type": "string"
+                    },
+                    "owner_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "counterparty_type": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "counterparty_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true
+                    },
+                    "quote_reference": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "asset_amount": {
+                        "type": "string",
+                        "example": "1.50000000"
+                    },
+                    "cash_amount": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "price_per_gram": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "fee_amount": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "total_amount": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "narration": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "nullable": true
+                    },
+                    "completed_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
                         "nullable": true
                     }
                 },

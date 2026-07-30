@@ -24,6 +24,9 @@ Route::middleware('auth:sanctum,platform_managers')->group(function () {
         Route::get('/wallets', [UserAssetController::class, 'wallets']);
         Route::get('/withdrawals', [UserAssetController::class, 'withdrawals']);
         Route::post('/withdrawals/{id}/approve', [UserAssetController::class, 'approve']);
+        Route::get('/transactions', [UserAssetController::class, 'transactions']);
+        Route::get('/quotes', [UserAssetController::class, 'quotes']);
+        Route::get('/prices/current', [UserAssetController::class, 'currentPrice']);
     });
 
     Route::prefix('v0/rates')->group(function () {

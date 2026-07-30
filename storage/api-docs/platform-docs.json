@@ -330,66 +330,12 @@
                         "sanctum": []
                     }
                 ]
-            },
-            "put": {
-                "tags": [
-                    "Customer"
-                ],
-                "summary": "Update customer details (Admin)",
-                "operationId": "83d11087a2145fe0da98f3b7cbc2a6b4",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Updated"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Customer"
-                ],
-                "summary": "Delete a customer (Admin)",
-                "operationId": "cd83a25341c9745d13cc6dc45631ca96",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "Deleted"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
             }
         },
         "/v0/customers/{id}/password/request": {
             "post": {
                 "tags": [
-                    "Customer"
+                    "Customers"
                 ],
                 "summary": "Request a password reset for a customer",
                 "operationId": "02431dff08180e5d4ee9d4f764bdb4d3",
@@ -409,6 +355,64 @@
                     },
                     "404": {
                         "description": "Customer not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/{id}/deactivate": {
+            "put": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Deactivate a customer (Admin)",
+                "operationId": "3554f8e025c17384ebaf1592e4ca73df",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customer deactivated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/customers/{id}/activate": {
+            "put": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Activate a customer (Admin)",
+                "operationId": "c0141b4a3ec34de6860a20d390953ddb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customer activated successfully"
                     }
                 },
                 "security": [
@@ -605,28 +609,28 @@
                     "required": true,
                     "content": {
                         "application/json": {
-                                "schema": {
-                                    "required": [
-                                        "rate",
-                                        "rate_type"
-                                    ],
-                                    "properties": {
-                                        "rate": {
-                                            "type": "number",
-                                            "format": "float",
-                                            "example": 0.05
-                                        },
-                                        "rate_type": {
-                                            "type": "string",
-                                            "enum": [
-                                                "buying",
-                                                "selling"
-                                            ]
-                                        },
-                                        "effective_at": {
-                                            "type": "string",
-                                            "format": "date-time",
-                                            "nullable": true
+                            "schema": {
+                                "required": [
+                                    "rate",
+                                    "rate_type"
+                                ],
+                                "properties": {
+                                    "rate": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 0.05
+                                    },
+                                    "rate_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "buying",
+                                            "selling"
+                                        ]
+                                    },
+                                    "effective_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
                                     },
                                     "notes": {
                                         "type": "string",
@@ -672,14 +676,13 @@
                 ]
             }
         },
-        "/v0/gold-wallets": {
+        "/v0/assets/wallets": {
             "get": {
                 "tags": [
-                    "Gold Wallets"
+                    "Assets"
                 ],
-                "summary": "Get the authenticated user's gold wallets",
-                "description": "Returns the current authenticated platform manager's gold wallets.",
-                "operationId": "398bead95b4bc2c08435bafda7382acb",
+                "summary": "Get all asset wallets",
+                "operationId": "60ef206e9163be486607d658ae3db3d0",
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -688,10 +691,7 @@
                                 "schema": {
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/GoldWallet"
-                                            }
+                                            "type": "object"
                                         },
                                         "status": {
                                             "type": "string",
@@ -703,8 +703,8 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized"
+                    "403": {
+                        "description": "Forbidden"
                     }
                 },
                 "security": [
@@ -714,14 +714,13 @@
                 ]
             }
         },
-        "/v0/gold-wallets/all": {
+        "/v0/assets/withdrawals": {
             "get": {
                 "tags": [
-                    "Gold Wallets"
+                    "Assets"
                 ],
-                "summary": "Get all users' gold wallets",
-                "description": "Returns every gold wallet in the system for platform administrators.",
-                "operationId": "7875fa7657dcb5c431cf57e80362fb57",
+                "summary": "Get all withdrawal requests",
+                "operationId": "afc2a8904af22b65bcdc152afc068912",
                 "parameters": [
                     {
                         "name": "per_page",
@@ -740,20 +739,6 @@
                                 "schema": {
                                     "properties": {
                                         "data": {
-                                            "properties": {
-                                                "data": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "$ref": "#/components/schemas/GoldWallet"
-                                                    }
-                                                },
-                                                "links": {
-                                                    "type": "object"
-                                                },
-                                                "meta": {
-                                                    "type": "object"
-                                                }
-                                            },
                                             "type": "object"
                                         },
                                         "status": {
@@ -768,6 +753,195 @@
                     },
                     "403": {
                         "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/assets/transactions": {
+            "get": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get all wallet transactions",
+                "operationId": "b2e319f565111bcacfc1897f559f5d2b",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/assets/quotes": {
+            "get": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get all wallet quotes",
+                "operationId": "01ddc996cd3a063538c304f36765cf18",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/assets/prices/current": {
+            "get": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get current gold pricing",
+                "operationId": "9bdaf8bef7fa1f9f01338b9259f4ad1b",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/assets/withdrawals/{id}/approve": {
+            "post": {
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Approve a withdrawal request",
+                "operationId": "fc68022aa35b5010172d5ac8687d2f01",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Withdrawal"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Invalid state"
                     }
                 },
                 "security": [
@@ -944,33 +1118,6 @@
                         "sanctum": []
                     }
                 ]
-            },
-            "delete": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Delete a user",
-                "operationId": "fb739ebd1af8454bffe2d76a0da4d065",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "Deleted"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
             }
         },
         "/v0/users/{id}/password/request": {
@@ -1004,64 +1151,88 @@
                     }
                 ]
             }
+        },
+        "/v0/users/{id}/deactivate": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Deactivate a user",
+                "operationId": "ece3f9a8a4090b6ef64de0282f3010c8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deactivated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v0/users/{id}/activate": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Activate a user",
+                "operationId": "e41dbf279af3a2dc1397a00df6705abd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User activated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
         "schemas": {
-            "Fee": {
-                "title": "Fee",
-                "description": "A historical fee entry.",
-                "properties": {
-                    "id": {
-                        "type": "string",
-                        "format": "uuid"
-                    },
-                    "fee": {
-                        "type": "string",
-                        "example": "0.0500"
-                    },
-                    "status": {
-                        "type": "string",
-                        "example": "active"
-                    },
-                    "effective_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "nullable": true
-                    },
-                    "notes": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "added_by": {
-                        "type": "string",
-                        "format": "uuid",
-                        "nullable": true
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "nullable": true
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "nullable": true
-                    }
-                },
-                "type": "object"
-            },
-            "GoldWallet": {
-                "title": "Gold Wallet",
-                "description": "A gold wallet belonging to a user.",
+            "AssetWallet": {
+                "title": "Asset Wallet",
+                "description": "A polymorphic asset wallet belonging to a customer or platform user.",
                 "properties": {
                     "id": {
                         "type": "integer",
                         "example": 1
                     },
-                    "user_id": {
+                    "owner_type": {
+                        "type": "string",
+                        "example": "App\\\\Modules\\\\v0\\\\Customers\\\\Models\\\\Customer"
+                    },
+                    "owner_id": {
                         "type": "string",
                         "format": "uuid"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true
                     },
                     "wallet_reference": {
                         "type": "string",
@@ -1090,6 +1261,353 @@
                     "last_transaction_at": {
                         "type": "string",
                         "format": "date-time",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Withdrawal": {
+                "title": "Withdrawal",
+                "description": "An asset withdrawal request.",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "asset_wallet_id": {
+                        "type": "integer"
+                    },
+                    "owner_type": {
+                        "type": "string"
+                    },
+                    "owner_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "rate_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true
+                    },
+                    "requested_amount": {
+                        "type": "string",
+                        "example": "2.00000000"
+                    },
+                    "asset_amount": {
+                        "type": "string",
+                        "example": "2.00000000"
+                    },
+                    "cash_amount": {
+                        "type": "string",
+                        "example": "2500.00"
+                    },
+                    "conversion_rate": {
+                        "type": "string",
+                        "example": "1250.0000"
+                    },
+                    "conversion_type": {
+                        "type": "string",
+                        "example": "gold_to_cash"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "pending"
+                    },
+                    "notes": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "approved_by": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true
+                    },
+                    "approved_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "rejected_by": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true
+                    },
+                    "rejected_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "rejection_reason": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "CustomerRate": {
+                "title": "Customer Rate",
+                "description": "A customer-facing active rate entry.",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "rate_type": {
+                        "type": "string",
+                        "example": "buying",
+                        "enum": [
+                            "buying",
+                            "selling"
+                        ]
+                    },
+                    "rate": {
+                        "type": "string",
+                        "example": "1250.0000"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "effective_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "notes": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "WalletQuote": {
+                "title": "Wallet Quote",
+                "description": "A quotation for buying, selling, or transferring gold.",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "reference": {
+                        "type": "string",
+                        "example": "BUY-20260730-ABC123"
+                    },
+                    "operation": {
+                        "type": "string",
+                        "example": "buy"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "currency": {
+                        "type": "string",
+                        "example": "GHS"
+                    },
+                    "cash_amount": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "gold_weight": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "price_per_gram": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "fee_rate": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "fee_amount": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "total_payable": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "total_receivable": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "recipient_type": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "recipient_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "WalletTransaction": {
+                "title": "Wallet Transaction",
+                "description": "A wallet transaction record.",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "reference": {
+                        "type": "string",
+                        "example": "BUY-20260730-ABC123"
+                    },
+                    "group_reference": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "operation": {
+                        "type": "string",
+                        "example": "buy"
+                    },
+                    "direction": {
+                        "type": "string",
+                        "example": "credit"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "completed"
+                    },
+                    "wallet_id": {
+                        "type": "integer"
+                    },
+                    "owner_type": {
+                        "type": "string"
+                    },
+                    "owner_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "counterparty_type": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "counterparty_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true
+                    },
+                    "quote_reference": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "asset_amount": {
+                        "type": "string",
+                        "example": "1.50000000"
+                    },
+                    "cash_amount": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "price_per_gram": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "fee_amount": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "total_amount": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "narration": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "nullable": true
+                    },
+                    "completed_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Fee": {
+                "title": "Fee",
+                "description": "A historical fee entry.",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "fee": {
+                        "type": "string",
+                        "example": "0.0500"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "effective_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "notes": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "added_by": {
+                        "type": "string",
+                        "format": "uuid",
                         "nullable": true
                     },
                     "created_at": {
@@ -1163,6 +1681,10 @@
     },
     "tags": [
         {
+            "name": "Assets",
+            "description": "Customer assets and gold wallets"
+        },
+        {
             "name": "Customer",
             "description": "Customer profile and account management"
         },
@@ -1171,16 +1693,16 @@
             "description": "Platform Operator Auth"
         },
         {
+            "name": "Customers",
+            "description": "Customers"
+        },
+        {
             "name": "Fees",
             "description": "Fees"
         },
         {
             "name": "Rates",
             "description": "Rates"
-        },
-        {
-            "name": "Gold Wallets",
-            "description": "Gold Wallets"
         },
         {
             "name": "Users",

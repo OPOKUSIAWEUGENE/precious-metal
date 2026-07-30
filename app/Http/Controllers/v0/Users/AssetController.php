@@ -65,6 +65,82 @@ class AssetController extends Controller
         return $this->service->allWithdrawals((int) $request->query('per_page', 15));
     }
 
+    #[OA\Get(
+        path: '/v0/assets/transactions',
+        summary: 'Get all wallet transactions',
+        tags: ['Assets'],
+        security: [['sanctum' => []]],
+        parameters: [
+            new OA\Parameter(name: 'per_page', in: 'query', schema: new OA\Schema(type: 'integer', default: 15))
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Success',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'data', type: 'object'),
+                        new OA\Property(property: 'status', type: 'string', example: 'success'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 403, description: 'Forbidden'),
+        ]
+    )]
+    public function transactions(Request $request): JsonResponse
+    {
+        return $this->service->allTransactions((int) $request->query('per_page', 15));
+    }
+
+    #[OA\Get(
+        path: '/v0/assets/quotes',
+        summary: 'Get all wallet quotes',
+        tags: ['Assets'],
+        security: [['sanctum' => []]],
+        parameters: [
+            new OA\Parameter(name: 'per_page', in: 'query', schema: new OA\Schema(type: 'integer', default: 15))
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Success',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'data', type: 'object'),
+                        new OA\Property(property: 'status', type: 'string', example: 'success'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 403, description: 'Forbidden'),
+        ]
+    )]
+    public function quotes(Request $request): JsonResponse
+    {
+        return $this->service->allQuotes((int) $request->query('per_page', 15));
+    }
+
+    #[OA\Get(
+        path: '/v0/assets/prices/current',
+        summary: 'Get current gold pricing',
+        tags: ['Assets'],
+        security: [['sanctum' => []]],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Success',
+                content: new OA\JsonContent(properties: [
+                    new OA\Property(property: 'data', type: 'object'),
+                    new OA\Property(property: 'status', type: 'string', example: 'success'),
+                ])
+            ),
+            new OA\Response(response: 404, description: 'Not Found'),
+        ]
+    )]
+    public function currentPrice(): JsonResponse
+    {
+        return $this->service->currentPrice();
+    }
+
     #[OA\Post(
         path: '/v0/assets/withdrawals/{id}/approve',
         summary: 'Approve a withdrawal request',

@@ -49,7 +49,7 @@ return [
                     base_path('app/Http/Controllers/v0/Fees'),
                     base_path('app/Http/Controllers/v0/Auth/PlatformManager'),
                     base_path('app/Http/Controllers/v0/Users'),
-                    base_path('app/Http/Controllers/v0/Customers'),
+                    base_path('app/Http/Controllers/v0/Customers/CustomerController.php'),
                     base_path('app/Http/Controllers/v0/Debug'),
                 ],
             ],

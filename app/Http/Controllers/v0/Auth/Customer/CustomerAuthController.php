@@ -21,7 +21,7 @@ class CustomerAuthController extends Controller
     }
 
     #[OA\Post(
-        path: "/v0/auth/customers/login",
+        path: "/v0/customers/auth/login",
         summary: "Customer Login",
         tags: ["Auth"],
         requestBody: new OA\RequestBody(
@@ -48,7 +48,7 @@ class CustomerAuthController extends Controller
     }
 
     #[OA\Post(
-        path: "/v0/auth/customers/register",
+        path: "/v0/customers/auth/register",
         summary: "Customer Registration",
         tags: ["Auth"],
         requestBody: new OA\RequestBody(
@@ -74,7 +74,7 @@ class CustomerAuthController extends Controller
     }
 
     #[OA\Post(
-        path: "/v0/auth/customers/password/request",
+        path: "/v0/customers/auth/password/request",
         summary: "Request Customer Password Reset",
         tags: ["Auth"],
         requestBody: new OA\RequestBody(
@@ -96,7 +96,7 @@ class CustomerAuthController extends Controller
     }
 
     #[OA\Post(
-        path: "/v0/auth/customers/password/reset",
+        path: "/v0/customers/auth/password/reset",
         summary: "Reset Customer Password",
         tags: ["Auth"],
         requestBody: new OA\RequestBody(
@@ -121,7 +121,7 @@ class CustomerAuthController extends Controller
     }
 
     #[OA\Post(
-        path: "/v0/auth/customers/logout",
+        path: "/v0/customers/auth/logout",
         summary: "Customer Logout",
         tags: ["Auth"],
         security: [["sanctum" => []]],
