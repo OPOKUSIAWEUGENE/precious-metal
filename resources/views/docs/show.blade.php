@@ -261,12 +261,6 @@
             font-weight: 700;
         }
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 14px;
-        }
-
         .block {
             border-radius: 18px;
             border: 1px solid rgba(148, 163, 184, 0.12);
@@ -315,9 +309,7 @@
         }
 
         .tester {
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px dashed rgba(148, 163, 184, 0.16);
+            height: 100%;
         }
 
         .tester-head {
@@ -444,14 +436,120 @@
             line-height: 1.55;
         }
 
+        .endpoint-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
+            gap: 14px;
+            align-items: start;
+            margin-top: 14px;
+        }
+
+        .endpoint-details {
+            display: grid;
+            gap: 14px;
+        }
+
+        .endpoint-tester {
+            position: sticky;
+            top: 18px;
+            padding: 16px;
+            border-radius: 22px;
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: var(--shadow);
+        }
+
+        .endpoint-tester .tester-head {
+            margin-bottom: 14px;
+        }
+
+        .payload-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .payload-table th,
+        .payload-table td {
+            text-align: left;
+            padding: 10px 8px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+            vertical-align: top;
+        }
+
+        .payload-table th {
+            color: var(--muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .request-json {
+            margin-top: 12px;
+            padding: 14px;
+            border-radius: 18px;
+            background: #111827;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            color: #f8fafc;
+        }
+
+        .request-json .notice {
+            color: #cbd5e1;
+        }
+
+        .request-json pre {
+            background: #111827;
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #f8fafc;
+        }
+
+        .response-json {
+            margin: 12px 0 10px;
+            padding: 14px;
+            border-radius: 18px;
+            background: #111827;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            color: #f8fafc;
+        }
+
+        .response-json .notice {
+            color: #cbd5e1;
+        }
+
+        .response-json pre {
+            background: #111827;
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #f8fafc;
+        }
+
+        .field-type {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 12px;
+            color: #1d4ed8;
+        }
+
+        .field-required {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 54px;
+            padding: 5px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            background: rgba(15, 23, 42, 0.06);
+        }
+
         @media (max-width: 1100px) {
             .layout { grid-template-columns: 1fr; }
             .nav { position: static; max-height: none; }
+            .endpoint-layout { grid-template-columns: 1fr; }
+            .endpoint-tester { position: static; }
         }
 
         @media (max-width: 760px) {
             .topbar { padding: 18px; }
-            .grid-2, .form-grid { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
             .span-2 { grid-column: span 1; }
         }
     </style>
@@ -461,6 +559,9 @@
     $pretty = static fn ($value) => $value === null
         ? 'No payload documented.'
         : json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    $inlineValue = static fn ($value) => $value === null
+        ? '—'
+        : (is_scalar($value) ? (string) $value : json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 @endphp
 <main class="shell">
     <header class="topbar">
@@ -568,102 +669,148 @@
                                     </div>
                                 @endif
 
-                                <div class="grid-2" style="margin-top: 14px;">
-                                    <div class="block">
-                                        <h4>Request payload</h4>
-                                        @if($endpoint['request'])
-                                            <div class="notice">Content type: <code>{{ $endpoint['request']['content_type'] }}</code></div>
-                                            <div class="notice">Required: {{ $endpoint['request']['required'] ? 'Yes' : 'No' }}</div>
-                                            <div style="margin-top: 10px;">
-                                                <pre>{{ $pretty($endpoint['request']['example']) }}</pre>
-                                            </div>
-                                            <div style="margin-top: 10px;">
-                                                <details>
-                                                    <summary class="notice" style="cursor:pointer;">View request schema</summary>
-                                                    <pre style="margin-top: 10px;">{{ $pretty($endpoint['request']['schema']) }}</pre>
-                                                </details>
-                                            </div>
-                                        @else
-                                            <p class="notice">This endpoint does not define a JSON request body.</p>
-                                        @endif
-                                    </div>
+                                <div class="endpoint-layout">
+                                    <div class="endpoint-details">
+                                        <div class="block">
+                                            <h4>Request payload</h4>
+                                            @if($endpoint['request'])
+                                                <div class="notice">Content type: <code>{{ $endpoint['request']['content_type'] }}</code></div>
+                                                <div class="notice">Required: {{ $endpoint['request']['required'] ? 'Yes' : 'No' }}</div>
+                                                <div class="request-json">
+                                                    <div class="notice">JSON body</div>
+                                                    <pre style="margin-top: 10px;">{{ $pretty($endpoint['request']['example']) }}</pre>
+                                                </div>
+                                                <div style="margin-top: 10px;">
+                                                    <table class="payload-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Field</th>
+                                                                <th>Type</th>
+                                                                <th>Required</th>
+                                                                <th>Description</th>
+                                                                <th>Example</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @forelse($endpoint['request']['fields'] as $field)
+                                                                <tr>
+                                                                    <td><code>{{ $field['name'] }}</code></td>
+                                                                    <td><span class="field-type">{{ $field['type'] }}</span></td>
+                                                                    <td><span class="field-required">{{ $field['required'] ? 'Yes' : 'No' }}</span></td>
+                                                                    <td>{{ $field['description'] ?: 'No description provided.' }}</td>
+                                                                    <td><code>{{ $inlineValue($field['example']) }}</code></td>
+                                                                </tr>
+                                                            @empty
+                                                                <tr>
+                                                                    <td colspan="5">No request fields documented.</td>
+                                                                </tr>
+                                                            @endforelse
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            @else
+                                                <p class="notice">This endpoint does not define a JSON request body.</p>
+                                            @endif
+                                        </div>
 
-                                    <div class="block">
-                                        <h4>Response payloads</h4>
-                                        @foreach($endpoint['responses'] as $response)
-                                            <div class="badge" style="margin-bottom: 10px;">HTTP {{ $response['status'] }}</div>
-                                            <div class="notice">{{ $response['description'] ?: 'No description provided.' }}</div>
+                                        <div class="block">
+                                            <h4>Response payloads</h4>
+                                            @foreach($endpoint['responses'] as $response)
+                                                <div class="badge" style="margin-bottom: 10px;">HTTP {{ $response['status'] }}</div>
+                                                <div class="notice">{{ $response['description'] ?: 'No description provided.' }}</div>
                                             @if($response['content_type'])
                                                 <div class="notice">Content type: <code>{{ $response['content_type'] }}</code></div>
                                             @endif
-                                            @if($response['schema'] || $response['example'] !== null)
-                                                <div style="margin-top: 10px;">
-                                                    <pre>{{ $pretty($response['example']) }}</pre>
+                                                <div class="response-json">
+                                                    <div class="notice">JSON body</div>
+                                                    <pre style="margin-top: 10px;">{{ $pretty($response['body']) }}</pre>
                                                 </div>
                                                 <div style="margin-top: 10px;">
-                                                    <details>
-                                                        <summary class="notice" style="cursor:pointer;">View response schema</summary>
-                                                        <pre style="margin-top: 10px;">{{ $pretty($response['schema']) }}</pre>
-                                                    </details>
+                                                    <table class="payload-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Field</th>
+                                                                <th>Type</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @forelse($response['fields'] as $field)
+                                                                <tr>
+                                                                    <td><code>{{ $field['name'] }}</code></td>
+                                                                    <td><span class="field-type">{{ $field['type'] }}</span></td>
+                                                                </tr>
+                                                            @empty
+                                                                <tr><td colspan="2">No response fields documented.</td></tr>
+                                                            @endforelse
+                                                        </tbody>
+                                                    </table>
                                                 </div>
-                                            @endif
-                                            @if(! $loop->last)
-                                                <div style="height: 14px;"></div>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                <form class="tester js-tester" data-base-url="{{ $documentation['base_url'] }}" data-method="{{ strtolower($endpoint['method']) }}" data-path="{{ $endpoint['path'] }}" data-has-body="{{ $endpoint['request'] ? '1' : '0' }}">
-                                    <div class="tester">
-                                        <div class="tester-head">
-                                            <h4>API testing</h4>
-                                            <span class="badge">Live request builder</span>
+                                                @if($response['schema'])
+                                                    <div style="margin-top: 10px;">
+                                                        <details>
+                                                            <summary class="notice" style="cursor:pointer;">View response schema</summary>
+                                                            <pre style="margin-top: 10px;">{{ $pretty($response['schema']) }}</pre>
+                                                        </details>
+                                                    </div>
+                                                @endif
+                                                @if(! $loop->last)
+                                                    <div style="height: 14px;"></div>
+                                                @endif
+                                            @endforeach
                                         </div>
+                                    </div>
 
-                                        @php
-                                            $pathParams = collect($endpoint['parameters'])->where('in', 'path')->values();
-                                            $queryParams = collect($endpoint['parameters'])->where('in', 'query')->values();
-                                        @endphp
-
-                                        <div class="form-grid">
-                                            @foreach($pathParams as $parameter)
-                                                <div class="field">
-                                                    <label>{{ $parameter['name'] }} path parameter</label>
-                                                    <input type="text" name="path[{{ $parameter['name'] }}]" data-kind="path" value="{{ is_scalar($parameter['example']) ? $parameter['example'] : '' }}" placeholder="{{ $parameter['name'] }}">
-                                                </div>
-                                            @endforeach
-
-                                            @foreach($queryParams as $parameter)
-                                                <div class="field">
-                                                    <label>{{ $parameter['name'] }} query parameter</label>
-                                                    <input type="text" name="query[{{ $parameter['name'] }}]" data-kind="query" value="{{ is_scalar($parameter['example']) ? $parameter['example'] : '' }}" placeholder="{{ $parameter['name'] }}">
-                                                </div>
-                                            @endforeach
-
-                                            @if($endpoint['request'])
-                                                <div class="field span-2">
-                                                    <label>JSON body</label>
-                                                    <textarea name="body" data-kind="body">{{ $pretty($endpoint['request']['example']) }}</textarea>
-                                                </div>
-                                            @endif
-
-                                            <div class="field span-2">
-                                                <label>Response output</label>
-                                                <textarea readonly data-role="output" placeholder="The response from the API will appear here."></textarea>
+                                    <form class="tester js-tester endpoint-tester" data-base-url="{{ $documentation['base_url'] }}" data-method="{{ strtolower($endpoint['method']) }}" data-path="{{ $endpoint['path'] }}" data-has-body="{{ $endpoint['request'] ? '1' : '0' }}">
+                                        <div class="tester">
+                                            <div class="tester-head">
+                                                <h4>API testing</h4>
+                                                <span class="badge">Live request builder</span>
                                             </div>
-                                        </div>
 
-                                        <div class="btn-row">
-                                            <button type="submit">Send request</button>
-                                            <button type="button" class="secondary" data-action="reset">Reset example</button>
-                                        </div>
+                                            @php
+                                                $pathParams = collect($endpoint['parameters'])->where('in', 'path')->values();
+                                                $queryParams = collect($endpoint['parameters'])->where('in', 'query')->values();
+                                            @endphp
 
-                                        <p class="notice">
-                                            The request is sent relative to <code>{{ $documentation['base_url'] }}</code> so the tester works against the current app host.
-                                        </p>
-                                    </div>
-                                </form>
+                                            <div class="form-grid">
+                                                @foreach($pathParams as $parameter)
+                                                    <div class="field">
+                                                        <label>{{ $parameter['name'] }} path parameter</label>
+                                                        <input type="text" name="path[{{ $parameter['name'] }}]" data-kind="path" value="{{ is_scalar($parameter['example']) ? $parameter['example'] : '' }}" placeholder="{{ $parameter['name'] }}">
+                                                    </div>
+                                                @endforeach
+
+                                                @foreach($queryParams as $parameter)
+                                                    <div class="field">
+                                                        <label>{{ $parameter['name'] }} query parameter</label>
+                                                        <input type="text" name="query[{{ $parameter['name'] }}]" data-kind="query" value="{{ is_scalar($parameter['example']) ? $parameter['example'] : '' }}" placeholder="{{ $parameter['name'] }}">
+                                                    </div>
+                                                @endforeach
+
+                                                @if($endpoint['request'])
+                                                    <div class="field span-2">
+                                                        <label>JSON body</label>
+                                                        <textarea name="body" data-kind="body">{{ $pretty($endpoint['request']['example']) }}</textarea>
+                                                    </div>
+                                                @endif
+
+                                                <div class="field span-2">
+                                                    <label>Response output</label>
+                                                    <textarea readonly data-role="output" placeholder="The response from the API will appear here."></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="btn-row">
+                                                <button type="submit">Send request</button>
+                                                <button type="button" class="secondary" data-action="reset">Reset example</button>
+                                            </div>
+
+                                            <p class="notice">
+                                                The request is sent relative to <code>{{ $documentation['base_url'] }}</code> so the tester works against the current app host.
+                                            </p>
+                                        </div>
+                                    </form>
+                                </div>
                             </article>
                         @endforeach
                     </div>
@@ -786,8 +933,6 @@
                     options.body = JSON.stringify(body);
                 }
 
-                renderOutput(`Sending ${options.method} ${url} ...`);
-
                 const response = await fetch(url, options);
                 const contentType = response.headers.get('content-type') || '';
                 let payload = null;
@@ -798,17 +943,9 @@
                     payload = await response.text();
                 }
 
-                renderOutput({
-                    url,
-                    status: response.status,
-                    ok: response.ok,
-                    headers: Object.fromEntries(response.headers.entries()),
-                    payload,
-                });
+                renderOutput(payload);
             } catch (error) {
-                renderOutput({
-                    error: error.message || String(error),
-                });
+                renderOutput(error.message || String(error));
             }
         });
     });

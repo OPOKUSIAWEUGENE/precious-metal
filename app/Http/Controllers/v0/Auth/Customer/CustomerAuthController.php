@@ -28,13 +28,46 @@ class CustomerAuthController extends Controller
             required: true,
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: "email", type: "string", format: "email", example: "customer@neutek.local"),
-                    new OA\Property(property: "password", type: "string", format: "password", example: "password123")
+                    new OA\Property(property: "email", type: "string", format: "email", example: "customer@gmail.com"),
+                    new OA\Property(property: "password", type: "string", format: "password", example: "12345")
                 ]
             )
         ),
         responses: [
-            new OA\Response(response: 200, description: "Successful operation", content: new OA\JsonContent()),
+            new OA\Response(
+                response: 200,
+                description: "Successful operation",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(
+                            property: "data",
+                            type: "object",
+                            properties: [
+                                new OA\Property(property: "token", type: "string", example: "1|customer_sanctum_token_example"),
+                                new OA\Property(
+                                    property: "customer",
+                                    type: "object",
+                                    properties: [
+                                        new OA\Property(property: "id", type: "string", format: "uuid", example: "00000000-0000-0000-0000-000000000001"),
+                                        new OA\Property(property: "email", type: "string", format: "email", example: "customer@gmail.com"),
+                                        new OA\Property(property: "first_name", type: "string", example: "John"),
+                                        new OA\Property(property: "last_name", type: "string", example: "Customer"),
+                                        new OA\Property(property: "date_of_birth", type: "string", nullable: true, example: "1990-01-01"),
+                                        new OA\Property(property: "nationality", type: "string", nullable: true, example: "Ghanaian"),
+                                        new OA\Property(property: "resident_address", type: "string", nullable: true, example: "123 Tech Street, Accra"),
+                                        new OA\Property(property: "selfie", type: "string", nullable: true, example: null),
+                                        new OA\Property(property: "phone_number", type: "string", example: "+233240000000"),
+                                        new OA\Property(property: "kyc", type: "string", nullable: true, example: null),
+                                        new OA\Property(property: "card_details", type: "string", nullable: true, example: null),
+                                        new OA\Property(property: "active", type: "boolean", example: true)
+                                    ]
+                                )
+                            ]
+                        ),
+                        new OA\Property(property: "status", type: "string", example: "success")
+                    ]
+                )
+            ),
             new OA\Response(response: 401, description: "Unauthorized", content: new OA\JsonContent()),
             new OA\Response(response: 404, description: "Not Found", content: new OA\JsonContent()),
             new OA\Response(response: 400, description: "Bad Request", content: new OA\JsonContent()),
@@ -55,11 +88,18 @@ class CustomerAuthController extends Controller
             required: true,
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: "first_name", type: "string", example: "John"),
-                    new OA\Property(property: "last_name", type: "string", example: "Doe"),
-                    new OA\Property(property: "email", type: "string", format: "email", example: "john.doe@example.com"),
-                    new OA\Property(property: "password", type: "string", format: "password", example: "password123"),
-                    new OA\Property(property: "password_confirmation", type: "string", format: "password", example: "password123")
+                    new OA\Property(property: "phone_number", type: "string", example: "+233240000000"),
+                    new OA\Property(property: "password", type: "string", format: "password", example: "12345"),
+                    new OA\Property(property: "confirm_password", type: "string", format: "password", example: "12345"),
+                    new OA\Property(property: "email", type: "string", format: "email", nullable: true, example: "customer@gmail.com"),
+                    new OA\Property(property: "first_name", type: "string", nullable: true, example: "John"),
+                    new OA\Property(property: "last_name", type: "string", nullable: true, example: "Customer"),
+                    new OA\Property(property: "date_of_birth", type: "string", format: "date", nullable: true, example: "1990-01-01"),
+                    new OA\Property(property: "nationality", type: "string", nullable: true, example: "Ghanaian"),
+                    new OA\Property(property: "resident_address", type: "string", nullable: true, example: "123 Tech Street, Accra"),
+                    new OA\Property(property: "selfie", type: "string", nullable: true, example: null),
+                    new OA\Property(property: "kyc", type: "array", nullable: true, example: null),
+                    new OA\Property(property: "card_details", type: "array", nullable: true, example: null)
                 ]
             )
         ),
@@ -81,7 +121,7 @@ class CustomerAuthController extends Controller
             required: true,
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: "email", type: "string", format: "email", example: "customer@neutek.local")
+                    new OA\Property(property: "email", type: "string", format: "email", example: "customer@gmail.com")
                 ]
             )
         ),
@@ -103,10 +143,10 @@ class CustomerAuthController extends Controller
             required: true,
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: "email", type: "string", format: "email", example: "customer@neutek.local"),
+                    new OA\Property(property: "email", type: "string", format: "email", example: "customer@gmail.com"),
                     new OA\Property(property: "token", type: "string", example: "123456"),
-                    new OA\Property(property: "password", type: "string", format: "password", example: "newpassword123"),
-                    new OA\Property(property: "password_confirmation", type: "string", format: "password", example: "newpassword123")
+                    new OA\Property(property: "password", type: "string", format: "password", example: "12345"),
+                    new OA\Property(property: "password_confirmation", type: "string", format: "password", example: "12345")
                 ]
             )
         ),

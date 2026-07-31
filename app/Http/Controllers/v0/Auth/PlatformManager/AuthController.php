@@ -26,13 +26,56 @@ class AuthController extends Controller
             required: true,
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: "email", type: "string", format: "email", example: "admin@neutek.local"),
-                    new OA\Property(property: "password", type: "string", format: "password", example: "password123")
+                    new OA\Property(property: "email", type: "string", format: "email", example: "admin@gmail.com"),
+                    new OA\Property(property: "password", type: "string", format: "password", example: "12345")
                 ]
             )
         ),
         responses: [
-            new OA\Response(response: 200, description: "Login successful", content: new OA\JsonContent()),
+            new OA\Response(
+                response: 200,
+                description: "Login successful",
+                content: new OA\JsonContent(
+                    example: [
+                        "data" => [
+                            "token" => "a2636ba5-10c4-4c2c-87ef-51c6b526e55f|F7YA08MSz0P1TcRvJijUIP1Q6rOOEByUtmfX1jp26c4a5496",
+                            "user" => [
+                                "id" => "a2614e64-d087-488d-87ff-52e5437f932f",
+                                "email" => "admin@gmail.com",
+                                "first_name" => "System",
+                                "last_name" => "Admin",
+                                "phone_number" => "+233200000000",
+                                "active" => true,
+                                "role" => "admin",
+                            ],
+                        ],
+                        "status" => "success",
+                    ],
+                    properties: [
+                        new OA\Property(
+                            property: "data",
+                            type: "object",
+                            properties: [
+                                new OA\Property(property: "token", type: "string", example: "1|platform_sanctum_token_example"),
+                                new OA\Property(
+                                    property: "user",
+                                    type: "object",
+                                    properties: [
+                                        new OA\Property(property: "id", type: "string", format: "uuid", example: "00000000-0000-0000-0000-000000000001"),
+                                        new OA\Property(property: "email", type: "string", format: "email", example: "admin@gmail.com"),
+                                        new OA\Property(property: "first_name", type: "string", example: "System"),
+                                        new OA\Property(property: "last_name", type: "string", example: "Admin"),
+                                        new OA\Property(property: "phone_number", type: "string", nullable: true, example: "+233200000000"),
+                                        new OA\Property(property: "active", type: "boolean", example: true),
+                                        new OA\Property(property: "role", type: "string", example: "admin")
+                                    ]
+                                )
+                            ]
+                        ),
+                        new OA\Property(property: "status", type: "string", example: "success")
+                    ]
+                )
+            ),
             new OA\Response(response: 401, description: "Invalid credentials", content: new OA\JsonContent())
         ]
     )]
@@ -63,7 +106,7 @@ class AuthController extends Controller
             required: true,
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: "email", type: "string", format: "email", example: "admin@neutek.local")
+                    new OA\Property(property: "email", type: "string", format: "email", example: "admin@gmail.com")
                 ]
             )
         ),
@@ -85,10 +128,10 @@ class AuthController extends Controller
             required: true,
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: "email", type: "string", format: "email", example: "admin@neutek.local"),
+                    new OA\Property(property: "email", type: "string", format: "email", example: "admin@gmail.com"),
                     new OA\Property(property: "token", type: "string", example: "123456"),
-                    new OA\Property(property: "password", type: "string", format: "password", example: "newpassword123"),
-                    new OA\Property(property: "password_confirmation", type: "string", format: "password", example: "newpassword123")
+                    new OA\Property(property: "password", type: "string", format: "password", example: "12345"),
+                    new OA\Property(property: "password_confirmation", type: "string", format: "password", example: "12345")
                 ]
             )
         ),
@@ -111,9 +154,9 @@ class AuthController extends Controller
             required: true,
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: "current_password", type: "string", format: "password", example: "password123"),
-                    new OA\Property(property: "password", type: "string", format: "password", example: "newpassword123"),
-                    new OA\Property(property: "password_confirmation", type: "string", format: "password", example: "newpassword123")
+                    new OA\Property(property: "current_password", type: "string", format: "password", example: "12345"),
+                    new OA\Property(property: "password", type: "string", format: "password", example: "12345"),
+                    new OA\Property(property: "password_confirmation", type: "string", format: "password", example: "12345")
                 ]
             )
         ),

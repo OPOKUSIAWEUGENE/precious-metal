@@ -31,12 +31,12 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "admin@neutek.local"
+                                        "example": "admin@gmail.com"
                                     },
                                     "password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "password123"
+                                        "example": "12345"
                                     }
                                 },
                                 "type": "object"
@@ -46,7 +46,79 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Login successful"
+                        "description": "Login successful",
+                        "content": {
+                                    "application/json": {
+                                        "example": {
+                                            "data": {
+                                                "token": "a2636ba5-10c4-4c2c-87ef-51c6b526e55f|F7YA08MSz0P1TcRvJijUIP1Q6rOOEByUtmfX1jp26c4a5496",
+                                                "user": {
+                                                    "id": "a2614e64-d087-488d-87ff-52e5437f932f",
+                                                    "email": "admin@gmail.com",
+                                                    "first_name": "System",
+                                                    "last_name": "Admin",
+                                                    "phone_number": "+233200000000",
+                                                    "active": true,
+                                                    "role": "admin"
+                                                }
+                                            },
+                                            "status": "success"
+                                        },
+                                        "schema": {
+                                            "properties": {
+                                                "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "1|platform_sanctum_token_example"
+                                                },
+                                                "user": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "string",
+                                                            "format": "uuid",
+                                                            "example": "00000000-0000-0000-0000-000000000001"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "format": "email",
+                                                            "example": "admin@gmail.com"
+                                                        },
+                                                        "first_name": {
+                                                            "type": "string",
+                                                            "example": "System"
+                                                        },
+                                                        "last_name": {
+                                                            "type": "string",
+                                                            "example": "Admin"
+                                                        },
+                                                        "phone_number": {
+                                                            "type": "string",
+                                                            "nullable": true,
+                                                            "example": "+233200000000"
+                                                        },
+                                                        "active": {
+                                                            "type": "boolean",
+                                                            "example": true
+                                                        },
+                                                        "role": {
+                                                            "type": "string",
+                                                            "example": "admin"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Invalid credentials"
@@ -89,7 +161,7 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "admin@neutek.local"
+                                        "example": "admin@gmail.com"
                                     }
                                 },
                                 "type": "object"
@@ -123,7 +195,7 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "admin@neutek.local"
+                                        "example": "admin@gmail.com"
                                     },
                                     "token": {
                                         "type": "string",
@@ -132,12 +204,12 @@
                                     "password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "newpassword123"
+                                        "example": "12345"
                                     },
                                     "password_confirmation": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "newpassword123"
+                                        "example": "12345"
                                     }
                                 },
                                 "type": "object"

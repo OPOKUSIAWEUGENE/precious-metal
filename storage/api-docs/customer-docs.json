@@ -31,12 +31,12 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "customer@neutek.local"
+                                        "example": "customer@gmail.com"
                                     },
                                     "password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "password123"
+                                        "example": "12345"
                                     }
                                 },
                                 "type": "object"
@@ -49,7 +49,84 @@
                         "description": "Successful operation",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "1|customer_sanctum_token_example"
+                                                },
+                                                "customer": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "string",
+                                                            "format": "uuid",
+                                                            "example": "00000000-0000-0000-0000-000000000001"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "format": "email",
+                                                            "example": "customer@gmail.com"
+                                                        },
+                                                        "first_name": {
+                                                            "type": "string",
+                                                            "example": "John"
+                                                        },
+                                                        "last_name": {
+                                                            "type": "string",
+                                                            "example": "Customer"
+                                                        },
+                                                        "date_of_birth": {
+                                                            "type": "string",
+                                                            "nullable": true,
+                                                            "example": "1990-01-01"
+                                                        },
+                                                        "nationality": {
+                                                            "type": "string",
+                                                            "nullable": true,
+                                                            "example": "Ghanaian"
+                                                        },
+                                                        "resident_address": {
+                                                            "type": "string",
+                                                            "nullable": true,
+                                                            "example": "123 Tech Street, Accra"
+                                                        },
+                                                        "selfie": {
+                                                            "type": "string",
+                                                            "nullable": true,
+                                                            "example": null
+                                                        },
+                                                        "phone_number": {
+                                                            "type": "string",
+                                                            "example": "+233240000000"
+                                                        },
+                                                        "kyc": {
+                                                            "type": "string",
+                                                            "nullable": true,
+                                                            "example": null
+                                                        },
+                                                        "card_details": {
+                                                            "type": "string",
+                                                            "nullable": true,
+                                                            "example": null
+                                                        },
+                                                        "active": {
+                                                            "type": "boolean",
+                                                            "example": true
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    }
+                                }
                             }
                         }
                     },
@@ -101,28 +178,66 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "first_name": {
+                                    "phone_number": {
                                         "type": "string",
-                                        "example": "John"
-                                    },
-                                    "last_name": {
-                                        "type": "string",
-                                        "example": "Doe"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email",
-                                        "example": "john.doe@example.com"
+                                        "example": "+233240000000"
                                     },
                                     "password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "password123"
+                                        "example": "12345"
                                     },
-                                    "password_confirmation": {
+                                    "confirm_password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "password123"
+                                        "example": "12345"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "nullable": true,
+                                        "example": "customer@gmail.com"
+                                    },
+                                    "first_name": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "example": "John"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "example": "Customer"
+                                    },
+                                    "date_of_birth": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "nullable": true,
+                                        "example": "1990-01-01"
+                                    },
+                                    "nationality": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "example": "Ghanaian"
+                                    },
+                                    "resident_address": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "example": "123 Tech Street, Accra"
+                                    },
+                                    "selfie": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "example": null
+                                    },
+                                    "kyc": {
+                                        "type": "array",
+                                        "nullable": true,
+                                        "example": null
+                                    },
+                                    "card_details": {
+                                        "type": "array",
+                                        "nullable": true,
+                                        "example": null
                                     }
                                 },
                                 "type": "object"
@@ -166,7 +281,7 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "customer@neutek.local"
+                                        "example": "customer@gmail.com"
                                     }
                                 },
                                 "type": "object"
@@ -210,7 +325,7 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "customer@neutek.local"
+                                        "example": "customer@gmail.com"
                                     },
                                     "token": {
                                         "type": "string",
@@ -219,12 +334,12 @@
                                     "password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "newpassword123"
+                                        "example": "12345"
                                     },
                                     "password_confirmation": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "newpassword123"
+                                        "example": "12345"
                                     }
                                 },
                                 "type": "object"

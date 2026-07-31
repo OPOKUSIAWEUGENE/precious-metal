@@ -75,11 +75,18 @@ class ApiDocumentationRepository
 
         $grouped = collect($endpoints)
             ->groupBy(fn (array $endpoint) => $endpoint['primary_tag'])
-            ->map(fn ($group, string $tag) => [
-                'name' => $tag,
-                'description' => $tagDescriptions[$tag] ?? '',
-                'endpoints' => $group->values()->all(),
-            ])
+            ->map(function ($group, string $tag) {
+                $endpoints = $group
+                    ->sortBy(fn (array $endpoint) => $this->endpointPriority($tag, $endpoint))
+                    ->values()
+                    ->all();
+
+                return [
+                    'name' => $tag,
+                    'description' => $tagDescriptions[$tag] ?? '',
+                    'endpoints' => $endpoints,
+                ];
+            })
             ->sortBy(fn (array $section) => $this->tagPriority($section['name']))
             ->values()
             ->all();
@@ -173,6 +180,7 @@ class ApiDocumentationRepository
             'content_type' => $content['contentType'] ?? 'application/json',
             'schema' => $schema,
             'example' => $this->exampleFromSchema($schema),
+            'fields' => $this->schemaFields($schema, $components),
         ];
     }
 
@@ -180,19 +188,22 @@ class ApiDocumentationRepository
     {
         $content = $this->firstContent($response['content'] ?? []);
         $schema = null;
-        $example = null;
+        $body = null;
 
         if ($content) {
             $schema = $this->resolveSchema($content['schema'] ?? [], $components);
-            $example = $this->exampleFromSchema($schema);
+            $body = $content['example'] ?? $this->exampleFromSchema($schema);
         }
+
+        $body ??= $this->fallbackResponseBody($status, $response['description'] ?? '');
 
         return [
             'status' => $status,
             'description' => $response['description'] ?? '',
             'content_type' => $content['contentType'] ?? null,
             'schema' => $schema,
-            'example' => $example,
+            'body' => $body,
+            'fields' => $this->schemaFields($schema, $components),
         ];
     }
 
@@ -209,6 +220,24 @@ class ApiDocumentationRepository
         }
 
         return ['contentType' => array_key_first($content)] + $first;
+    }
+
+    private function fallbackResponseBody(string $status, string $description): array
+    {
+        $code = (int) $status;
+
+        if ($code >= 200 && $code < 300) {
+            return [
+                'data' => (object) [],
+                'status' => 'success',
+            ];
+        }
+
+        return [
+            'message' => $description ?: 'Request failed',
+            'errors' => [],
+            'status' => 'failed',
+        ];
     }
 
     private function resolveSchema(array $schema, array $components): array
@@ -328,6 +357,87 @@ class ApiDocumentationRepository
         };
     }
 
+    private function schemaFields(mixed $schema, array $components, string $prefix = ''): array
+    {
+        if (! is_array($schema)) {
+            return [];
+        }
+
+        $schema = $this->resolveSchema($schema, $components);
+        $fields = [];
+        $required = array_fill_keys($schema['required'] ?? [], true);
+
+        if (isset($schema['properties']) && is_array($schema['properties'])) {
+            foreach ($schema['properties'] as $name => $property) {
+                if (! is_array($property)) {
+                    continue;
+                }
+
+                $fieldName = $prefix === '' ? $name : $prefix . '.' . $name;
+                $resolvedProperty = $this->resolveSchema($property, $components);
+
+                $fields[] = [
+                    'name' => $fieldName,
+                    'type' => $this->describeSchemaType($resolvedProperty),
+                    'required' => isset($required[$name]),
+                    'description' => $resolvedProperty['description'] ?? '',
+                    'example' => $this->exampleFromSchema($resolvedProperty),
+                ];
+
+                $fields = array_merge($fields, $this->schemaFields($resolvedProperty, $components, $fieldName));
+            }
+        }
+
+        if (isset($schema['additionalProperties']) && is_array($schema['additionalProperties'])) {
+            $additional = $this->resolveSchema($schema['additionalProperties'], $components);
+            $fieldName = $prefix === '' ? 'additionalProperties' : $prefix . '.additionalProperties';
+
+            $fields[] = [
+                'name' => $fieldName,
+                'type' => $this->describeSchemaType($additional),
+                'required' => false,
+                'description' => $additional['description'] ?? 'Dynamic key/value pairs.',
+                'example' => $this->exampleFromSchema($additional),
+            ];
+
+            $fields = array_merge($fields, $this->schemaFields($additional, $components, $fieldName));
+        }
+
+        if (isset($schema['items']) && is_array($schema['items'])) {
+            $items = $this->resolveSchema($schema['items'], $components);
+            $fieldName = $prefix === '' ? 'items' : $prefix . '[]';
+
+            $fields[] = [
+                'name' => $fieldName,
+                'type' => $this->describeSchemaType($items),
+                'required' => true,
+                'description' => $items['description'] ?? 'Array items.',
+                'example' => $this->exampleFromSchema($items),
+            ];
+
+            $fields = array_merge($fields, $this->schemaFields($items, $components, $fieldName));
+        }
+
+        return $fields;
+    }
+
+    private function describeSchemaType(array $schema): string
+    {
+        $type = $schema['type'] ?? 'object';
+
+        if ($type === 'array') {
+            return 'array<' . $this->describeSchemaType($schema['items'] ?? ['type' => 'object']) . '>';
+        }
+
+        if ($type === 'object') {
+            return 'object';
+        }
+
+        $format = $schema['format'] ?? null;
+
+        return $format ? $type . ' (' . $format . ')' : $type;
+    }
+
     private function methodOrder(string $method): int
     {
         return match ($method) {
@@ -349,6 +459,18 @@ class ApiDocumentationRepository
         return [
             str_contains($normalized, 'auth') ? 0 : 1,
             $normalized,
+        ];
+    }
+
+    private function endpointPriority(string $tag, array $endpoint): array
+    {
+        $normalizedTag = strtolower($tag);
+        $path = strtolower($endpoint['path'] ?? '');
+
+        return [
+            str_contains($normalizedTag, 'auth') && str_contains($path, '/login') ? 0 : 1,
+            $endpoint['method_order'] ?? 99,
+            $path,
         ];
     }
 }

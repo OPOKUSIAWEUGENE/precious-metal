@@ -22,8 +22,12 @@ class ApiDocumentationTest extends TestCase
             ->assertSeeInOrder([
                 'Customer API Documentation',
                 'Auth',
-                'Assets',
+                '/v0/customers/auth/login',
+                '/v0/customers/auth/register',
             ])
+            ->assertSee('customer@gmail.com', false)
+            ->assertSee('12345', false)
+            ->assertSee('1|customer_sanctum_token_example', false)
             ->assertSee('API testing', false);
     }
 
@@ -34,7 +38,11 @@ class ApiDocumentationTest extends TestCase
             ->assertSeeInOrder([
                 'Platform Operator API Documentation',
                 'Platform Operator Auth',
-                'Platform Assets',
-            ]);
+                '/v0/auth/platform-managers/login',
+                '/v0/auth/platform-managers/logout',
+            ])
+            ->assertSee('admin@gmail.com', false)
+            ->assertSee('System', false)
+            ->assertSee('a2636ba5-10c4-4c2c-87ef-51c6b526e55f|F7YA08MSz0P1TcRvJijUIP1Q6rOOEByUtmfX1jp26c4a5496', false);
     }
 }
