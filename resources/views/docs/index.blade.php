@@ -31,9 +31,9 @@
         }
 
         .wrap {
-            max-width: 1120px;
+            max-width: 1480px;
             margin: 0 auto;
-            padding: 64px 20px 80px;
+            padding: 56px 24px 80px;
         }
 
         .hero {
@@ -74,7 +74,7 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
+            gap: 20px;
             margin-top: 34px;
         }
 
@@ -82,7 +82,7 @@
             border: 1px solid var(--panel-border);
             border-radius: 24px;
             background: var(--panel);
-            padding: 24px;
+            padding: 28px;
             box-shadow: 0 20px 55px rgba(15, 23, 42, 0.10);
             backdrop-filter: blur(14px);
         }
@@ -161,6 +161,21 @@
         </div>
 
         <section class="grid">
+            <article class="card">
+                <h2>Module documentation</h2>
+                <p>
+                    A dedicated overview of the code modules, their models, what each entity does, and the endpoint
+                    groups that use them.
+                </p>
+                <div class="meta">
+                    <span class="pill">Users, customers, auth, assets</span>
+                    <span class="pill">Rates, fees, emails</span>
+                    <span class="pill">Entity-level notes</span>
+                </div>
+                <div class="actions">
+                    <a href="{{ route('docs.modules') }}">Open module docs</a>
+                </div>
+            </article>
             @foreach($documentations as $documentation)
                 <article class="card">
                     <h2>{{ $documentation['title'] }}</h2>

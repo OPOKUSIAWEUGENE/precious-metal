@@ -36,12 +36,14 @@
         a { color: inherit; }
 
         .shell {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 28px 18px 60px;
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 16px 16px 48px;
         }
 
         .topbar {
+            width: 100%;
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
@@ -104,14 +106,14 @@
 
         .layout {
             display: grid;
-            grid-template-columns: 290px minmax(0, 1fr);
-            gap: 18px;
+            grid-template-columns: 280px minmax(0, 1fr);
+            gap: 22px;
             align-items: start;
         }
 
         .nav {
             position: sticky;
-            top: 18px;
+            top: 16px;
             padding: 18px;
             border: 1px solid var(--border);
             border-radius: 22px;
@@ -154,12 +156,14 @@
         }
 
         .content {
+            width: 100%;
             display: grid;
             gap: 18px;
         }
 
         .section {
-            padding: 18px;
+            width: 100%;
+            padding: 22px;
             border: 1px solid var(--border);
             border-radius: 24px;
             background: rgba(255, 255, 255, 0.84);
@@ -193,7 +197,8 @@
         }
 
         .endpoint {
-            padding: 18px;
+            width: 100%;
+            padding: 22px;
             border-radius: 22px;
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 255, 0.96));
             border: 1px solid rgba(148, 163, 184, 0.14);
@@ -438,13 +443,14 @@
 
         .endpoint-layout {
             display: grid;
-            grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
-            gap: 14px;
+            grid-template-columns: minmax(0, 1.65fr) minmax(340px, 0.75fr);
+            gap: 18px;
             align-items: start;
             margin-top: 14px;
         }
 
         .endpoint-details {
+            min-width: 0;
             display: grid;
             gap: 14px;
         }
@@ -452,7 +458,7 @@
         .endpoint-tester {
             position: sticky;
             top: 18px;
-            padding: 16px;
+            padding: 18px;
             border-radius: 22px;
             border: 1px solid rgba(148, 163, 184, 0.16);
             background: rgba(255, 255, 255, 0.88);
@@ -488,9 +494,10 @@
             margin-top: 12px;
             padding: 14px;
             border-radius: 18px;
-            background: #111827;
+            background: linear-gradient(180deg, #111827 0%, #0b1220 100%);
             border: 1px solid rgba(148, 163, 184, 0.18);
             color: #f8fafc;
+            width: 100%;
         }
 
         .request-json .notice {
@@ -498,18 +505,20 @@
         }
 
         .request-json pre {
-            background: #111827;
+            background: #0b1220;
             border-color: rgba(255, 255, 255, 0.08);
             color: #f8fafc;
+            width: 100%;
         }
 
         .response-json {
             margin: 12px 0 10px;
-            padding: 14px;
+            padding: 16px;
             border-radius: 18px;
-            background: #111827;
+            background: linear-gradient(180deg, #111827 0%, #0b1220 100%);
             border: 1px solid rgba(148, 163, 184, 0.18);
             color: #f8fafc;
+            width: 100%;
         }
 
         .response-json .notice {
@@ -517,9 +526,10 @@
         }
 
         .response-json pre {
-            background: #111827;
+            background: #0b1220;
             border-color: rgba(255, 255, 255, 0.08);
             color: #f8fafc;
+            width: 100%;
         }
 
         .field-type {
@@ -542,7 +552,7 @@
 
         @media (max-width: 1100px) {
             .layout { grid-template-columns: 1fr; }
-            .nav { position: static; max-height: none; }
+            .nav { position: static; max-height: none; top: auto; }
             .endpoint-layout { grid-template-columns: 1fr; }
             .endpoint-tester { position: static; }
         }
