@@ -34,17 +34,25 @@ class ApiDocumentationController extends Controller
     public function modules(): View
     {
         return view('docs.modules', [
-            'modules' => $this->moduleDocumentation(),
+            'audiences' => $this->audienceDocumentation(),
         ]);
     }
 
-    private function moduleDocumentation(): array
+    private function audienceDocumentation(): array
     {
+        $endpoints = $this->endpointCatalog();
+
         return [
             [
                 'key' => 'platform-user',
                 'title' => 'Platform User',
                 'summary' => 'The platform user is the internal operator account used by admins and staff to manage the system.',
+                'base_url' => url('/api'),
+                'references' => [
+                    'Route file' => 'routes/api/platformManagers.php',
+                    'Platform auth controller' => 'app/Http/Controllers/v0/Auth/PlatformManager/AuthController.php',
+                    'User model' => 'app/Modules/v0/Users/Models/User.php',
+                ],
                 'what_it_does' => [
                     'Logs in through the platform auth module and receives a Sanctum token.',
                     'Manages users, customers, rates, fees, and asset operations.',
@@ -59,11 +67,11 @@ class ApiDocumentationController extends Controller
                         'Service' => 'app/Modules/v0/Auth/Services/PlatformManager/PlatformManagerAuthService.php',
                     ],
                     'endpoints' => [
-                        $this->endpoint('POST', '/v0/auth/platform-managers/login', 'Platform manager login', 'app/Http/Controllers/v0/Auth/PlatformManager/AuthController.php@login', 'Validates `email` and `password`, then issues a Sanctum token.'),
-                        $this->endpoint('POST', '/v0/auth/platform-managers/password/request', 'Request platform manager password reset', 'app/Http/Controllers/v0/Auth/PlatformManager/AuthController.php@requestPasswordReset', 'Generates a reset token and emails a reset link.'),
-                        $this->endpoint('POST', '/v0/auth/platform-managers/password/reset', 'Reset platform manager password', 'app/Http/Controllers/v0/Auth/PlatformManager/AuthController.php@resetPassword', 'Checks the token and updates the password after validation.'),
-                        $this->endpoint('POST', '/v0/auth/platform-managers/logout', 'Platform manager logout', 'app/Http/Controllers/v0/Auth/PlatformManager/AuthController.php@logout', 'Deletes the current Sanctum token.'),
-                        $this->endpoint('POST', '/v0/auth/platform-managers/change-password', 'Change platform manager password', 'app/Http/Controllers/v0/Auth/PlatformManager/AuthController.php@changePassword', 'Requires the current password from an authenticated session.'),
+                        $this->resolvedEndpoint($endpoints, 'POST', '/v0/auth/platform-managers/login', 'Validates `email` and `password`, then issues a Sanctum token.'),
+                        $this->resolvedEndpoint($endpoints, 'POST', '/v0/auth/platform-managers/password/request', 'Generates a reset token and emails a reset link.'),
+                        $this->resolvedEndpoint($endpoints, 'POST', '/v0/auth/platform-managers/password/reset', 'Checks the token and updates the password after validation.'),
+                        $this->resolvedEndpoint($endpoints, 'POST', '/v0/auth/platform-managers/logout', 'Deletes the current Sanctum token.'),
+                        $this->resolvedEndpoint($endpoints, 'POST', '/v0/auth/platform-managers/change-password', 'Requires the current password from an authenticated session.'),
                     ],
                 ],
                 'modules' => [
@@ -76,15 +84,15 @@ class ApiDocumentationController extends Controller
                             'Model' => 'app/Modules/v0/Users/Models/User.php',
                         ],
                         'endpoints' => [
-                            $this->endpoint('GET', '/v0/users', 'List platform users', 'app/Http/Controllers/v0/Users/UserController.php@index', 'Protected platform management endpoint.'),
-                            $this->endpoint('POST', '/v0/users', 'Create a platform user', 'app/Http/Controllers/v0/Users/UserController.php@store', 'Creates a user, generates a password, and sends a welcome email.'),
-                            $this->endpoint('GET', '/v0/users/{id}', 'Fetch a platform user', 'app/Http/Controllers/v0/Users/UserController.php@show'),
-                            $this->endpoint('PUT', '/v0/users/{id}', 'Update a platform user', 'app/Http/Controllers/v0/Users/UserController.php@update'),
-                            $this->endpoint('POST', '/v0/users/{id}/password/request', 'Request a platform user password reset', 'app/Http/Controllers/v0/Users/UserController.php@requestPasswordReset'),
-                            $this->endpoint('DELETE', '/v0/users/{id}', 'Delete a platform user', 'app/Http/Controllers/v0/Users/UserController.php@destroy'),
-                            $this->endpoint('GET', '/v0/users/email/{email}', 'Find a user by email', 'app/Http/Controllers/v0/Users/UserController.php@findByEmail'),
-                            $this->endpoint('PUT', '/v0/users/{id}/deactivate', 'Deactivate a user', 'app/Http/Controllers/v0/Users/UserController.php@deactivate'),
-                            $this->endpoint('PUT', '/v0/users/{id}/activate', 'Reactivate a user', 'app/Http/Controllers/v0/Users/UserController.php@activate'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/users', 'Protected platform management endpoint.'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/users', 'Creates a user, generates a password, and sends a welcome email.'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/users/{id}'),
+                            $this->resolvedEndpoint($endpoints, 'PUT', '/v0/users/{id}'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/users/{id}/password/request'),
+                            $this->resolvedEndpoint($endpoints, 'DELETE', '/v0/users/{id}'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/users/email/{email}'),
+                            $this->resolvedEndpoint($endpoints, 'PUT', '/v0/users/{id}/deactivate'),
+                            $this->resolvedEndpoint($endpoints, 'PUT', '/v0/users/{id}/activate'),
                         ],
                     ],
                     [
@@ -96,15 +104,15 @@ class ApiDocumentationController extends Controller
                             'Model' => 'app/Modules/v0/Customers/Models/Customer.php',
                         ],
                         'endpoints' => [
-                            $this->endpoint('GET', '/v0/customers', 'List customers', 'app/Http/Controllers/v0/Customers/CustomerController.php@index'),
-                            $this->endpoint('POST', '/v0/customers', 'Create a customer', 'app/Http/Controllers/v0/Customers/CustomerController.php@store'),
-                            $this->endpoint('GET', '/v0/customers/{id}', 'Fetch a customer', 'app/Http/Controllers/v0/Customers/CustomerController.php@show'),
-                            $this->endpoint('PUT', '/v0/customers/{id}', 'Update a customer', 'app/Http/Controllers/v0/Customers/CustomerController.php@update'),
-                            $this->endpoint('POST', '/v0/customers/{id}/password/request', 'Request a customer password reset from the admin side', 'app/Http/Controllers/v0/Customers/CustomerController.php@requestPasswordReset'),
-                            $this->endpoint('DELETE', '/v0/customers/{id}', 'Delete a customer', 'app/Http/Controllers/v0/Customers/CustomerController.php@destroy'),
-                            $this->endpoint('GET', '/v0/customers/email/{email}', 'Find a customer by email', 'app/Http/Controllers/v0/Customers/CustomerController.php@findByEmail'),
-                            $this->endpoint('PUT', '/v0/customers/{id}/deactivate', 'Deactivate a customer', 'app/Http/Controllers/v0/Customers/CustomerController.php@deactivate'),
-                            $this->endpoint('PUT', '/v0/customers/{id}/activate', 'Reactivate a customer', 'app/Http/Controllers/v0/Customers/CustomerController.php@activate'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/customers', 'Platform users use this to manage customer records.'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers', 'Platform users create customer records from here.'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/customers/{id}'),
+                            $this->resolvedEndpoint($endpoints, 'PUT', '/v0/customers/{id}'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/{id}/password/request'),
+                            $this->resolvedEndpoint($endpoints, 'DELETE', '/v0/customers/{id}'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/customers/email/{email}'),
+                            $this->resolvedEndpoint($endpoints, 'PUT', '/v0/customers/{id}/deactivate'),
+                            $this->resolvedEndpoint($endpoints, 'PUT', '/v0/customers/{id}/activate'),
                         ],
                     ],
                     [
@@ -117,12 +125,12 @@ class ApiDocumentationController extends Controller
                             'Withdrawal model' => 'app/Modules/v0/Assets/Models/Withdrawal.php',
                         ],
                         'endpoints' => [
-                            $this->endpoint('GET', '/v0/assets/wallets', 'List asset wallets', 'app/Http/Controllers/v0/Users/AssetController.php@wallets'),
-                            $this->endpoint('GET', '/v0/assets/withdrawals', 'List withdrawals', 'app/Http/Controllers/v0/Users/AssetController.php@withdrawals'),
-                            $this->endpoint('POST', '/v0/assets/withdrawals/{id}/approve', 'Approve a withdrawal', 'app/Http/Controllers/v0/Users/AssetController.php@approve'),
-                            $this->endpoint('GET', '/v0/assets/transactions', 'List wallet transactions', 'app/Http/Controllers/v0/Users/AssetController.php@transactions'),
-                            $this->endpoint('GET', '/v0/assets/quotes', 'List wallet quotes', 'app/Http/Controllers/v0/Users/AssetController.php@quotes'),
-                            $this->endpoint('GET', '/v0/assets/prices/current', 'Fetch current asset price', 'app/Http/Controllers/v0/Users/AssetController.php@currentPrice'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/assets/wallets'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/assets/withdrawals'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/assets/withdrawals/{id}/approve'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/assets/transactions'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/assets/quotes'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/assets/prices/current'),
                         ],
                     ],
                     [
@@ -135,10 +143,10 @@ class ApiDocumentationController extends Controller
                             'Fee controller' => 'app/Http/Controllers/v0/Fees/FeeController.php',
                         ],
                         'endpoints' => [
-                            $this->endpoint('GET', '/v0/rates', 'List rates', 'app/Http/Controllers/v0/Rates/RateController.php@index'),
-                            $this->endpoint('POST', '/v0/rates', 'Create a rate', 'app/Http/Controllers/v0/Rates/RateController.php@store'),
-                            $this->endpoint('GET', '/v0/fees', 'List fees', 'app/Http/Controllers/v0/Fees/FeeController.php@index'),
-                            $this->endpoint('POST', '/v0/fees', 'Create a fee', 'app/Http/Controllers/v0/Fees/FeeController.php@store'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/rates'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/rates'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/fees'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/fees'),
                         ],
                     ],
                     [
@@ -160,6 +168,12 @@ class ApiDocumentationController extends Controller
                 'key' => 'customer',
                 'title' => 'Customer',
                 'summary' => 'Customers are the external users of the system who sign in to manage their own balances and wallet actions.',
+                'base_url' => url('/api'),
+                'references' => [
+                    'Route file' => 'routes/api/customers.php',
+                    'Customer auth controller' => 'app/Http/Controllers/v0/Auth/Customer/CustomerAuthController.php',
+                    'Customer model' => 'app/Modules/v0/Customers/Models/Customer.php',
+                ],
                 'what_it_does' => [
                     'Authenticates with email or phone number through the customer auth module.',
                     'Uses wallet endpoints to check balances, request quotes, transfer assets, sell, purchase, and withdraw.',
@@ -174,11 +188,11 @@ class ApiDocumentationController extends Controller
                         'Service' => 'app/Modules/v0/Auth/Services/Customer/CustomerAuthService.php',
                     ],
                     'endpoints' => [
-                        $this->endpoint('POST', '/v0/customers/auth/login', 'Customer login', 'app/Http/Controllers/v0/Auth/Customer/CustomerAuthController.php@login', 'Accepts email or phone number, then returns a token and customer profile.'),
-                        $this->endpoint('POST', '/v0/customers/auth/register', 'Customer registration', 'app/Http/Controllers/v0/Auth/Customer/CustomerAuthController.php@register', 'Creates the customer record and logs the new account in immediately.'),
-                        $this->endpoint('POST', '/v0/customers/auth/password/request', 'Request customer password reset', 'app/Http/Controllers/v0/Auth/Customer/CustomerAuthController.php@requestPasswordReset', 'Generates a hashed reset token and sends the reset email.'),
-                        $this->endpoint('POST', '/v0/customers/auth/password/reset', 'Reset customer password', 'app/Http/Controllers/v0/Auth/Customer/CustomerAuthController.php@resetPassword', 'Validates token and password confirmation before updating the password.'),
-                        $this->endpoint('POST', '/v0/customers/auth/logout', 'Customer logout', 'app/Http/Controllers/v0/Auth/Customer/CustomerAuthController.php@logout', 'Deletes the current customer access token.'),
+                        $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/auth/login', 'Accepts email or phone number, then returns a token and customer profile.'),
+                        $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/auth/register', 'Creates the customer record and logs the new account in immediately.'),
+                        $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/auth/password/request', 'Generates a hashed reset token and sends the reset email.'),
+                        $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/auth/password/reset', 'Validates token and password confirmation before updating the password.'),
+                        $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/auth/logout', 'Deletes the current customer access token.'),
                     ],
                 ],
                 'modules' => [
@@ -192,22 +206,22 @@ class ApiDocumentationController extends Controller
                             'Withdrawal model' => 'app/Modules/v0/Assets/Models/Withdrawal.php',
                         ],
                         'endpoints' => [
-                            $this->endpoint('GET', '/v0/customers/assets/wallets', 'Customer wallets', 'app/Http/Controllers/v0/Customers/AssetController.php@wallets', 'Shows the customer\'s asset wallets and balances.'),
-                            $this->endpoint('GET', '/v0/customers/assets/rate', 'Customer rate', 'app/Http/Controllers/v0/Customers/AssetController.php@rate'),
-                            $this->endpoint('GET', '/v0/customers/assets/balance', 'Customer balance', 'app/Http/Controllers/v0/Customers/AssetController.php@balance', 'Useful for checking how much the customer can move or withdraw.'),
-                            $this->endpoint('GET', '/v0/customers/assets/transactions', 'Customer transactions', 'app/Http/Controllers/v0/Customers/AssetController.php@transactions'),
-                            $this->endpoint('GET', '/v0/customers/assets/transactions/{reference}', 'Show a customer transaction', 'app/Http/Controllers/v0/Customers/AssetController.php@transaction'),
-                            $this->endpoint('GET', '/v0/customers/assets/prices/current', 'Customer current price', 'app/Http/Controllers/v0/Customers/AssetController.php@currentPrice'),
-                            $this->endpoint('POST', '/v0/customers/assets/quotes', 'Create a customer quote', 'app/Http/Controllers/v0/Customers/AssetController.php@quote'),
-                            $this->endpoint('GET', '/v0/customers/assets/quotes/{reference}', 'Show a customer quote', 'app/Http/Controllers/v0/Customers/AssetController.php@quoteShow'),
-                            $this->endpoint('POST', '/v0/customers/assets/transfers/recipient-enquiry', 'Recipient enquiry', 'app/Http/Controllers/v0/Customers/AssetController.php@recipientEnquiry'),
-                            $this->endpoint('POST', '/v0/customers/assets/transfers/quote', 'Transfer quote', 'app/Http/Controllers/v0/Customers/AssetController.php@transferQuote'),
-                            $this->endpoint('POST', '/v0/customers/assets/transfers', 'Create transfer', 'app/Http/Controllers/v0/Customers/AssetController.php@transfer'),
-                            $this->endpoint('POST', '/v0/customers/assets/sales/quote', 'Sale quote', 'app/Http/Controllers/v0/Customers/AssetController.php@saleQuote'),
-                            $this->endpoint('POST', '/v0/customers/assets/sales', 'Create sale', 'app/Http/Controllers/v0/Customers/AssetController.php@sale'),
-                            $this->endpoint('POST', '/v0/customers/assets/purchases/quote', 'Purchase quote', 'app/Http/Controllers/v0/Customers/AssetController.php@purchaseQuote'),
-                            $this->endpoint('POST', '/v0/customers/assets/purchases', 'Create purchase', 'app/Http/Controllers/v0/Customers/AssetController.php@purchase'),
-                            $this->endpoint('POST', '/v0/customers/assets/withdrawals', 'Create withdrawal request', 'app/Http/Controllers/v0/Customers/AssetController.php@store', 'Customers use this when they want to convert or cash out from their wallet.'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/customers/assets/wallets', 'Shows the customer\'s asset wallets and balances.'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/customers/assets/rate'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/customers/assets/balance', 'Useful for checking how much the customer can move or withdraw.'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/customers/assets/transactions'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/customers/assets/transactions/{reference}'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/customers/assets/prices/current'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/assets/quotes'),
+                            $this->resolvedEndpoint($endpoints, 'GET', '/v0/customers/assets/quotes/{reference}'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/assets/transfers/recipient-enquiry'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/assets/transfers/quote'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/assets/transfers'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/assets/sales/quote'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/assets/sales'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/assets/purchases/quote'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/assets/purchases'),
+                            $this->resolvedEndpoint($endpoints, 'POST', '/v0/customers/assets/withdrawals', 'Customers use this when they want to convert or cash out from their wallet.'),
                         ],
                     ],
                 ],
@@ -216,6 +230,62 @@ class ApiDocumentationController extends Controller
                 ],
             ],
         ];
+    }
+
+    private function endpointCatalog(): array
+    {
+        $catalog = [];
+
+        foreach ($this->documentations->all() as $documentation) {
+            foreach ($documentation['endpoints'] as $endpoint) {
+                $catalog[$this->endpointKey($endpoint['method'], $endpoint['path'])] = array_merge($endpoint, [
+                    'docs_title' => $documentation['title'],
+                    'docs_route' => $documentation['route'],
+                ]);
+            }
+        }
+
+        return $catalog;
+    }
+
+    private function resolvedEndpoint(array $catalog, string $method, string $path, string $notes = ''): array
+    {
+        $key = $this->endpointKey($method, $path);
+        $endpoint = $catalog[$key] ?? [
+            'id' => $this->endpointId($method, $path),
+            'method' => strtoupper($method),
+            'path' => $path,
+            'summary' => $path,
+            'description' => '',
+            'operation_id' => null,
+            'tags' => [],
+            'primary_tag' => 'Untagged',
+            'secured' => false,
+            'parameters' => [],
+            'request' => null,
+            'responses' => [],
+            'docs_title' => null,
+            'docs_route' => null,
+        ];
+
+        return array_merge($endpoint, [
+            'notes' => $notes,
+        ]);
+    }
+
+    private function endpointKey(string $method, string $path): string
+    {
+        return strtolower($method) . '|' . $this->normalizePath($path);
+    }
+
+    private function normalizePath(string $path): string
+    {
+        return '/' . ltrim(trim(preg_replace('#/+#', '/', $path)), '/');
+    }
+
+    private function endpointId(string $method, string $path): string
+    {
+        return \Illuminate\Support\Str::slug(strtolower($method) . ' ' . $path);
     }
 
     private function endpoint(string $method, string $path, string $summary, string $controller, string $notes = '', bool $secured = false): array

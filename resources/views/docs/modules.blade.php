@@ -72,11 +72,11 @@
             font-size: clamp(34px, 5vw, 62px);
             line-height: 0.96;
             letter-spacing: -0.05em;
-            max-width: 12ch;
+            max-width: 13ch;
         }
 
         .lede {
-            max-width: 900px;
+            max-width: 980px;
             margin: 0;
             color: var(--muted);
             line-height: 1.7;
@@ -172,15 +172,16 @@
 
         .summary {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 14px;
         }
 
         .summary-card,
+        .audience-card,
         .module-card,
-        .entity-card,
         .endpoint-card,
-        .callout {
+        .callout,
+        .mini-card {
             border: 1px solid var(--border);
             border-radius: 22px;
             background: rgba(255, 255, 255, 0.86);
@@ -207,11 +208,11 @@
             line-height: 1.6;
         }
 
-        .module-card {
+        .audience-card {
             padding: 22px;
         }
 
-        .module-head {
+        .audience-head {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
@@ -219,16 +220,17 @@
             margin-bottom: 14px;
         }
 
-        .module-head h2 {
+        .audience-head h2 {
             margin: 0 0 8px;
-            font-size: 26px;
-            letter-spacing: -0.03em;
+            font-size: 30px;
+            letter-spacing: -0.04em;
         }
 
-        .module-head p {
+        .audience-head p {
             margin: 0;
             color: var(--muted);
             line-height: 1.65;
+            max-width: 900px;
         }
 
         .badge {
@@ -242,147 +244,6 @@
             font-size: 13px;
             font-weight: 700;
             white-space: nowrap;
-        }
-
-        .stack {
-            display: grid;
-            gap: 14px;
-        }
-
-        .subhead {
-            margin: 18px 0 10px;
-            font-size: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--muted);
-        }
-
-        .entity-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 14px;
-        }
-
-        .entity-card {
-            padding: 18px;
-        }
-
-        .entity-card h3 {
-            margin: 0 0 8px;
-            font-size: 18px;
-            letter-spacing: -0.02em;
-        }
-
-        .entity-card p {
-            margin: 0 0 12px;
-            color: var(--muted);
-            line-height: 1.6;
-        }
-
-        .refs {
-            display: grid;
-            gap: 8px;
-        }
-
-        .ref {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .ref span:first-child {
-            min-width: 88px;
-            color: var(--muted);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-
-        .endpoint-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-
-        .endpoint-table th,
-        .endpoint-table td {
-            text-align: left;
-            padding: 10px 8px;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.14);
-            vertical-align: top;
-        }
-
-        .endpoint-table th {
-            color: var(--muted);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .method {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 78px;
-            padding: 7px 12px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 900;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .method.get { background: rgba(59, 130, 246, 0.10); color: #2563eb; }
-        .method.post { background: rgba(34, 197, 94, 0.10); color: #16a34a; }
-        .method.put, .method.patch { background: rgba(234, 179, 8, 0.12); color: #a16207; }
-        .method.delete { background: rgba(239, 68, 68, 0.10); color: #dc2626; }
-
-        .endpoint-card {
-            padding: 18px;
-        }
-
-        .endpoint-head {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
-        }
-
-        .endpoint-head strong {
-            font-size: 17px;
-            letter-spacing: -0.02em;
-        }
-
-        .endpoint-path {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-            font-size: 13px;
-            color: #1e293b;
-            word-break: break-word;
-        }
-
-        .endpoint-card p {
-            margin: 0;
-            color: var(--muted);
-            line-height: 1.6;
-        }
-
-        .endpoint-note {
-            margin-top: 10px;
-            padding: 12px;
-            border-radius: 16px;
-            background: rgba(15, 23, 42, 0.04);
-            color: var(--muted);
-            line-height: 1.55;
-        }
-
-        .notes {
-            display: grid;
-            gap: 10px;
-            margin-top: 14px;
         }
 
         .subsection {
@@ -403,21 +264,76 @@
             line-height: 1.65;
         }
 
-        .module-grid {
+        .refs {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .ref {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .ref span:first-child {
+            min-width: 88px;
+            color: var(--muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .module-stack {
+            display: grid;
             gap: 14px;
             margin-top: 14px;
         }
 
-        .mini-card {
+        .module-card {
             padding: 18px;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.8);
         }
 
-        .mini-card h4 {
+        .module-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+
+        .module-head h4 {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: -0.03em;
+        }
+
+        .module-head p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .module-copy {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .module-grid {
+            display: grid;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .mini-card {
+            padding: 18px;
+        }
+
+        .mini-card h5 {
             margin: 0 0 8px;
             font-size: 17px;
             letter-spacing: -0.02em;
@@ -440,45 +356,354 @@
             line-height: 1.55;
         }
 
-        .notice {
-            padding: 14px;
+        details.endpoint {
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.78);
+            overflow: hidden;
+        }
+
+        details.endpoint + details.endpoint {
+            margin-top: 12px;
+        }
+
+        details.endpoint summary {
+            cursor: pointer;
+            list-style: none;
+            padding: 16px 18px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+        }
+
+        details.endpoint summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details.endpoint[open] summary {
+            border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+            background: rgba(125, 211, 252, 0.06);
+        }
+
+        .endpoint-path {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            word-break: break-word;
+        }
+
+        .endpoint-summary-text {
+            color: var(--muted);
+            flex-basis: 100%;
+            line-height: 1.5;
+            margin-top: 2px;
+        }
+
+        .endpoint-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .method {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 78px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .method.get { background: rgba(59, 130, 246, 0.10); color: #2563eb; }
+        .method.post { background: rgba(34, 197, 94, 0.10); color: #16a34a; }
+        .method.put, .method.patch { background: rgba(234, 179, 8, 0.12); color: #a16207; }
+        .method.delete { background: rgba(239, 68, 68, 0.10); color: #dc2626; }
+
+        .endpoint-body {
+            padding: 18px;
+        }
+
+        .endpoint-description {
+            color: var(--muted);
+            line-height: 1.65;
+            margin: 0 0 14px;
+        }
+
+        .endpoint-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.65fr) minmax(340px, 0.75fr);
+            gap: 18px;
+            align-items: start;
+            margin-top: 14px;
+        }
+
+        .endpoint-details {
+            min-width: 0;
+            display: grid;
+            gap: 14px;
+        }
+
+        .endpoint-tester {
+            position: sticky;
+            top: 18px;
+            padding: 18px;
+            border-radius: 22px;
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: var(--shadow);
+        }
+
+        .tester {
+            height: 100%;
+        }
+
+        .tester-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tester-head h4 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .block {
             border-radius: 18px;
-            background: rgba(125, 211, 252, 0.10);
-            border: 1px solid rgba(125, 211, 252, 0.22);
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            background: rgba(255, 255, 255, 0.03);
+            padding: 14px;
+        }
+
+        .block h4 {
+            margin: 0 0 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #d5def0;
+        }
+
+        .params, .payload-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .params th, .params td,
+        .payload-table th, .payload-table td {
+            text-align: left;
+            padding: 10px 8px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+            vertical-align: top;
+        }
+
+        .params th, .payload-table th {
+            color: var(--muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        pre {
+            margin: 0;
+            overflow: auto;
+            padding: 14px;
+            border-radius: 16px;
+            background: #f8fbff;
+            border: 1px solid rgba(148, 163, 184, 0.18);
             color: #0f172a;
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .request-json,
+        .response-json {
+            margin-top: 12px;
+            padding: 16px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, #111827 0%, #0b1220 100%);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            color: #f8fafc;
+            width: 100%;
+        }
+
+        .request-json .notice,
+        .response-json .notice,
+        .endpoint-note {
+            color: #cbd5e1;
+        }
+
+        .request-json pre,
+        .response-json pre {
+            background: #0b1220;
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #f8fafc;
+            width: 100%;
+        }
+
+        .endpoint-note {
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.04);
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .endpoint-note strong {
+            color: var(--text);
+        }
+
+        .field-type {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 12px;
+            color: #1d4ed8;
+        }
+
+        .field-required {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 54px;
+            padding: 5px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            background: rgba(15, 23, 42, 0.06);
+        }
+
+        .field,
+        .form-grid {
+            display: grid;
+            gap: 8px;
+        }
+
+        .form-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .field label {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text);
+            padding: 12px 14px;
+            font: inherit;
+            outline: none;
+        }
+
+        .field textarea {
+            min-height: 170px;
+            resize: vertical;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+
+        .field input:focus,
+        .field textarea:focus,
+        .field select:focus {
+            border-color: rgba(125, 211, 252, 0.5);
+            box-shadow: 0 0 0 4px rgba(125, 211, 252, 0.14);
+        }
+
+        .span-2 { grid-column: span 2; }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 14px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, var(--accent), #d8f7ff);
+            color: #07111f;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 150ms ease, box-shadow 150ms ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 30px rgba(125, 211, 252, 0.22);
+        }
+
+        .secondary {
+            background: rgba(15, 23, 42, 0.07);
+            color: var(--text);
+        }
+
+        .notice {
+            color: var(--muted);
+            margin: 10px 0 0;
+            font-size: 14px;
             line-height: 1.6;
         }
 
-        code {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-            font-size: 0.95em;
+        .empty-state {
+            padding: 16px;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.04);
+            color: var(--muted);
+            line-height: 1.6;
         }
 
         @media (max-width: 1100px) {
             .layout { grid-template-columns: 1fr; }
             .nav { position: static; max-height: none; top: auto; }
             .summary { grid-template-columns: 1fr; }
-            .entity-grid { grid-template-columns: 1fr; }
-            .module-grid { grid-template-columns: 1fr; }
+            .endpoint-layout { grid-template-columns: 1fr; }
+            .endpoint-tester { position: static; }
         }
 
         @media (max-width: 760px) {
             .topbar { padding: 18px; }
-            .module-card { padding: 18px; }
-            .endpoint-card { padding: 16px; }
+            .audience-card { padding: 18px; }
+            .module-card { padding: 16px; }
+            .endpoint-body { padding: 14px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .span-2 { grid-column: span 1; }
         }
     </style>
 </head>
 <body>
+@php
+    $pretty = static fn ($value) => $value === null
+        ? 'No payload documented.'
+        : json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    $inlineValue = static fn ($value) => $value === null
+        ? '—'
+        : (is_scalar($value) ? (string) $value : json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+@endphp
 <main class="shell">
     <header class="topbar">
         <div>
             <div class="eyebrow">Module documentation</div>
-            <h1>What each module does, and which endpoints belong to it</h1>
+            <h1>Audience-based module docs with expandable endpoints</h1>
             <p class="lede">
-                This page explains the entities behind the app's module structure in plain language, with the route
-                and controller references that back each feature. It is meant to answer questions like:
-                "What happens for a platform user in Auth?" and "Which endpoints belong to that flow?"
+                This page is grouped by audience first, then by module. Each module occupies a full-width row, and
+                each endpoint can be expanded to reveal request payloads, response payloads, and the live test kit.
             </p>
             <div class="top-actions">
                 <a class="button" href="{{ route('docs.show', 'platform') }}">Open platform API docs</a>
@@ -490,11 +715,11 @@
 
     <div class="layout">
         <aside class="nav">
-            <h2>Modules</h2>
-            @foreach($modules as $module)
-                <a href="#module-{{ \Illuminate\Support\Str::slug($module['key']) }}">
-                    {{ $module['title'] }}
-                    <small>{{ $module['summary'] }}</small>
+            <h2>Audience</h2>
+            @foreach($audiences as $audience)
+                <a href="#audience-{{ \Illuminate\Support\Str::slug($audience['key']) }}">
+                    {{ $audience['title'] }}
+                    <small>{{ $audience['summary'] }}</small>
                 </a>
             @endforeach
         </aside>
@@ -502,106 +727,493 @@
         <section class="content">
             <div class="summary">
                 <div class="summary-card">
-                    <strong>Platform user focus</strong>
-                    <p>The internal <code>User</code> model powers admin sign-in, operator management, asset approvals, and the settings that control the platform.</p>
+                    <strong>Platform user</strong>
+                    <p>Internal operators who manage users, customers, assets, rates, fees, and approvals.</p>
                 </div>
                 <div class="summary-card">
-                    <strong>Customer focus</strong>
-                    <p>The <code>Customer</code> model supports self-service login, registration, wallet visibility, transfers, purchases, sales, and withdrawals.</p>
+                    <strong>Customer</strong>
+                    <p>External users who authenticate themselves and use wallets, balances, quotes, transfers, sales, purchases, and withdrawals.</p>
                 </div>
             </div>
 
-            @foreach($modules as $module)
-                <article class="module-card" id="module-{{ \Illuminate\Support\Str::slug($module['key']) }}">
-                    <div class="module-head">
+            @foreach($audiences as $audience)
+                <article class="audience-card" id="audience-{{ \Illuminate\Support\Str::slug($audience['key']) }}">
+                    <div class="audience-head">
                         <div>
-                            <h2>{{ $module['title'] }}</h2>
-                            <p>{{ $module['summary'] }}</p>
+                            <h2>{{ $audience['title'] }}</h2>
+                            <p>{{ $audience['summary'] }}</p>
                         </div>
-                        <span class="badge">{{ count($module['auth']['endpoints']) + collect($module['modules'])->sum(fn ($item) => count($item['endpoints'])) }} endpoints</span>
+                        <span class="badge">{{ count($audience['modules']) }} modules</span>
                     </div>
-
-                    <div class="notice">
-                        <strong>What this actor does</strong>
-                        <ul style="margin: 10px 0 0; padding-left: 20px;">
-                            @foreach($module['what_it_does'] as $item)
-                                <li style="margin-bottom: 6px;">{{ $item }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-
-                    @if(! empty($module['notes']))
-                        <div class="notes">
-                            @foreach($module['notes'] as $note)
-                                <div class="callout">
-                                    <p>{{ $note }}</p>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
 
                     <div class="subsection">
-                        <h3>Authentication</h3>
-                        <p>{{ $module['auth']['description'] }}</p>
-                        <div class="refs" style="margin-top: 12px;">
-                            @foreach($module['auth']['references'] as $label => $reference)
+                        <h3>What this audience does</h3>
+                        <ul style="margin: 10px 0 0; padding-left: 20px; color: var(--muted);">
+                            @foreach($audience['what_it_does'] as $item)
+                                <li style="margin-bottom: 6px; line-height: 1.55;">{{ $item }}</li>
+                            @endforeach
+                        </ul>
+                        <div class="refs">
+                            @foreach($audience['references'] as $label => $reference)
                                 <div class="ref">
                                     <span>{{ $label }}</span>
                                     <code>{{ $reference }}</code>
                                 </div>
                             @endforeach
                         </div>
-                        <div class="stack" style="margin-top: 14px;">
-                            @foreach($module['auth']['endpoints'] as $endpoint)
-                                <div class="endpoint-card">
-                                    <div class="endpoint-head">
-                                        <span class="method {{ strtolower($endpoint['method']) }}">{{ $endpoint['method'] }}</span>
-                                        <strong>{{ $endpoint['summary'] }}</strong>
-                                    </div>
-                                    <div class="endpoint-path">{{ $endpoint['path'] }}</div>
-                                    <div class="endpoint-note">
-                                        <strong>Controller reference:</strong>
-                                        <code>{{ $endpoint['controller'] }}</code>
-                                        @if($endpoint['notes'])
-                                            <div style="margin-top: 6px;">{{ $endpoint['notes'] }}</div>
-                                        @endif
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
                     </div>
 
+                    @if(! empty($audience['auth']))
+                        <div class="subsection">
+                            <h3>Authentication</h3>
+                            <p>{{ $audience['auth']['description'] }}</p>
+                            <div class="refs">
+                                @foreach($audience['auth']['references'] as $label => $reference)
+                                    <div class="ref">
+                                        <span>{{ $label }}</span>
+                                        <code>{{ $reference }}</code>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="module-stack">
+                                @foreach($audience['auth']['endpoints'] as $endpoint)
+                                    <details class="endpoint" id="{{ $endpoint['id'] }}">
+                                        <summary>
+                                            <span class="method {{ strtolower($endpoint['method']) }}">{{ $endpoint['method'] }}</span>
+                                            <div class="endpoint-path">{{ $endpoint['path'] }}</div>
+                                            <div class="endpoint-meta">
+                                                <span class="badge">{{ $endpoint['secured'] ? 'Sanctum protected' : 'Public' }}</span>
+                                                @if($endpoint['docs_title'])
+                                                    <span class="badge">{{ $endpoint['docs_title'] }}</span>
+                                                @endif
+                                                @if($endpoint['operation_id'])
+                                                    <span class="badge">Op: {{ $endpoint['operation_id'] }}</span>
+                                                @endif
+                                            </div>
+                                            <div class="endpoint-summary-text">{{ $endpoint['summary'] }}</div>
+                                        </summary>
+
+                                        <div class="endpoint-body">
+                                            @if($endpoint['description'])
+                                                <p class="endpoint-description">{{ $endpoint['description'] }}</p>
+                                            @elseif($endpoint['notes'])
+                                                <p class="endpoint-description">{{ $endpoint['notes'] }}</p>
+                                            @endif
+
+                                            <div class="endpoint-layout">
+                                                <div class="endpoint-details">
+                                                    @if($endpoint['parameters'])
+                                                        <div class="block">
+                                                            <h4>Parameters</h4>
+                                                            <table class="params">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>Location</th>
+                                                                        <th>Required</th>
+                                                                        <th>Description</th>
+                                                                        <th>Example</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach($endpoint['parameters'] as $parameter)
+                                                                        <tr>
+                                                                            <td>{{ $parameter['name'] }}</td>
+                                                                            <td>{{ $parameter['in'] }}</td>
+                                                                            <td>{{ $parameter['required'] ? 'Yes' : 'No' }}</td>
+                                                                            <td>{{ $parameter['description'] ?: 'No description provided.' }}</td>
+                                                                            <td><code>{{ $inlineValue($parameter['example']) }}</code></td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    @endif
+
+                                                    <div class="block">
+                                                        <h4>Request payload</h4>
+                                                        @if($endpoint['request'])
+                                                            <div class="notice">Content type: <code>{{ $endpoint['request']['content_type'] }}</code></div>
+                                                            <div class="notice">Required: {{ $endpoint['request']['required'] ? 'Yes' : 'No' }}</div>
+                                                            <div class="request-json">
+                                                                <div class="notice">JSON body</div>
+                                                                <pre style="margin-top: 10px;">{{ $pretty($endpoint['request']['example']) }}</pre>
+                                                            </div>
+                                                            <div style="margin-top: 10px;">
+                                                                <table class="payload-table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Field</th>
+                                                                            <th>Type</th>
+                                                                            <th>Required</th>
+                                                                            <th>Description</th>
+                                                                            <th>Example</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @forelse($endpoint['request']['fields'] as $field)
+                                                                            <tr>
+                                                                                <td><code>{{ $field['name'] }}</code></td>
+                                                                                <td><span class="field-type">{{ $field['type'] }}</span></td>
+                                                                                <td><span class="field-required">{{ $field['required'] ? 'Yes' : 'No' }}</span></td>
+                                                                                <td>{{ $field['description'] ?: 'No description provided.' }}</td>
+                                                                                <td><code>{{ $inlineValue($field['example']) }}</code></td>
+                                                                            </tr>
+                                                                        @empty
+                                                                            <tr>
+                                                                                <td colspan="5">No request fields documented.</td>
+                                                                            </tr>
+                                                                        @endforelse
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        @else
+                                                            <p class="notice">This endpoint does not define a JSON request body.</p>
+                                                        @endif
+                                                    </div>
+
+                                                    <div class="block">
+                                                        <h4>Response payloads</h4>
+                                                        @forelse($endpoint['responses'] as $response)
+                                                            <div class="badge" style="margin-bottom: 10px;">HTTP {{ $response['status'] }}</div>
+                                                            <div class="notice">{{ $response['description'] ?: 'No description provided.' }}</div>
+                                                            @if($response['content_type'])
+                                                                <div class="notice">Content type: <code>{{ $response['content_type'] }}</code></div>
+                                                            @endif
+                                                            <div class="response-json">
+                                                                <div class="notice">JSON body</div>
+                                                                <pre style="margin-top: 10px;">{{ $pretty($response['body']) }}</pre>
+                                                            </div>
+                                                            <div style="margin-top: 10px;">
+                                                                <table class="payload-table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Field</th>
+                                                                            <th>Type</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @forelse($response['fields'] as $field)
+                                                                            <tr>
+                                                                                <td><code>{{ $field['name'] }}</code></td>
+                                                                                <td><span class="field-type">{{ $field['type'] }}</span></td>
+                                                                            </tr>
+                                                                        @empty
+                                                                            <tr>
+                                                                                <td colspan="2">No response fields documented.</td>
+                                                                            </tr>
+                                                                        @endforelse
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            @if($response['schema'])
+                                                                <div style="margin-top: 10px;">
+                                                                    <details>
+                                                                        <summary class="notice" style="cursor:pointer;">View response schema</summary>
+                                                                        <pre style="margin-top: 10px;">{{ $pretty($response['schema']) }}</pre>
+                                                                    </details>
+                                                                </div>
+                                                            @endif
+                                                            @if(! $loop->last)
+                                                                <div style="height: 14px;"></div>
+                                                            @endif
+                                                        @empty
+                                                            <p class="notice">No response payloads documented.</p>
+                                                        @endforelse
+                                                    </div>
+                                                </div>
+
+                                                <form class="tester js-tester endpoint-tester" data-base-url="{{ $audience['base_url'] }}" data-method="{{ strtolower($endpoint['method']) }}" data-path="{{ $endpoint['path'] }}" data-has-body="{{ $endpoint['request'] ? '1' : '0' }}">
+                                                    <div class="tester">
+                                                        <div class="tester-head">
+                                                            <h4>API testing</h4>
+                                                            <span class="badge">Live request builder</span>
+                                                        </div>
+
+                                                        @php
+                                                            $pathParams = collect($endpoint['parameters'])->where('in', 'path')->values();
+                                                            $queryParams = collect($endpoint['parameters'])->where('in', 'query')->values();
+                                                        @endphp
+
+                                                        <div class="form-grid">
+                                                            @foreach($pathParams as $parameter)
+                                                                <div class="field">
+                                                                    <label>{{ $parameter['name'] }} path parameter</label>
+                                                                    <input type="text" name="path[{{ $parameter['name'] }}]" data-kind="path" value="{{ is_scalar($parameter['example']) ? $parameter['example'] : '' }}" placeholder="{{ $parameter['name'] }}">
+                                                                </div>
+                                                            @endforeach
+
+                                                            @foreach($queryParams as $parameter)
+                                                                <div class="field">
+                                                                    <label>{{ $parameter['name'] }} query parameter</label>
+                                                                    <input type="text" name="query[{{ $parameter['name'] }}]" data-kind="query" value="{{ is_scalar($parameter['example']) ? $parameter['example'] : '' }}" placeholder="{{ $parameter['name'] }}">
+                                                                </div>
+                                                            @endforeach
+
+                                                            @if($endpoint['request'])
+                                                                <div class="field span-2">
+                                                                    <label>JSON body</label>
+                                                                    <textarea name="body" data-kind="body">{{ $pretty($endpoint['request']['example']) }}</textarea>
+                                                                </div>
+                                                            @endif
+
+                                                            <div class="field span-2">
+                                                                <label>Response output</label>
+                                                                <textarea readonly data-role="output" placeholder="The response from the API will appear here."></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="btn-row">
+                                                            <button type="submit">Send request</button>
+                                                            <button type="button" class="secondary" data-action="reset">Reset example</button>
+                                                        </div>
+
+                                                        <p class="notice">
+                                                            The request is sent relative to <code>{{ $audience['base_url'] }}</code> so the tester works against the current app host.
+                                                        </p>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </details>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="subsection">
-                        <h3>Available Modules</h3>
-                        @if($module['title'] === 'Customer')
-                            <p>For customers, the most important module is the wallets and assets flow. That is what lets them see what they hold and actually do something with it.</p>
-                        @else
-                            <p>Platform users can reach the operational modules that power administration and asset control.</p>
-                        @endif
+                        <h3>Modules</h3>
+                        <p>Each row below is a module the audience can use or manage. Open an endpoint to inspect payloads and test it live.</p>
+
                         <div class="module-grid">
-                            @foreach($module['modules'] as $entity)
-                                <div class="mini-card">
-                                    <h4>{{ $entity['name'] }}</h4>
-                                    <p>{{ $entity['purpose'] }}</p>
+                            @foreach($audience['modules'] as $module)
+                                <article class="module-card">
+                                    <div class="module-head">
+                                        <div>
+                                            <h4>{{ $module['name'] }}</h4>
+                                            <p>{{ $module['purpose'] }}</p>
+                                        </div>
+                                        <span class="badge">{{ count($module['endpoints']) }} endpoints</span>
+                                    </div>
+
                                     <div class="refs">
-                                        @foreach($entity['references'] as $label => $reference)
+                                        @foreach($module['references'] as $label => $reference)
                                             <div class="ref">
                                                 <span>{{ $label }}</span>
                                                 <code>{{ $reference }}</code>
                                             </div>
                                         @endforeach
                                     </div>
-                                    @if($entity['endpoints'])
-                                        <ul>
-                                            @foreach($entity['endpoints'] as $endpoint)
-                                                <li>
-                                                    <span class="method {{ strtolower($endpoint['method']) }}" style="margin-right: 8px; vertical-align: middle;">{{ $endpoint['method'] }}</span>
-                                                    <code>{{ $endpoint['path'] }}</code>
-                                                </li>
+
+                                    @if($module['endpoints'])
+                                        <div class="module-stack">
+                                            @foreach($module['endpoints'] as $endpoint)
+                                                <details class="endpoint" id="{{ $endpoint['id'] }}">
+                                                    <summary>
+                                                        <span class="method {{ strtolower($endpoint['method']) }}">{{ $endpoint['method'] }}</span>
+                                                        <div class="endpoint-path">{{ $endpoint['path'] }}</div>
+                                                        <div class="endpoint-meta">
+                                                            <span class="badge">{{ $endpoint['secured'] ? 'Sanctum protected' : 'Public' }}</span>
+                                                            @if($endpoint['docs_title'])
+                                                                <span class="badge">{{ $endpoint['docs_title'] }}</span>
+                                                            @endif
+                                                            @if($endpoint['operation_id'])
+                                                                <span class="badge">Op: {{ $endpoint['operation_id'] }}</span>
+                                                            @endif
+                                                        </div>
+                                                        <div class="endpoint-summary-text">{{ $endpoint['summary'] }}</div>
+                                                    </summary>
+
+                                                    <div class="endpoint-body">
+                                                        @if($endpoint['description'])
+                                                            <p class="endpoint-description">{{ $endpoint['description'] }}</p>
+                                                        @elseif($endpoint['notes'])
+                                                            <p class="endpoint-description">{{ $endpoint['notes'] }}</p>
+                                                        @endif
+
+                                                        <div class="endpoint-layout">
+                                                            <div class="endpoint-details">
+                                                                @if($endpoint['parameters'])
+                                                                    <div class="block">
+                                                                        <h4>Parameters</h4>
+                                                                        <table class="params">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Name</th>
+                                                                                    <th>Location</th>
+                                                                                    <th>Required</th>
+                                                                                    <th>Description</th>
+                                                                                    <th>Example</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach($endpoint['parameters'] as $parameter)
+                                                                                    <tr>
+                                                                                        <td>{{ $parameter['name'] }}</td>
+                                                                                        <td>{{ $parameter['in'] }}</td>
+                                                                                        <td>{{ $parameter['required'] ? 'Yes' : 'No' }}</td>
+                                                                                        <td>{{ $parameter['description'] ?: 'No description provided.' }}</td>
+                                                                                        <td><code>{{ $inlineValue($parameter['example']) }}</code></td>
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                @endif
+
+                                                                <div class="block">
+                                                                    <h4>Request payload</h4>
+                                                                    @if($endpoint['request'])
+                                                                        <div class="notice">Content type: <code>{{ $endpoint['request']['content_type'] }}</code></div>
+                                                                        <div class="notice">Required: {{ $endpoint['request']['required'] ? 'Yes' : 'No' }}</div>
+                                                                        <div class="request-json">
+                                                                            <div class="notice">JSON body</div>
+                                                                            <pre style="margin-top: 10px;">{{ $pretty($endpoint['request']['example']) }}</pre>
+                                                                        </div>
+                                                                        <div style="margin-top: 10px;">
+                                                                            <table class="payload-table">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>Field</th>
+                                                                                        <th>Type</th>
+                                                                                        <th>Required</th>
+                                                                                        <th>Description</th>
+                                                                                        <th>Example</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    @forelse($endpoint['request']['fields'] as $field)
+                                                                                        <tr>
+                                                                                            <td><code>{{ $field['name'] }}</code></td>
+                                                                                            <td><span class="field-type">{{ $field['type'] }}</span></td>
+                                                                                            <td><span class="field-required">{{ $field['required'] ? 'Yes' : 'No' }}</span></td>
+                                                                                            <td>{{ $field['description'] ?: 'No description provided.' }}</td>
+                                                                                            <td><code>{{ $inlineValue($field['example']) }}</code></td>
+                                                                                        </tr>
+                                                                                    @empty
+                                                                                        <tr>
+                                                                                            <td colspan="5">No request fields documented.</td>
+                                                                                        </tr>
+                                                                                    @endforelse
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    @else
+                                                                        <p class="notice">This endpoint does not define a JSON request body.</p>
+                                                                    @endif
+                                                                </div>
+
+                                                                <div class="block">
+                                                                    <h4>Response payloads</h4>
+                                                                    @forelse($endpoint['responses'] as $response)
+                                                                        <div class="badge" style="margin-bottom: 10px;">HTTP {{ $response['status'] }}</div>
+                                                                        <div class="notice">{{ $response['description'] ?: 'No description provided.' }}</div>
+                                                                        @if($response['content_type'])
+                                                                            <div class="notice">Content type: <code>{{ $response['content_type'] }}</code></div>
+                                                                        @endif
+                                                                        <div class="response-json">
+                                                                            <div class="notice">JSON body</div>
+                                                                            <pre style="margin-top: 10px;">{{ $pretty($response['body']) }}</pre>
+                                                                        </div>
+                                                                        <div style="margin-top: 10px;">
+                                                                            <table class="payload-table">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>Field</th>
+                                                                                        <th>Type</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    @forelse($response['fields'] as $field)
+                                                                                        <tr>
+                                                                                            <td><code>{{ $field['name'] }}</code></td>
+                                                                                            <td><span class="field-type">{{ $field['type'] }}</span></td>
+                                                                                        </tr>
+                                                                                    @empty
+                                                                                        <tr>
+                                                                                            <td colspan="2">No response fields documented.</td>
+                                                                                        </tr>
+                                                                                    @endforelse
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        @if($response['schema'])
+                                                                            <div style="margin-top: 10px;">
+                                                                                <details>
+                                                                                    <summary class="notice" style="cursor:pointer;">View response schema</summary>
+                                                                                    <pre style="margin-top: 10px;">{{ $pretty($response['schema']) }}</pre>
+                                                                                </details>
+                                                                            </div>
+                                                                        @endif
+                                                                        @if(! $loop->last)
+                                                                            <div style="height: 14px;"></div>
+                                                                        @endif
+                                                                    @empty
+                                                                        <p class="notice">No response payloads documented.</p>
+                                                                    @endforelse
+                                                                </div>
+                                                            </div>
+
+                                                            <form class="tester js-tester endpoint-tester" data-base-url="{{ $audience['base_url'] }}" data-method="{{ strtolower($endpoint['method']) }}" data-path="{{ $endpoint['path'] }}" data-has-body="{{ $endpoint['request'] ? '1' : '0' }}">
+                                                                <div class="tester">
+                                                                    <div class="tester-head">
+                                                                        <h4>API testing</h4>
+                                                                        <span class="badge">Live request builder</span>
+                                                                    </div>
+
+                                                                    @php
+                                                                        $pathParams = collect($endpoint['parameters'])->where('in', 'path')->values();
+                                                                        $queryParams = collect($endpoint['parameters'])->where('in', 'query')->values();
+                                                                    @endphp
+
+                                                                    <div class="form-grid">
+                                                                        @foreach($pathParams as $parameter)
+                                                                            <div class="field">
+                                                                                <label>{{ $parameter['name'] }} path parameter</label>
+                                                                                <input type="text" name="path[{{ $parameter['name'] }}]" data-kind="path" value="{{ is_scalar($parameter['example']) ? $parameter['example'] : '' }}" placeholder="{{ $parameter['name'] }}">
+                                                                            </div>
+                                                                        @endforeach
+
+                                                                        @foreach($queryParams as $parameter)
+                                                                            <div class="field">
+                                                                                <label>{{ $parameter['name'] }} query parameter</label>
+                                                                                <input type="text" name="query[{{ $parameter['name'] }}]" data-kind="query" value="{{ is_scalar($parameter['example']) ? $parameter['example'] : '' }}" placeholder="{{ $parameter['name'] }}">
+                                                                            </div>
+                                                                        @endforeach
+
+                                                                        @if($endpoint['request'])
+                                                                            <div class="field span-2">
+                                                                                <label>JSON body</label>
+                                                                                <textarea name="body" data-kind="body">{{ $pretty($endpoint['request']['example']) }}</textarea>
+                                                                            </div>
+                                                                        @endif
+
+                                                                        <div class="field span-2">
+                                                                            <label>Response output</label>
+                                                                            <textarea readonly data-role="output" placeholder="The response from the API will appear here."></textarea>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="btn-row">
+                                                                        <button type="submit">Send request</button>
+                                                                        <button type="button" class="secondary" data-action="reset">Reset example</button>
+                                                                    </div>
+
+                                                                    <p class="notice">
+                                                                        The request is sent relative to <code>{{ $audience['base_url'] }}</code> so the tester works against the current app host.
+                                                                    </p>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </details>
                                             @endforeach
-                                        </ul>
+                                        </div>
+                                    @else
+                                        <div class="empty-state">This module has no public HTTP endpoints. It is used internally by services and other module flows.</div>
                                     @endif
-                                </div>
+                                </article>
                             @endforeach
                         </div>
                     </div>
@@ -610,5 +1222,152 @@
         </section>
     </div>
 </main>
+
+<script>
+    const storageKey = 'api-docs-global-token';
+    const globalToken = document.getElementById('global-token');
+
+    if (globalToken) {
+        globalToken.value = localStorage.getItem(storageKey) || '';
+        globalToken.addEventListener('input', () => {
+            localStorage.setItem(storageKey, globalToken.value);
+        });
+    }
+
+    const jsonPretty = (value) => {
+        if (value === null || value === undefined || value === '') {
+            return '';
+        }
+
+        if (typeof value === 'string') {
+            return value;
+        }
+
+        return JSON.stringify(value, null, 2);
+    };
+
+    const applyPathParams = (template, form) => {
+        return template.replace(/\{([^}]+)\}/g, (_, name) => {
+            const input = form.querySelector(`[name="path[${name}]"]`);
+            return encodeURIComponent(input?.value || '');
+        });
+    };
+
+    const collectQueryParams = (form) => {
+        const search = new URLSearchParams();
+        form.querySelectorAll('[data-kind="query"]').forEach((input) => {
+            if (input.value !== '') {
+                search.set(input.name.replace(/^query\[(.+)\]$/, '$1'), input.value);
+            }
+        });
+        return search;
+    };
+
+    const parseBody = (form) => {
+        const textarea = form.querySelector('[data-kind="body"]');
+        if (!textarea) {
+            return undefined;
+        }
+
+        const raw = textarea.value.trim();
+        if (!raw) {
+            return undefined;
+        }
+
+        return JSON.parse(raw);
+    };
+
+    document.querySelectorAll('.js-tester').forEach((form) => {
+        const output = form.querySelector('[data-role="output"]');
+        const resetButton = form.querySelector('[data-action="reset"]');
+        const defaultBody = form.querySelector('[data-kind="body"]')?.value ?? '';
+        const defaultPathValues = Array.from(form.querySelectorAll('[data-kind="path"]')).reduce((carry, input) => {
+            carry[input.name] = input.value;
+            return carry;
+        }, {});
+        const defaultQueryValues = Array.from(form.querySelectorAll('[data-kind="query"]')).reduce((carry, input) => {
+            carry[input.name] = input.value;
+            return carry;
+        }, {});
+
+        const renderOutput = (value) => {
+            output.value = typeof value === 'string' ? value : jsonPretty(value);
+        };
+
+        resetButton?.addEventListener('click', () => {
+            form.querySelectorAll('[data-kind="path"]').forEach((input) => {
+                input.value = defaultPathValues[input.name] || '';
+            });
+            form.querySelectorAll('[data-kind="query"]').forEach((input) => {
+                input.value = defaultQueryValues[input.name] || '';
+            });
+            const body = form.querySelector('[data-kind="body"]');
+            if (body) {
+                body.value = defaultBody;
+            }
+            renderOutput('Example values restored.');
+        });
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const method = form.dataset.method?.toUpperCase() || 'GET';
+            const baseUrl = form.dataset.baseUrl || '';
+            const rawPath = form.dataset.path || '';
+            const url = new URL(baseUrl.replace(/\/$/, '') + applyPathParams(rawPath, form));
+            const query = collectQueryParams(form);
+
+            query.forEach((value, key) => url.searchParams.set(key, value));
+
+            const headers = {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            };
+
+            const token = localStorage.getItem(storageKey);
+            if (token) {
+                headers.Authorization = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+            }
+
+            const options = {
+                method,
+                headers,
+            };
+
+            if (!['GET', 'HEAD'].includes(method)) {
+                try {
+                    options.body = JSON.stringify(parseBody(form) ?? {});
+                } catch (error) {
+                    renderOutput(`Invalid JSON body: ${error.message}`);
+                    return;
+                }
+            }
+
+            renderOutput('Sending request...');
+
+            try {
+                const response = await fetch(url.toString(), options);
+                const contentType = response.headers.get('content-type') || '';
+                let payload;
+
+                if (contentType.includes('application/json')) {
+                    payload = await response.json();
+                } else {
+                    payload = await response.text();
+                }
+
+                renderOutput({
+                    ok: response.ok,
+                    status: response.status,
+                    statusText: response.statusText,
+                    url: url.toString(),
+                    payload,
+                });
+            } catch (error) {
+                renderOutput(`Request failed: ${error.message}`);
+            }
+        });
+    });
+</script>
 </body>
 </html>
