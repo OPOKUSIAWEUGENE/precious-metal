@@ -30,6 +30,7 @@
             background:
                 radial-gradient(circle at top left, rgba(125, 211, 252, 0.28), transparent 28%),
                 radial-gradient(circle at 85% 10%, rgba(248, 168, 79, 0.16), transparent 22%),
+                radial-gradient(circle at 15% 85%, rgba(34, 197, 94, 0.07), transparent 20%),
                 linear-gradient(180deg, #f8fbff 0%, #eef4fb 48%, #e8eff8 100%);
         }
 
@@ -39,10 +40,12 @@
             width: 100%;
             max-width: none;
             margin: 0;
-            padding: 16px 16px 48px;
+            padding: 16px 16px 52px;
         }
 
         .topbar {
+            position: relative;
+            overflow: hidden;
             width: 100%;
             display: flex;
             align-items: flex-start;
@@ -51,10 +54,18 @@
             margin-bottom: 18px;
             padding: 24px;
             border: 1px solid var(--border);
-            border-radius: 26px;
+            border-radius: 30px;
             background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(18px);
-            box-shadow: var(--shadow);
+            box-shadow: 0 28px 70px rgba(15, 23, 42, 0.12);
+        }
+
+        .topbar::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 7px;
+            background: linear-gradient(180deg, var(--accent), var(--accent-2));
         }
 
         .title-block h1 {
@@ -106,7 +117,7 @@
 
         .layout {
             display: grid;
-            grid-template-columns: 280px minmax(0, 1fr);
+            grid-template-columns: 304px minmax(0, 1fr);
             gap: 22px;
             align-items: start;
         }
@@ -116,10 +127,11 @@
             top: 16px;
             padding: 18px;
             border: 1px solid var(--border);
-            border-radius: 22px;
+            border-radius: 26px;
             background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(18px);
-            box-shadow: var(--shadow);
+            box-shadow: 0 22px 56px rgba(15, 23, 42, 0.10);
+            border-left: 6px solid rgba(125, 211, 252, 0.48);
             max-height: calc(100vh - 36px);
             overflow: auto;
         }
@@ -162,13 +174,23 @@
         }
 
         .section {
+            position: relative;
+            overflow: hidden;
             width: 100%;
             padding: 22px;
             border: 1px solid var(--border);
-            border-radius: 24px;
+            border-radius: 28px;
             background: rgba(255, 255, 255, 0.84);
             backdrop-filter: blur(18px);
-            box-shadow: var(--shadow);
+            box-shadow: 0 22px 56px rgba(15, 23, 42, 0.10);
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 5px;
+            background: linear-gradient(180deg, var(--accent), rgba(125, 211, 252, 0));
         }
 
         .section-head {
@@ -199,9 +221,10 @@
         .endpoint {
             width: 100%;
             padding: 22px;
-            border-radius: 22px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 255, 0.96));
-            border: 1px solid rgba(148, 163, 184, 0.14);
+            border-radius: 24px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 255, 0.96));
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            box-shadow: 0 12px 36px rgba(15, 23, 42, 0.08);
         }
 
         .endpoint + .endpoint {
@@ -260,7 +283,8 @@
             gap: 6px;
             padding: 7px 10px;
             border-radius: 999px;
-            background: rgba(15, 23, 42, 0.05);
+            background: rgba(15, 23, 42, 0.04);
+            border: 1px solid rgba(148, 163, 184, 0.18);
             color: var(--text);
             font-size: 12px;
             font-weight: 700;
@@ -268,8 +292,8 @@
 
         .block {
             border-radius: 18px;
-            border: 1px solid rgba(148, 163, 184, 0.12);
-            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(148, 163, 184, 0.14);
+            background: rgba(248, 251, 255, 0.94);
             padding: 14px;
         }
 
@@ -278,7 +302,7 @@
             font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: #d5def0;
+            color: #0f172a;
         }
 
         .params {
@@ -368,6 +392,10 @@
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         }
 
+        .field textarea[data-role="output"] {
+            min-height: 240px;
+        }
+
         .field input:focus,
         .field textarea:focus,
         .field select:focus {
@@ -443,7 +471,7 @@
 
         .endpoint-layout {
             display: grid;
-            grid-template-columns: minmax(0, 1.65fr) minmax(340px, 0.75fr);
+            grid-template-columns: minmax(0, 1.55fr) minmax(380px, 0.9fr);
             gap: 18px;
             align-items: start;
             margin-top: 14px;
@@ -461,8 +489,8 @@
             padding: 18px;
             border-radius: 22px;
             border: 1px solid rgba(148, 163, 184, 0.16);
-            background: rgba(255, 255, 255, 0.88);
-            box-shadow: var(--shadow);
+            background: rgba(255, 255, 255, 0.90);
+            box-shadow: 0 18px 42px rgba(15, 23, 42, 0.10);
         }
 
         .endpoint-tester .tester-head {
@@ -884,6 +912,18 @@
         return JSON.parse(raw);
     };
 
+    const extractDataResponse = (payload) => {
+        if (payload && typeof payload === 'object') {
+            if (Object.prototype.hasOwnProperty.call(payload, 'data')) {
+                return payload.data;
+            }
+
+            return '';
+        }
+
+        return payload;
+    };
+
     document.querySelectorAll('.js-tester').forEach((form) => {
         const output = form.querySelector('[data-role="output"]');
         const resetButton = form.querySelector('[data-action="reset"]');
@@ -953,7 +993,7 @@
                     payload = await response.text();
                 }
 
-                renderOutput(payload);
+                renderOutput(extractDataResponse(payload));
             } catch (error) {
                 renderOutput(error.message || String(error));
             }

@@ -26,20 +26,22 @@
             background:
                 radial-gradient(circle at top left, rgba(125, 211, 252, 0.28), transparent 30%),
                 radial-gradient(circle at top right, rgba(248, 168, 79, 0.18), transparent 26%),
+                radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.08), transparent 18%),
                 linear-gradient(180deg, #f8fbff 0%, #eef4fb 48%, #e8eff8 100%);
             min-height: 100vh;
         }
 
         .wrap {
-            max-width: 1480px;
+            max-width: 1560px;
             margin: 0 auto;
-            padding: 56px 24px 80px;
+            padding: 56px 20px 84px;
         }
 
         .hero {
             display: grid;
-            gap: 20px;
-            margin-bottom: 28px;
+            gap: 18px;
+            margin-bottom: 30px;
+            padding: 4px 2px;
         }
 
         .eyebrow {
@@ -60,7 +62,7 @@
             line-height: 0.95;
             letter-spacing: -0.05em;
             margin: 0;
-            max-width: 12ch;
+            max-width: 10ch;
         }
 
         .lede {
@@ -74,17 +76,44 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 20px;
-            margin-top: 34px;
+            gap: 18px;
+            margin-top: 28px;
         }
 
         .card {
+            position: relative;
+            overflow: hidden;
             border: 1px solid var(--panel-border);
-            border-radius: 24px;
+            border-radius: 28px;
             background: var(--panel);
             padding: 28px;
-            box-shadow: 0 20px 55px rgba(15, 23, 42, 0.10);
-            backdrop-filter: blur(14px);
+            box-shadow: 0 26px 60px rgba(15, 23, 42, 0.10);
+            backdrop-filter: blur(18px);
+        }
+
+        .grid > .card::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto auto 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--accent), rgba(255,255,255,0));
+        }
+
+        .grid > .card:nth-child(1)::before {
+            background: linear-gradient(90deg, var(--accent), rgba(125, 211, 252, 0));
+        }
+
+        .grid > .card:nth-child(2)::before {
+            background: linear-gradient(90deg, var(--accent-2), rgba(248, 168, 79, 0));
+        }
+
+        .grid > .card:nth-child(3)::before {
+            background: linear-gradient(90deg, #22c55e, rgba(34, 197, 94, 0));
+        }
+
+        .grid > .card:nth-child(odd) {
+            transform: translateY(2px);
         }
 
         .card h2 {
@@ -112,7 +141,8 @@
             gap: 8px;
             padding: 8px 12px;
             border-radius: 999px;
-            background: rgba(15, 23, 42, 0.05);
+            background: rgba(15, 23, 42, 0.04);
+            border: 1px solid rgba(148, 163, 184, 0.18);
             color: var(--text);
             font-size: 13px;
             font-weight: 600;
@@ -128,7 +158,8 @@
             text-decoration: none;
             color: #06111f;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--accent), #c6f0ff);
+            background: linear-gradient(135deg, var(--accent), #c6f0ff 55%, #f6fbff);
+            border: 1px solid rgba(125, 211, 252, 0.28);
             transition: transform 140ms ease, box-shadow 140ms ease;
         }
 
@@ -141,6 +172,7 @@
             margin-top: 22px;
             color: var(--muted);
             font-size: 14px;
+            max-width: 840px;
         }
 
         @media (max-width: 800px) {

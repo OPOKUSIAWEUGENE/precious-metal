@@ -28,6 +28,7 @@
             background:
                 radial-gradient(circle at top left, rgba(125, 211, 252, 0.28), transparent 28%),
                 radial-gradient(circle at 85% 10%, rgba(248, 168, 79, 0.16), transparent 22%),
+                radial-gradient(circle at 18% 82%, rgba(34, 197, 94, 0.08), transparent 18%),
                 linear-gradient(180deg, #f8fbff 0%, #eef4fb 48%, #e8eff8 100%);
         }
 
@@ -36,21 +37,31 @@
         .shell {
             width: 100%;
             margin: 0;
-            padding: 16px;
+            padding: 16px 16px 52px;
         }
 
         .topbar {
+            position: relative;
+            overflow: hidden;
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
             gap: 16px;
-            padding: 24px;
+            padding: 26px;
             border: 1px solid var(--border);
-            border-radius: 26px;
+            border-radius: 30px;
             background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(18px);
-            box-shadow: var(--shadow);
+            box-shadow: 0 28px 70px rgba(15, 23, 42, 0.12);
             margin-bottom: 18px;
+        }
+
+        .topbar::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 7px;
+            background: linear-gradient(180deg, var(--accent-2), var(--accent));
         }
 
         .eyebrow {
@@ -90,6 +101,46 @@
             margin-top: 18px;
         }
 
+        .auth-box {
+            display: grid;
+            gap: 10px;
+            min-width: min(360px, 100%);
+            margin-top: 2px;
+            padding: 16px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.74);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+        }
+
+        .auth-box strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            letter-spacing: 0.02em;
+        }
+
+        .auth-box small {
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .auth-box input {
+            width: 100%;
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.96);
+            color: var(--text);
+            padding: 12px 14px;
+            font: inherit;
+            outline: none;
+        }
+
+        .auth-box input:focus {
+            border-color: rgba(125, 211, 252, 0.5);
+            box-shadow: 0 0 0 4px rgba(125, 211, 252, 0.14);
+        }
+
         .button {
             display: inline-flex;
             align-items: center;
@@ -116,7 +167,7 @@
 
         .layout {
             display: grid;
-            grid-template-columns: 300px minmax(0, 1fr);
+            grid-template-columns: 312px minmax(0, 1fr);
             gap: 22px;
             align-items: start;
         }
@@ -126,10 +177,11 @@
             top: 16px;
             padding: 18px;
             border: 1px solid var(--border);
-            border-radius: 22px;
+            border-radius: 26px;
             background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(18px);
-            box-shadow: var(--shadow);
+            box-shadow: 0 22px 56px rgba(15, 23, 42, 0.10);
+            border-left: 6px solid rgba(248, 168, 79, 0.38);
             max-height: calc(100vh - 36px);
             overflow: auto;
         }
@@ -192,6 +244,8 @@
         .summary-card,
         .callout {
             padding: 18px;
+            position: relative;
+            overflow: hidden;
         }
 
         .summary-card strong,
@@ -199,6 +253,15 @@
             display: block;
             margin-bottom: 8px;
             font-size: 15px;
+        }
+
+        .summary-card::before,
+        .callout::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--accent), rgba(125, 211, 252, 0));
         }
 
         .summary-card p,
@@ -210,6 +273,16 @@
 
         .audience-card {
             padding: 22px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .audience-card::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 6px;
+            background: linear-gradient(180deg, var(--accent-2), rgba(248, 168, 79, 0));
         }
 
         .audience-head {
@@ -295,6 +368,17 @@
 
         .module-card {
             padding: 18px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
         }
 
         .module-head {
@@ -331,6 +415,16 @@
 
         .mini-card {
             padding: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mini-card::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            background: linear-gradient(180deg, #22c55e, rgba(34, 197, 94, 0));
         }
 
         .mini-card h5 {
@@ -357,10 +451,39 @@
         }
 
         details.endpoint {
+            position: relative;
             border: 1px solid rgba(148, 163, 184, 0.16);
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.78);
+            border-radius: 22px;
+            background: var(--endpoint-bg, rgba(255, 255, 255, 0.84));
             overflow: hidden;
+        }
+
+        .module-stack > details.endpoint:nth-child(4n + 1) {
+            --endpoint-accent: #7dd3fc;
+            --endpoint-bg: rgba(125, 211, 252, 0.12);
+        }
+
+        .module-stack > details.endpoint:nth-child(4n + 2) {
+            --endpoint-accent: #f8a84f;
+            --endpoint-bg: rgba(248, 168, 79, 0.12);
+        }
+
+        .module-stack > details.endpoint:nth-child(4n + 3) {
+            --endpoint-accent: #22c55e;
+            --endpoint-bg: rgba(34, 197, 94, 0.10);
+        }
+
+        .module-stack > details.endpoint:nth-child(4n + 4) {
+            --endpoint-accent: #a78bfa;
+            --endpoint-bg: rgba(167, 139, 250, 0.10);
+        }
+
+        details.endpoint::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 6px;
+            background: linear-gradient(180deg, var(--endpoint-accent, var(--accent)), rgba(255, 255, 255, 0));
         }
 
         details.endpoint + details.endpoint {
@@ -383,7 +506,7 @@
 
         details.endpoint[open] summary {
             border-bottom: 1px solid rgba(148, 163, 184, 0.14);
-            background: rgba(125, 211, 252, 0.06);
+            background: linear-gradient(90deg, var(--endpoint-bg, rgba(125, 211, 252, 0.10)), rgba(255, 255, 255, 0.10));
         }
 
         .endpoint-path {
@@ -426,6 +549,7 @@
 
         .endpoint-body {
             padding: 18px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), var(--endpoint-bg, rgba(247, 250, 255, 0.96)));
         }
 
         .endpoint-description {
@@ -436,7 +560,7 @@
 
         .endpoint-layout {
             display: grid;
-            grid-template-columns: minmax(0, 1.65fr) minmax(340px, 0.75fr);
+            grid-template-columns: minmax(0, 1.55fr) minmax(380px, 0.9fr);
             gap: 18px;
             align-items: start;
             margin-top: 14px;
@@ -454,8 +578,8 @@
             padding: 18px;
             border-radius: 22px;
             border: 1px solid rgba(148, 163, 184, 0.16);
-            background: rgba(255, 255, 255, 0.88);
-            box-shadow: var(--shadow);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 18px 42px rgba(15, 23, 42, 0.10);
         }
 
         .tester {
@@ -617,6 +741,10 @@
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         }
 
+        .field textarea[data-role="output"] {
+            min-height: 240px;
+        }
+
         .field input:focus,
         .field textarea:focus,
         .field select:focus {
@@ -710,6 +838,14 @@
                 <a class="button secondary" href="{{ route('docs.show', 'customer') }}">Open customer API docs</a>
                 <a class="button secondary" href="{{ route('docs.index') }}">Back to docs home</a>
             </div>
+        </div>
+        <div class="auth-box">
+            <strong>Shared API token</strong>
+            <small>
+                Paste a bearer token here once and it will be used by every tester on this page.
+                The value is stored in your browser for the current session.
+            </small>
+            <input id="global-token" type="text" placeholder="Bearer token">
         </div>
     </header>
 
@@ -1277,6 +1413,18 @@
         return JSON.parse(raw);
     };
 
+    const extractDataResponse = (payload) => {
+        if (payload && typeof payload === 'object') {
+            if (Object.prototype.hasOwnProperty.call(payload, 'data')) {
+                return payload.data;
+            }
+
+            return '';
+        }
+
+        return payload;
+    };
+
     document.querySelectorAll('.js-tester').forEach((form) => {
         const output = form.querySelector('[data-role="output"]');
         const resetButton = form.querySelector('[data-action="reset"]');
@@ -1356,13 +1504,7 @@
                     payload = await response.text();
                 }
 
-                renderOutput({
-                    ok: response.ok,
-                    status: response.status,
-                    statusText: response.statusText,
-                    url: url.toString(),
-                    payload,
-                });
+                renderOutput(extractDataResponse(payload));
             } catch (error) {
                 renderOutput(`Request failed: ${error.message}`);
             }
