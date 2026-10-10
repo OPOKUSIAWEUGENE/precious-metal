@@ -25,6 +25,16 @@ class AssetWalletRepository extends BaseRepository
             ->get();
     }
 
+    public function findForOwnerByReference(Authenticatable $owner, string $reference): ?AssetWallet
+    {
+        return $this->model->newQuery()
+            ->where('wallet_reference', $reference)
+            ->where('owner_type', $owner::class)
+            ->where('owner_id', $owner->getAuthIdentifier())
+            ->where('status', 'active')
+            ->first();
+    }
+
     public function paginateAll(int $perPage = 15): LengthAwarePaginator
     {
         return $this->model->newQuery()

@@ -30,7 +30,11 @@ use OpenApi\Attributes as OA;
     description: 'An asset withdrawal request.',
     properties: [
         new OA\Property(property: 'id', type: 'string', format: 'uuid'),
-        new OA\Property(property: 'asset_wallet_id', type: 'integer'),
+        new OA\Property(
+            property: 'asset_wallet_id',
+            description: 'The internal asset wallet primary key.',
+            type: 'integer'
+        ),
         new OA\Property(property: 'owner_type', type: 'string'),
         new OA\Property(property: 'owner_id', type: 'string', format: 'uuid'),
         new OA\Property(property: 'rate_id', type: 'string', format: 'uuid', nullable: true),

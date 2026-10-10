@@ -348,7 +348,12 @@ class AssetController extends Controller
             content: new OA\JsonContent(
                 required: ['asset_wallet_id', 'amount'],
                 properties: [
-                    new OA\Property(property: 'asset_wallet_id', type: 'string', format: 'uuid'),
+                    new OA\Property(
+                        property: 'asset_wallet_id',
+                        description: 'The wallet_reference UUID returned by GET /v0/customers/assets/wallets.',
+                        type: 'string',
+                        format: 'uuid'
+                    ),
                     new OA\Property(property: 'amount', type: 'number', format: 'float', example: 2.0),
                     new OA\Property(property: 'conversion_type', type: 'string', example: 'gold_to_cash'),
                     new OA\Property(property: 'notes', type: 'string', nullable: true),

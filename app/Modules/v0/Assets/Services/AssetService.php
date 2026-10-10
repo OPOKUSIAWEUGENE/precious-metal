@@ -626,7 +626,7 @@ class AssetService extends BaseService
             return self::error('Unauthorized', code: 401);
         }
 
-        $wallet = $this->walletRepository->find((string) $data['asset_wallet_id']);
+        $wallet = $this->walletRepository->findForOwnerByReference($owner, (string) $data['asset_wallet_id']);
 
         if (!$wallet || $wallet->owner_type !== $owner::class || $wallet->owner_id !== $owner->getAuthIdentifier()) {
             return self::error('Asset wallet not found', code: 404);
