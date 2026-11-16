@@ -31,7 +31,6 @@ class StoreProfileRequest extends FormRequest
                 Rule::in(array_column(ProfileType::cases(), 'value')),
             ],
             'role_id' => 'nullable|uuid|exists:roles,id',
-            'operator_id' => 'nullable|uuid|exists:operators,id',
             'active' => 'nullable|boolean',
             'current' => 'nullable|boolean',
             'license' => 'nullable|string|max:255',
@@ -54,7 +53,6 @@ class StoreProfileRequest extends FormRequest
             'profile_type.required' => 'The profile type is required.',
             'profile_type.in' => 'Invalid profile type. Valid types are: PLATFORM_OPERATOR, CLIENT_OPERATOR, PASSENGER, DRIVER.',
             'role_id.exists' => 'The specified role does not exist.',
-            'operator_id.exists' => 'The specified operator does not exist.',
             'driver_status.in' => 'Invalid driver status. Valid statuses are: AVAILABLE, ON_TRIP, OFF_DUTY, ON_BREAK, SUSPENDED.',
         ];
     }

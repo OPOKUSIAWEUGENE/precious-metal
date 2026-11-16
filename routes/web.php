@@ -11,6 +11,7 @@ Route::get('/', function () {
 });
 
 Route::get('/docs', [ApiDocumentationController::class, 'index'])->name('docs.index');
+Route::view('/app-overview', 'app-overview')->name('docs.app-overview');
 Route::get('/developer/modules', [ApiDocumentationController::class, 'modules'])->name('docs.modules');
 Route::get('/developer/docs/{documentation}', [ApiDocumentationController::class, 'show'])
     ->whereIn('documentation', ['customer', 'platform'])
